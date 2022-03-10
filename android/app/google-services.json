@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "396822170196",
+    "project_id": "aprojecttest-99761",
+    "storage_bucket": "aprojecttest-99761.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396822170196:android:138a99664c03f85ad07bc1",
+        "android_client_info": {
+          "package_name": "com.example.izibagde"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396822170196-c5jms6cnkc13v5jtreflh4gtbo73h3pn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7KNcvzi9yYv42MRK9hHypKnXfwjzBanc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396822170196-c5jms6cnkc13v5jtreflh4gtbo73h3pn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
