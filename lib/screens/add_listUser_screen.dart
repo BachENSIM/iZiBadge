@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
-import 'package:izibagde/screens/autocomp_screen.dart';
+import 'package:izibagde/model/database_test.dart';
+import 'package:izibagde/screens/dashboard_screen.dart';
 
 class RadioUserPage extends StatefulWidget {
   const RadioUserPage({Key? key}) : super(key: key);
@@ -40,7 +43,9 @@ class _RadioUserPageState extends State<RadioUserPage> {
       ),
       body: Padding(
           padding: const EdgeInsets.all(25),
-          child: Column(
+          child: SingleChildScrollView(
+            child:
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Please chose which option you want:'),
@@ -70,7 +75,7 @@ class _RadioUserPageState extends State<RadioUserPage> {
                 ),
                 title: const Text('Option'),
               ),
-              const SizedBox(height: 25),
+              //const SizedBox(height: 5),
               _selected
                   ? /*TextFormField(
                       maxLines: 5,
@@ -84,7 +89,7 @@ class _RadioUserPageState extends State<RadioUserPage> {
                             borderSide: BorderSide(color: Colors.grey)),
                       ),
                     )*/
-                  Container(
+                  /*Container(
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
@@ -149,7 +154,98 @@ class _RadioUserPageState extends State<RadioUserPage> {
                           )
                         ],
                       ),
-                    )
+                    )*/
+              Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: ListView(
+                              shrinkWrap: true,
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: TextFormField(
+                                          maxLines: 1,
+                                          keyboardType: TextInputType.emailAddress,
+                                          controller: _guestCtl,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Enter email of guest',
+                                            contentPadding: EdgeInsets.all(8),
+                                            isDense: true,
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            _groupListUser.add(_guestCtl.text);
+                                            _guestCtl.text = "";
+                                            setState(() {
+
+                                              // _selectedUser = _guestCtl.text;
+                                              //_groupListUser.add(_selectedUser);
+                                            });
+                                          },
+                                          child: Wrap(
+                                            children: const <Widget>[Text('Add')],
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                //Container(
+                                ListView(shrinkWrap: true, children: <Widget>[
+                                  SizedBox(height: 20),
+                                  Container(
+                                    height: 200.0,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _groupListUser.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return Container(
+                                            child: Row(children: <Widget>[
+                                              GFButton(
+                                                icon: Icon(Icons.close),
+                                                text: _groupListUser[index],
+                                                onPressed: () {
+                                                  setState(() {
+                                                    print("del : " + _groupListUser[index]);
+                                                    print("index : " + index.toString());
+                                                    _groupListUser.removeAt(index);
+                                                    DatabaseTest.listInvite = _groupListUser;
+                                                    print("Data save : " +  DatabaseTest.listInvite.toString());
+                                                  });
+                                                },
+                                                shape: GFButtonShape.pills ,
+                                                color: Colors.orangeAccent,
+                                                hoverColor: Colors.red,
+                                                focusColor: Colors.red,
+                                              )
+
+
+
+                                            ]));
+                                      },
+                                    ),
+                                  )
+                                ]),
+                                SizedBox(
+                                  height: 25,
+                                ),
+
+                              ],
+                            ),
+                          )
+                        ],
+                      )))
                   : ElevatedButton(
                       onPressed: () {
                         showDialog(
@@ -249,15 +345,33 @@ class _RadioUserPageState extends State<RadioUserPage> {
                     ),
                   ),
                   onPressed: () async {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AutoScreen()));
+                    //print(DatabaseTest.nameSave.toString());
+                    //print(DatabaseTest.descSave.toString());
+                    //print(DatabaseTest.addrSave.toString());
+
+                    await DatabaseTest.addItem(
+                          title: DatabaseTest.nameSave.toString(),
+                          description: DatabaseTest.descSave.toString(),
+                          address: DatabaseTest.addrSave.toString(),
+                          start: DateTime.parse(DateTime.now().toString()),
+                          end: DateTime.parse(DateTime.now().toString()),
+                        );
+                    await DatabaseTest.addInviteList(
+                        list: _groupListUser
+                    );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => DashboardScreen(),
+                      ),
+                    );
+
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                     child: Text(
-                      'Next',
+                      'Submit',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: CustomColors.firebaseGrey,
                         letterSpacing: 2,
@@ -269,7 +383,7 @@ class _RadioUserPageState extends State<RadioUserPage> {
 
               //Text(_selectedOption == 'Option' ? 'You can create a group of user' : 'Add list of user you want to invite' )
             ],
-          )),
+          ))),
     );
   }
 

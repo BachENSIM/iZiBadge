@@ -5,6 +5,17 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 
 class Database {
   static String? userUid = "test@gmail.com";
+  static List<String> listRole = [];
+  DocumentSnapshot? snapshot;
+  //static Query<Map<String, dynamic>>   map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
+
+  void getRole() async {
+    final data = await FirebaseFirestore.instance.collection('evenements').doc(userUid).collection('items').doc().collection('participation').get();
+    //listRole = (data as DocumentSnapshot).data['email'].toString() as List<String>;
+    snapshot = data as DocumentSnapshot<Object?>?;
+  }
+
+
 
   static Future<void> addItem({
     required String title,
@@ -55,13 +66,20 @@ class Database {
   }
 
   static Stream<QuerySnapshot> readItems() {
+    //code source pour recuperer touts les evenements
     Query<Map<String, dynamic>> notesItemCollection =
     _mainCollection.doc(userUid).collection("items")
-        .orderBy("dateDebut", descending: false);
+        .orderBy("dateDebut", descending: true);
+
+    //modifier pour comparer des emails qui existent dans la liste d'invitation vont afficher sur l'ecran
+
+    /*Query<Map<String, dynamic>> notesItemCollection =
+    _mainCollection.doc(userUid).collection("items").doc().collection("participation").where("email",isEqualTo: userUid);*/
     //_mainCollection.doc("test@gmail.com").collection('items');
 
     return notesItemCollection.snapshots();
   }
+
 
   static Stream<QuerySnapshot> readEmails() {
     Query<Map<String, dynamic>> itemsEmailCollection =

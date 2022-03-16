@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/model/database.dart';
+import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/dashboard_screen.dart';
 import 'package:izibagde/screens/register_screen.dart';
 import 'package:izibagde/services/authentication.dart';
@@ -309,12 +310,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         .then((value) {
                       print( "after login"+ _emailCtl.text);
                       print("after login"+_passCtl.text);
-                      Database.userUid = _emailCtl.text;
+                      DatabaseTest.userUid = _emailCtl.text;
                       Navigator.of(context).push(MaterialPageRoute(
                         //builder: (context) =>  ListViewEvent()));
                           builder: (context) =>  DashboardScreen()));
                       //builder: (context) => EventList()));
                     }).catchError((e) => print(e));
+                    /*setState(() {
+                      DatabaseTest.fetchDataID();
+                    });*/
                  // }
                   //else {
                     //Text("Login or password is wrong!!!");

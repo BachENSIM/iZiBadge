@@ -277,7 +277,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.descSave = _descCtl.text;
                         DatabaseTest.startSave = DateTime.parse(DateTime.now().toString());
                         DatabaseTest.endSave = DateTime.parse(DateTime.now().toString());
-                        print( DatabaseTest.nameSave! + " " +   DatabaseTest.addrSave! + " " + DatabaseTest.descSave!);
+                        print( "T:[" + DatabaseTest.nameSave! + "]  A:[" +   DatabaseTest.addrSave! + "]  D:[" + DatabaseTest.descSave! + "]");
 
                         /*await Database.addItem(
                           title: _titleCtl.text,

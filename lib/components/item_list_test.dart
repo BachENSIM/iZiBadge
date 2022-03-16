@@ -7,26 +7,22 @@ import 'package:izibagde/screens/edit_event_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
 
 
-class ItemList extends StatelessWidget {
-  /*late  List<String> newList;
-  ItemList({
+class ItemListTest extends StatelessWidget {
+  late  List<String> newList;
+  ItemListTest({
     required this.newList,
-});*/
+});
 
   //static Query<Map<String, dynamic>>   map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
-
-  List<bool> _organisateur = [false];
-  List<bool> _inviteur = [false];
-  List<bool> _scanneur = [false];
 
 
   @override
   Widget build(BuildContext context) {
     //getRole();
     //listRole = snapshot.data['email'] as List<String>;
-    //print("List role Item : " + newList.toString());
+    print("List role Item : " + newList.toString());
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseTest.readItems(),
+      stream: DatabaseTest.readRoles(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -38,28 +34,8 @@ class ItemList extends StatelessWidget {
               var noteInfo = snapshot.data!.docs[index].data()! as Map<String,
                   dynamic>; //Dart doesn’t know which type of object it is getting.
               String docID = snapshot.data!.docs[index].id;
-              String title = noteInfo['tittre'];
-              String address = noteInfo['adresse'];
-              String description = noteInfo['description'];
-              DateTime dateStart =
-                  (noteInfo['dateDebut'] as Timestamp).toDate();
-              //Timestamp startDate = noteInfo['dateDebut'];
+              String role = noteInfo['role'];
 
-              if(DatabaseTest.listRole[index].compareTo("Organisateur") == 0) {
-                print("index " + index.toString());
-                print("role O " + DatabaseTest.listRole[index]);
-                _organisateur[index] = true;
-              }
-              else if (DatabaseTest.listRole[index].compareTo("Invité") == 0) {
-                print("index " + index.toString());
-                print("role I " + DatabaseTest.listRole[index]);
-                _inviteur[index] = true;
-              }
-              else {
-                print("index " + index.toString());
-                print("role " + DatabaseTest.listRole[index]);
-                _scanneur[index] = true;
-              }
 
               return Ink(
                 decoration: BoxDecoration(
@@ -70,42 +46,36 @@ class ItemList extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  onTap: () => Navigator.of(context).push(
+                  onTap: () =>
+                      Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => EditScreen(
-                        currTitle: title,
-                        currDesc: description,
-                        currAddr: address,
+                        currTitle: "title",
+                        currDesc: "description",
+                        currAddr: "address",
                         //currStartDate: startDate.toDate(),
                         documentId: docID,
                       ),
                     ),
                   ),
                   title: Text(
-                    title,
+                    role,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  subtitle: Text(
-                    //"Desc: " + description + "\nAdresse: " + address,
-                    //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
-                    setUp(dateStart),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing:
-                  _organisateur[index] ?
-                  Row(
+
+                  //trailing: Icon(Icons.edit),
+                  trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                        IconButton(
+                      IconButton(
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => EditScreen(
-                                currTitle: title,
-                                currDesc: description,
-                                currAddr: address,
+                                currTitle: "title",
+                                currDesc: "description",
+                                currAddr: "address",
                                 //currStartDate: startDate.toDate(),
                                 documentId: docID,
                               ),
@@ -135,45 +105,7 @@ class ItemList extends StatelessWidget {
                           },
                           icon: Icon(Icons.qr_code_scanner_outlined)),
                     ],
-                  )
-                      : _inviteur[index] ?
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                          onPressed: () {
-                            print("Event id to qrcode: " + docID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScreen(
-                                  documentId: docID,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.qr_code_scanner_outlined)),
-                    ],
-                  ) :
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.photo_camera)),
-                      IconButton(
-                          onPressed: () {
-                            print("Event id to qrcode: " + docID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScreen(
-                                  documentId: docID,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.qr_code_scanner_outlined)),
-                    ],
-                  )
+                  ),
                 ),
               );
             },

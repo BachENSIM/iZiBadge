@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:izibagde/components/custom_colors.dart';
+import 'package:getwidget/getwidget.dart';
+
 
 class TestLoop extends StatefulWidget {
   const TestLoop({Key? key}) : super(key: key);
@@ -7,18 +11,20 @@ class TestLoop extends StatefulWidget {
   _TestLoopState createState() => _TestLoopState();
 }
 
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final CollectionReference _mainCollection = _firestore.collection('evenements');
+
 class _TestLoopState extends State<TestLoop> {
   List<String> _groupListUser = [];
-  String _selectedUser = '';
-  int count = 0;
   final TextEditingController _guestCtl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("test")),
+      appBar: AppBar(title: Text("test")),
       body: Padding(
           padding: const EdgeInsets.all(25),
-          child: Column(
+          child: SingleChildScrollView(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -35,24 +41,23 @@ class _TestLoopState extends State<TestLoop> {
                               maxLines: 1,
                               keyboardType: TextInputType.emailAddress,
                               controller: _guestCtl,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: 'Enter email of guest',
                                 contentPadding: EdgeInsets.all(8),
                                 isDense: true,
+                                suffix: IconButton(
+                                    onPressed: () {
+                                      _guestCtl.clear();
+                                    },
+                                    icon: Icon(Icons.close)
+                                ),
                               ),
                             ),
                           ),
-                          //const Text("data"),
-                          //const SizedBox(width: 5),
                           ElevatedButton(
                               onPressed: () {
-                                _selectedUser = _guestCtl.text;
-                                _groupListUser.add(_selectedUser);
-                                print("count:" + count.toString());
-                                count++;
-
-                                //_groupListUser.removeLast();
-                                _guestCtl.text = " ";
+                                _groupListUser.add(_guestCtl.text);
+                                _guestCtl.clear();
                                 setState(() {
                                   // _selectedUser = _guestCtl.text;
                                   //_groupListUser.add(_selectedUser);
@@ -65,43 +70,119 @@ class _TestLoopState extends State<TestLoop> {
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 10,
                     ),
-                    Text(_groupListUser.isEmpty
-                        ? "Nothing to show"
-                        : _groupListUser.toString()),
+
                     const SizedBox(
                       height: 10,
                     ),
+                    //Container(
+                    ListView(shrinkWrap: true, children: <Widget>[
+                      SizedBox(height: 20),
+                      Container(
+                        height: 300.0,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _groupListUser.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                                child: Row(children: <Widget>[
+                                  GFButton(
+                                      icon: Icon(Icons.close),
+                                      text: _groupListUser[index],
+                                      onPressed: () {
+                                        setState(() {
+                                          print("del : " + _groupListUser[index]);
+                                          print("index : " + index.toString());
+                                          _groupListUser.removeAt(index);
+                                        });
+                                      },
+                                    shape: GFButtonShape.pills ,
+                                    color: Colors.orangeAccent,
+                                    hoverColor: Colors.red,
+                                    focusColor: Colors.red,
+                                  )
+
+
+                              /*Text(_groupListUser[index]),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      print("del : " + _groupListUser[index]);
+                                      print("index : " + index.toString());
+                                      _groupListUser.removeAt(index);
+                                    });
+                                  },
+                                  icon: Icon(Icons.close)),*/
+                            ]));
+                          },
+                        ),
+                      )
+                    ]),
+                    SizedBox(
+                      height: 25,
+                    ),
                     Container(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: _groupListUser.length,
-                        itemBuilder: (BuildContext context, int index){
-                          return Container(
-                            child: Text(
-                                _groupListUser[index]
+                      width: double.maxFinite,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            CustomColors.firebaseOrange,
+                          ),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          );
+                          ),
+                        ),
+                        onPressed: () async {
+                          //Navigator.of(context).pop();
+                          for (int i = 0; i < _groupListUser.length; i++) {
+                            DocumentReference documentReferencer = _mainCollection
+                                .doc("test@gmail.com")
+                                .collection('items')
+                                .doc('DY2kddSmQGxTLMax7KNi')
+                                .collection('participation')
+                                .doc();
+                            print("ID docs " + documentReferencer.id);
+                            Map<String, dynamic> data = <String, dynamic>{
+                              "role": "Invité",
+                              "statutEntree": false,
+                              "timestamp": DateTime.now(),
+                              "email": _groupListUser[i],
+                            };
+
+                            //print(" ID " + i.toString());
+                            //add invitation of every one
+                            await documentReferencer.set(data).whenComplete(() {
+                              print(documentReferencer.id + " ID ");
+                            }).catchError((e) => print(e));
+                          }
                         },
+
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: CustomColors.firebaseGrey,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ),
                       ),
-
-                    /*Row(
-                        children: <Widget>[
-                          Text(_groupListUser.toString()),
-                          Icon(Icons.close),
-
-                        ]
-                    )*/
+                    )
                   ],
                 ),
               )
-
             ],
-          )),
+          ))),
     );
   }
 }
+
 /*TextFormField(
                 controller: _guestCtl,
 
@@ -131,34 +212,3 @@ class _TestLoopState extends State<TestLoop> {
                   ),
                 ),
               )*/
-class Content extends StatelessWidget {
-  final List<String> elements = [
-    "Zero",
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five",
-    "Six",
-    "Seven",
-    "Eight",
-    "A Million Billion Trillion",
-    "A much, much longer text that will still fit"
-  ];
-  @override
-  Widget build(context) => GridView.builder(
-      itemCount: elements.length,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 130.0,
-        crossAxisSpacing: 20.0,
-        mainAxisSpacing: 20.0,
-      ),
-      itemBuilder: (context, i) => Card(
-          child: Center(
-              child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Container(
-                      child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(elements[i])))))));
-}
