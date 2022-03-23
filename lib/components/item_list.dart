@@ -6,7 +6,6 @@ import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/edit_event_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
 
-
 class ItemList extends StatelessWidget {
   /*late  List<String> newList;
   ItemList({
@@ -15,10 +14,12 @@ class ItemList extends StatelessWidget {
 
   //static Query<Map<String, dynamic>>   map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
 
-  List<bool> _organisateur = [false];
-  List<bool> _inviteur = [false];
-  List<bool> _scanneur = [false];
-
+  /*late List<bool> _organisateur = [];
+  late List<bool> _inviteur = [];
+  late List<bool> _scanneur = [];*/
+  bool _organisateur = false;
+  bool _inviteur = false;
+  bool _scanneur = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,140 +42,171 @@ class ItemList extends StatelessWidget {
               String title = noteInfo['tittre'];
               String address = noteInfo['adresse'];
               String description = noteInfo['description'];
+              String role = noteInfo['role'];
               DateTime dateStart =
                   (noteInfo['dateDebut'] as Timestamp).toDate();
+              bool isDel = noteInfo['isDelete'];
               //Timestamp startDate = noteInfo['dateDebut'];
-
-              if(DatabaseTest.listRole[index].compareTo("Organisateur") == 0) {
-                print("index " + index.toString());
-                print("role O " + DatabaseTest.listRole[index]);
-                _organisateur[index] = true;
-              }
-              else if (DatabaseTest.listRole[index].compareTo("Invité") == 0) {
-                print("index " + index.toString());
-                print("role I " + DatabaseTest.listRole[index]);
-                _inviteur[index] = true;
-              }
-              else {
-                print("index " + index.toString());
-                print("role " + DatabaseTest.listRole[index]);
-                _scanneur[index] = true;
+              //_organisateur = true;
+              if (role.compareTo("Organisateur") == 0) {
+                // print("index 0 " + index.toString());
+                // print("role O " + DatabaseTest.listRole[index]);
+                _organisateur = true;
+              } else {
+                _organisateur = false;
+                if (role.compareTo("Invité") == 0) {
+                  // print("index I " + index.toString());
+                  // print("role I " + DatabaseTest.listRole[index]);
+                  _inviteur = true;
+                } else {
+                  _inviteur = false;
+                  // print("index " + index.toString());
+                  // print("role " + DatabaseTest.listRole[index]);
+                  if (role.compareTo("Scanneur") == 0)
+                    _scanneur = true;
+                  else
+                    _scanneur = false;
+                }
               }
 
               return Ink(
+                //color: Colors.lightBlue,
                 decoration: BoxDecoration(
-                  color: CustomColors.firebaseGrey.withOpacity(0.1),
+                  //color: !isDel ? CustomColors.firebaseGrey.withOpacity(0.1) : Color(0xFF2E9598),
+
+                  gradient: !isDel
+                      ? const LinearGradient(colors: [
+                          Color.fromARGB(255, 15, 199, 245),
+                          Color.fromARGB(255, 130, 234, 234)
+                        ])
+                      : const LinearGradient(colors: [
+                          Color.fromARGB(255, 122, 146, 183),
+                          Color.fromARGB(255, 243, 244, 246)
+                        ]),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: ListTile(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => EditScreen(
-                        currTitle: title,
-                        currDesc: description,
-                        currAddr: address,
-                        //currStartDate: startDate.toDate(),
-                        documentId: docID,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    onTap: () {},
+                    title: Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        //color: Color(0xFFB38305),
+                        color: Colors.white,
+                        fontSize: 20,
                       ),
                     ),
-                  ),
-                  title: Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    //"Desc: " + description + "\nAdresse: " + address,
-                    //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
-                    setUp(dateStart),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  trailing:
-                  _organisateur[index] ?
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                        IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => EditScreen(
-                                currTitle: title,
-                                currDesc: description,
-                                currAddr: address,
-                                //currStartDate: startDate.toDate(),
-                                documentId: docID,
-                              ),
-                            ),
-                          );
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            _delete(context, docID);
-                          },
-                          icon: Icon(Icons.delete)),
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.photo_camera)),
-                      IconButton(
-                          onPressed: () {
-                            print("Event id to qrcode: " + docID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScreen(
-                                  documentId: docID,
+                    subtitle: Text(
+                      //"Desc: " + description + "\nAdresse: " + address,
+                      //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
+                      setUp(dateStart, isDel),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Color(0xFF665017), fontSize: 14),
+                    ),
+                    trailing: _organisateur
+                        ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => EditScreen(
+                                        currTitle: title,
+                                        currDesc: description,
+                                        currAddr: address,
+                                        //currStartDate: startDate.toDate(),
+                                        documentId: docID,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: Color(0xFFB38305),
                                 ),
                               ),
-                            );
-                          },
-                          icon: Icon(Icons.qr_code_scanner_outlined)),
-                    ],
-                  )
-                      : _inviteur[index] ?
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                          onPressed: () {
-                            print("Event id to qrcode: " + docID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScreen(
-                                  documentId: docID,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.qr_code_scanner_outlined)),
-                    ],
-                  ) :
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.photo_camera)),
-                      IconButton(
-                          onPressed: () {
-                            print("Event id to qrcode: " + docID);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => QRCodeScreen(
-                                  documentId: docID,
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.qr_code_scanner_outlined)),
-                    ],
-                  )
-                ),
+                              IconButton(
+                                  onPressed: () {
+                                    _delete(context, docID);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  )),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.photo_camera,
+                                    color: Color(0xFFB38305),
+                                  )),
+                              IconButton(
+                                  onPressed: () {
+                                    print("Event id to qrcode: " +
+                                        docID +
+                                        isDel.toString());
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => QRCodeScreen(
+                                          documentId: docID,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.qr_code_scanner_outlined,
+                                    color: Color(0xFFB38305),
+                                  )),
+                            ],
+                          )
+                        : _inviteur
+                            ? Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                      onPressed: () {
+                                        print("Event id to qrcode: " + docID);
+                                        if (!isDel) {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  QRCodeScreen(
+                                                documentId: docID,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      icon:
+                                          Icon(Icons.qr_code_scanner_outlined)),
+                                ],
+                              )
+                            : Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.photo_camera)),
+                                  IconButton(
+                                      onPressed: () {
+                                        print("Event id to qrcode: " + docID);
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => QRCodeScreen(
+                                              documentId: docID,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon:
+                                          Icon(Icons.qr_code_scanner_outlined)),
+                                ],
+                              )),
               );
             },
           );
@@ -191,7 +223,7 @@ class ItemList extends StatelessWidget {
     );
   }
 
-  String setUp(DateTime selectedDateStart) {
+  String setUp(DateTime selectedDateStart, bool isDel) {
     String? startDate;
     if (selectedDateStart.month < 10) {
       if (selectedDateStart.day < 10) {
@@ -214,7 +246,11 @@ class ItemList extends StatelessWidget {
           "-" +
           selectedDateStart.day.toString();
     }
-    return startDate;
+
+    if (!isDel)
+      return startDate;
+    else
+      return "(Annulé par l'organisateur)";
   }
 
   void _delete(BuildContext context, String id) {

@@ -50,6 +50,10 @@ dependencies:
   http: "0.13.4"
   ##GF Button
   getwidget: ^2.0.4
+  ##Stikyheader
+  grouped_list: ^4.2.0
+  sticky_headers: "0.2.0"
+
 
 
 

@@ -355,6 +355,7 @@ class _RadioUserPageState extends State<RadioUserPage> {
                           address: DatabaseTest.addrSave.toString(),
                           start: DateTime.parse(DateTime.now().toString()),
                           end: DateTime.parse(DateTime.now().toString()),
+                          role: "Organisateur",
                         );
                     await DatabaseTest.addInviteList(
                         list: _groupListUser

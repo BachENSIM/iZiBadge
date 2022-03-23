@@ -8,7 +8,7 @@ class AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
+      //mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
           'asset/image/firebase_logo.png',
@@ -22,6 +22,11 @@ class AppBarTitle extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        SizedBox(width: 225),
+        IconButton(
+            onPressed: () {
+            },
+            icon: Icon(Icons.search_rounded)),
       ],
     );
   }
