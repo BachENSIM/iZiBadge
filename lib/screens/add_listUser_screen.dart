@@ -5,27 +5,31 @@ import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/dashboard_screen.dart';
 
-class RadioUserPage extends StatefulWidget {
-  const RadioUserPage({Key? key}) : super(key: key);
+class ListUserScreen extends StatefulWidget {
+  const ListUserScreen({Key? key}) : super(key: key);
 
   @override
-  _RadioUserPageState createState() => _RadioUserPageState();
+  _ListUserScreenState createState() => _ListUserScreenState();
 }
 
-class _RadioUserPageState extends State<RadioUserPage> {
+class _ListUserScreenState extends State<ListUserScreen> {
   // The inital group value
   String _selectedOption = 'Default';
   String _selectedUser = '';
   final List<String> _groupListUser = [];
-  int count =0;
+  final List<String> _groupDropdownValue = [];
+  int count = 0;
   bool _selected = true;
   final TextEditingController _emailCtl = TextEditingController();
   final TextEditingController _guestCtl = TextEditingController();
+
+  String? _dropdownValue;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: CustomColors.blueJeans,
         centerTitle: true,
         title: const Text(
           'Add list of invite',
@@ -44,8 +48,7 @@ class _RadioUserPageState extends State<RadioUserPage> {
       body: Padding(
           padding: const EdgeInsets.all(25),
           child: SingleChildScrollView(
-            child:
-          Column(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Please chose which option you want:'),
@@ -76,89 +79,12 @@ class _RadioUserPageState extends State<RadioUserPage> {
                 title: const Text('Option'),
               ),
               //const SizedBox(height: 5),
-              _selected
-                  ? /*TextFormField(
-                      maxLines: 5,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailCtl,
-                      decoration: const InputDecoration(
-                        hintText: 'List of user',
-                        contentPadding: EdgeInsets.all(8),
-                        isDense: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey)),
-                      ),
-                    )*/
-                  /*Container(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: <Widget>[
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: TextFormField(
-                                    maxLines: 1,
-                                    keyboardType: TextInputType.emailAddress,
-                                    controller: _guestCtl,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter email of guest',
-                                      contentPadding: EdgeInsets.all(8),
-                                      isDense: true,
-                                    ),
-                                  ),
-                                ),
-                                //const Text("data"),
-                                //const SizedBox(width: 5),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      _selectedUser = _guestCtl.text;
-                                      _groupListUser.add(_selectedUser);
-                                      print("count:" + count.toString());
-                                      count++;
-
-                                      //_groupListUser.removeLast();
-                                      _guestCtl.text = " ";
-                                      setState(() {
-                                        // _selectedUser = _guestCtl.text;
-                                        //_groupListUser.add(_selectedUser);
-                                      });
-                                    },
-                                    child: Wrap(
-                                      children: const <Widget>[Text('Add')],
-                                    ))
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Text(_groupListUser.isEmpty
-                              ? "Nothing to show"
-                              : _groupListUser.toString()),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-
-
-                              //Text(_groupListUser[count++]),
-                              Text(_groupListUser[1]),
-                              Icon(Icons.close),
-
-                            ],
-                          )
-                        ],
-                      ),
-                    )*/
-              Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: SingleChildScrollView(
-                      child: Column(
+              _selected ?
+                  //ajouter d'une liste d'invitation (1 QRCode pour toute la durée)
+                  Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: SingleChildScrollView(
+                          child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
@@ -167,13 +93,15 @@ class _RadioUserPageState extends State<RadioUserPage> {
                               children: <Widget>[
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Expanded(
                                         child: TextFormField(
                                           maxLines: 1,
-                                          keyboardType: TextInputType.emailAddress,
+                                          keyboardType:
+                                              TextInputType.emailAddress,
                                           controller: _guestCtl,
                                           decoration: const InputDecoration(
                                             hintText: 'Enter email of guest',
@@ -182,57 +110,102 @@ class _RadioUserPageState extends State<RadioUserPage> {
                                           ),
                                         ),
                                       ),
-                                      ElevatedButton(
+                                      Container(
+                                        height: 50,
+                                        //width: MediaQuery.of(context).size.width,
+                                        margin: EdgeInsets.all(5),
+                                        child: DropdownButtonHideUnderline(
+                                          child: GFDropdown(
+                                            padding: const EdgeInsets.all(15),
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: const BorderSide(
+                                                color: Colors.black12, width: 1),
+                                            dropdownButtonColor: Colors.white,
+                                            value: _dropdownValue,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _dropdownValue = newValue as String?;
+                                              });
+                                            },
+                                            items: DatabaseTest.listNameGroup
+                                                .map((value) => DropdownMenuItem(
+                                              value: value,
+                                              child: Text(value),
+                                            ))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      )
+                                     /* ElevatedButton(
                                           onPressed: () {
                                             _groupListUser.add(_guestCtl.text);
                                             _guestCtl.text = "";
                                             setState(() {
-
                                               // _selectedUser = _guestCtl.text;
                                               //_groupListUser.add(_selectedUser);
                                             });
                                           },
                                           child: Wrap(
-                                            children: const <Widget>[Text('Add')],
-                                          ))
+                                            children: const <Widget>[
+                                              Text('ADD')
+                                            ],
+                                          ))*/
                                     ],
                                   ),
                                 ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      _groupListUser.add(_guestCtl.text);
+                                      _groupDropdownValue.add(_dropdownValue!);
+                                      _guestCtl.text = "";
+                                      setState(() {
+                                        // _selectedUser = _guestCtl.text;
+                                        //_groupListUser.add(_selectedUser);
+                                      });
+                                    },
+                                    child: Wrap(
+                                      children: const <Widget>[
+                                        Text('ADD')
+                                      ],
+                                    )),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 //Container(
+                                //afficher la liste d'invitation afin de consulter avant de sauvegarder dans la BDD
                                 ListView(shrinkWrap: true, children: <Widget>[
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 15),
                                   Container(
                                     height: 200.0,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _groupListUser.length,
-                                      itemBuilder: (BuildContext context, int index) {
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
                                         return Container(
                                             child: Row(children: <Widget>[
-                                              GFButton(
-                                                icon: Icon(Icons.close),
-                                                text: _groupListUser[index],
-                                                onPressed: () {
-                                                  setState(() {
-                                                    print("del : " + _groupListUser[index]);
-                                                    print("index : " + index.toString());
-                                                    _groupListUser.removeAt(index);
-                                                    DatabaseTest.listInvite = _groupListUser;
-                                                    print("Data save : " +  DatabaseTest.listInvite.toString());
-                                                  });
-                                                },
-                                                shape: GFButtonShape.pills ,
-                                                color: Colors.orangeAccent,
-                                                hoverColor: Colors.red,
-                                                focusColor: Colors.red,
-                                              )
+                                          GFButton(
+                                            icon: Icon(Icons.close),
+                                            text: "Email: " + _groupListUser[index] + " - Group: " + _groupDropdownValue[index],
+                                            onPressed: () {
+                                              setState(() {
+                                                print("del : " +
+                                                    _groupListUser[index]);
+                                                print("index : " +
+                                                    index.toString());
+                                                _groupListUser.removeAt(index);
+                                                DatabaseTest.listInvite =
+                                                    _groupListUser;
+                                                print("Data save : " +
+                                                    DatabaseTest.listInvite
+                                                        .toString());
+                                              });
+                                            },
+                                            shape: GFButtonShape.pills,
+                                            color: Colors.orangeAccent,
 
-
-
-                                            ]));
+                                          )
+                                        ]));
                                       },
                                     ),
                                   )
@@ -240,13 +213,14 @@ class _RadioUserPageState extends State<RadioUserPage> {
                                 SizedBox(
                                   height: 25,
                                 ),
-
                               ],
                             ),
                           )
                         ],
                       )))
-                  : ElevatedButton(
+                  :
+                  //ajouter d'un groupe avec des personnes et chaque possède un QRCode
+                  ElevatedButton(
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -350,22 +324,19 @@ class _RadioUserPageState extends State<RadioUserPage> {
                     //print(DatabaseTest.addrSave.toString());
 
                     await DatabaseTest.addItem(
-                          title: DatabaseTest.nameSave.toString(),
-                          description: DatabaseTest.descSave.toString(),
-                          address: DatabaseTest.addrSave.toString(),
-                          start: DateTime.parse(DateTime.now().toString()),
-                          end: DateTime.parse(DateTime.now().toString()),
-                          role: "Organisateur",
-                        );
-                    await DatabaseTest.addInviteList(
-                        list: _groupListUser
+                      title: DatabaseTest.nameSave.toString(),
+                      description: DatabaseTest.descSave.toString(),
+                      address: DatabaseTest.addrSave.toString(),
+                      start: DateTime.parse(DateTime.now().toString()),
+                      end: DateTime.parse(DateTime.now().toString()),
+                      role: "Organisateur",
                     );
+                    await DatabaseTest.addInviteList(list: _groupListUser);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => DashboardScreen(),
                       ),
                     );
-
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),

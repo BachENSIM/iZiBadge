@@ -1,10 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:izibagde/screens/autocomp_screen.dart';
-import 'package:izibagde/screens/exemple.dart';
 import 'package:izibagde/screens/dashboard_screen.dart';
 import 'package:izibagde/screens/login_screen.dart';
-import 'package:izibagde/screens/test_loop_screen.dart';
 import 'package:izibagde/services/authentication.dart';
 import 'package:provider/provider.dart';
 
@@ -29,10 +26,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        //indiquer sur quelle page il va commencer quand lancer l'app
         //home: const LoginScreen(),
         home:  DashboardScreen(),
-        //home: TestLoop(),
-        //home:  AutoScreen(),
       ),
     );
   }

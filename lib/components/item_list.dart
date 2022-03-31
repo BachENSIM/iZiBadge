@@ -45,7 +45,7 @@ class ItemList extends StatelessWidget {
               String role = noteInfo['role'];
               DateTime dateStart =
                   (noteInfo['dateDebut'] as Timestamp).toDate();
-              bool isDel = noteInfo['isDelete'];
+              bool isDel = noteInfo['idDelete'];
               //Timestamp startDate = noteInfo['dateDebut'];
               //_organisateur = true;
               if (role.compareTo("Organisateur") == 0) {

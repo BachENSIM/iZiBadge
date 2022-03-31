@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/custom_form_field.dart';
-
 import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/model/validator.dart';
 import 'package:izibagde/screens/add_listUser_screen.dart';
-import 'package:izibagde/screens/generator_screen.dart';
+
 
 
 class AddItemForm extends StatefulWidget {
@@ -300,7 +299,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RadioUserPage()));
+                                builder: (context) => ListUserScreen()));
                       }
                     },
                     child: Padding(

@@ -5,20 +5,34 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('evenements');
 
 class DatabaseTest {
+  //définir le nom de personne qui se connecte
   static String userUid = "test14@gmail.com";
-  static String? docIdAdd;
-  static String? addrSave;
-  static String? nameSave;
-  static String? descSave;
-  static DateTime? startSave;
-  static DateTime? endSave;
+  //des variables pour les sauvegarder dans la BDD (les mettre en variable pour les déplacer étape par étape)
+  static String? docIdAdd; //renvoyer ID d'un event spécifique
+  static String? addrSave; //Adresses
+  static String? nameSave; //titre
+  static String? descSave; //description
+  static DateTime? startSave; //date commencé
+  static DateTime? endSave; //date fin
+
+  static String searchSave = ""; //pour la barre de recherche
+  //pour savoir si cet events est supprimé ou pas
   static bool isDel = false;
-  static List<String>? listInvite;
-  static List<String> listRole = [];
+  //pour filtrer entre des roles
+  static bool isOrgan = false;
+  static bool isInvite = false;
+  static bool isScan = false;
+  //pour cette fonction fetchID => ne pas utiliser
+  static List<String>? listInvite; // pas besoin pour l'instant
+  static List<String> listRole = [];// pas besoin pour l'instant
+
+  //pour save d'un nom de chaque groupe
+  static List<String> listNameGroup = [];
 
   /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation') as Map<String, dynamic>;
   static List<String> listRole = map['email'];*/
 
+  //pour ajouter un events dans la BDD avec des attributs
   static Future<void> addItem({
     required String title,
     required String description,
@@ -38,7 +52,7 @@ class DatabaseTest {
       "dateDebut": start,
       "dateEnd": end,
       "role": role,
-      "idDelete": isDel,
+      "isDelete": isDel,
     };
     print("In Database_test : " + userUid);
     docIdAdd = documentReferencer.id;
@@ -51,6 +65,7 @@ class DatabaseTest {
         .catchError((e) => print("Error " + e));
   }
 
+  //pour modifier un events
   static Future<void> updateItem({
     required String title,
     required String description,
@@ -65,7 +80,7 @@ class DatabaseTest {
       "tittre": title,
       "description": description,
       "adresse": address,
-      "role": isDel
+      "isDelete": isDel
     };
 
     await documentReferencer
@@ -75,14 +90,8 @@ class DatabaseTest {
         .catchError((e) => print(e));
   }
 
+  //pour récupérer tous les events dans la BDD et les metrre dans un listview
   static Stream<QuerySnapshot> readItems() {
-    /*if(listRole.isEmpty) {
-      fetchDataID();
-    }
-    else {
-      listRole.clear();
-      fetchDataID();
-    }*/
     Query<Map<String, dynamic>> notesItemCollection = _mainCollection
         .doc(userUid)
         .collection("items")
@@ -92,49 +101,50 @@ class DatabaseTest {
     return notesItemCollection.snapshots();
   }
 
-  static Stream<QuerySnapshot> readRoles(bool isRoleOrganisateur, bool isRoleInviteur) {
-    print("or : " +isRoleOrganisateur.toString() + " invi : " + isRoleInviteur.toString());
-    Query<Map<String, dynamic>> notesItemCollection = _mainCollection
-        .doc(userUid)
-        .collection("items");
-        //.orderBy("dateDebut", descending: true);
-    if(isRoleOrganisateur && !isRoleInviteur)  return notesItemCollection.where("role",isEqualTo: "Organisateur").orderBy("dateDebut", descending: true).snapshots();
-    else if(isRoleInviteur && !isRoleOrganisateur)  return notesItemCollection.where("role",isEqualTo: "Invité").orderBy("dateDebut", descending: true).snapshots();
-    else   return notesItemCollection.orderBy("dateDebut", descending: true).snapshots();
-
-
-    /*if(isRoleOrganisateur && !isRoleInviteur) {
-      print("or : " +isRoleOrganisateur.toString() + " invi : " + isRoleInviteur.toString());
-      Query<Map<String, dynamic>> notesItemCollection = _mainCollection
-          .doc(userUid)
-          .collection("items")
-          .orderBy("dateDebut", descending: true).where("role",isEqualTo: "Organisateur");
-          //.where("role",isEqualTo: "Organisateur");
-      return notesItemCollection.snapshots();
+  ////pour récupérer tous les events dans la BDD mais trier par "role"
+  static Stream<QuerySnapshot> readRoles(
+      bool _isOrganisateur, bool _isInviteur, bool _isScanneur) {
+    /*  print("or : " +
+        isOrgan.toString() +
+        " invi : " +
+        isInvite.toString()+ " name : " + searchSave);*/
+    Query<Map<String, dynamic>> notesItemCollection =
+        _mainCollection.doc(userUid).collection("items");
+    //.orderBy("dateDebut", descending: true);
+    //Filtrer par Organisateur
+    if (_isOrganisateur && !_isInviteur) {
+      return notesItemCollection
+          .where("role", isEqualTo: "Organisateur")
+          .orderBy("dateDebut", descending: false)
+          .snapshots();
     }
-    else if(isRoleInviteur && !isRoleOrganisateur) {
-      print("or : " +isRoleOrganisateur.toString() + " invi : " + isRoleInviteur.toString());
-
-      Query<Map<String, dynamic>> notesItemCollection = _mainCollection
-          .doc(userUid)
-          .collection("items")
-          //.orderBy("dateDebut", descending: true).where("role",isEqualTo: "Invité");
-          .where("role",isEqualTo: "Invité");
-      return notesItemCollection.snapshots();
+    //Filtrer par Invité
+    else if (!_isOrganisateur && _isInviteur) {
+      return notesItemCollection
+          .where("role", isEqualTo: "Invité")
+          .orderBy("dateDebut", descending: false)
+          .snapshots();
     }
+    //Faire la recherche par le nom de titre
+    else if (searchSave.isNotEmpty) {
+      return notesItemCollection
+          .where("tittre",
+              isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave + 'z')
+          /*.startAt([searchSave]).endAt([searchSave + '\uf8ff'])*/
+          .orderBy("tittre", descending: true)
+          .orderBy("dateDebut", descending: false)
+          .snapshots();
+    }
+    //Revoyer toutes les infos dans la BDD
     else {
-      print("or : " +isRoleOrganisateur.toString() + " invi : " + isRoleInviteur.toString());
-
-      Query<Map<String, dynamic>> notesItemCollection = _mainCollection
-          .doc(userUid)
-          .collection("items")
-          .orderBy("dateDebut", descending: true);
-      return notesItemCollection.snapshots();
-    }*/
-    
-
-
-
+      return notesItemCollection
+          /*.where("tittre",
+          isGreaterThanOrEqualTo: searchSave,
+          isLessThan: searchSave + 'z')
+          .orderBy("tittre", descending: true)*/
+          .orderBy("dateDebut", descending: false)
+          .snapshots();
+    }
   }
 
   static Stream<QuerySnapshot> readEmails() {
@@ -145,6 +155,7 @@ class DatabaseTest {
     return itemsEmailCollection.snapshots();
   }
 
+  //pour effacer un events
   static Future<void> deleteItem({
     required String docId,
   }) async {
@@ -162,16 +173,21 @@ class DatabaseTest {
           .doc()
           .collection('items')
           .doc(docId);*/
-      var update = await FirebaseFirestore.instance
+      /*var update = await FirebaseFirestore.instance
           .collection('evenements')
           .doc(data.docs[j].data()['email'])
           .collection('items')
-          .get();
-      updateItem(
-          title: update.docs[j].data()['tittre'],
-          description: update.docs[j].data()['description'],
-          address: update.docs[j].data()['adresse'],
-          docId: docId);
+          .get();*/
+      await _mainCollection
+          .doc(data.docs[j].data()['email'])
+          .collection('items')
+          .doc(docId).update({"isDelete" : false}).whenComplete(
+              () => print("Event of this account :" + data.docs[j].data()['email']+   "has been updated in the database"))
+          .catchError((e) => print(e));
+
+      /*updateAttribute(
+          email: data.docs[j].data()['email'],
+          docId: docId);*/
     }
 
     //Step 2 : delete list of user (participation) of this event
@@ -201,6 +217,7 @@ class DatabaseTest {
   static Future<void> addInviteList({
     required List<String> list,
   }) async {
+    //Step 1: add host to the list of invite
     DocumentReference documentReferencer = _mainCollection
         .doc(userUid)
         .collection('items')
@@ -221,6 +238,7 @@ class DatabaseTest {
             () => print("Add Organisateur : id " + documentReferencer.id))
         .catchError((e) => print(e));
 
+    //Step 2: Save the list into database
     for (int i = 0; i < list.length; i++) {
       DocumentReference documentReferencer = _mainCollection
           .doc(userUid)
@@ -243,7 +261,7 @@ class DatabaseTest {
               "] avec id: " +
               documentReferencer.id))
           .catchError((e) => print(e));
-
+      //Step 3: in the same time, create an event with each of email in the list
       syncItems(
           email: list[i],
           title: nameSave!,
@@ -252,6 +270,7 @@ class DatabaseTest {
           start: startSave!,
           end: endSave!,
           role: "Invité");
+      //Step 4: in this event of this client, creat too an email in the collection "participation" for the content of QRCode
       await _mainCollection
           .doc(list[i])
           .collection('items')
@@ -278,6 +297,7 @@ class DatabaseTest {
     return notesItemCollection.snapshots();
   }
 
+  //essayer d'ajouter en meme temps un events pour tous les personnes qui ont été invitées par organisateur => synchroniser
   static Future<void> syncItems({
     required String email,
     required String title,
@@ -306,7 +326,7 @@ class DatabaseTest {
   }
 
   //static late List<String> listID = [];
-
+  //cette methode n'a pas besoin d'utiliser
   static void fetchDataID() async {
     var dataID = await FirebaseFirestore.instance
         .collection('evenements')
@@ -330,5 +350,38 @@ class DatabaseTest {
     }
     //print("length : " + listID.length.toString() + " " + listID.toString());
     print("length : " + listRole.length.toString() + " " + listRole.toString());
+  }
+
+  //create
+  static List<int> listNbRole = [0,0,0];
+
+  static void fetchNBRole() async {
+    int nbOgani = 0;
+    int nbInv = 0;
+    int nbScan = 0;
+    var dataID = await FirebaseFirestore.instance
+        .collection('evenements')
+        .doc(userUid)
+        .collection('items')
+        .get();
+    for (int i = 0; i < dataID.docs.length; i++) {
+      if (dataID.docs[i].data()['role'] == "Organisateur") {
+        nbOgani++;
+      } else if (dataID.docs[i].data()['role'] == "Invité") {
+        nbInv++;
+      } else
+        nbScan++;
+    }
+
+    //print("length : " + listID.length.toString() + " " + listID.toString());
+    print("O : " +
+        nbOgani.toString() +
+        " I : " +
+        nbInv.toString() +
+        " S : " +
+        nbScan.toString());
+    listNbRole[0] = nbOgani;
+    listNbRole[1] = nbInv;
+    listNbRole[2] = nbScan;
   }
 }

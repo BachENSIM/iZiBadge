@@ -7,6 +7,7 @@ import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/item_list.dart';
 import 'package:izibagde/components/item_list_test.dart';
 import 'package:izibagde/components/item_list_test_v2.dart';
+import 'package:izibagde/components/search_form.dart';
 import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/add_event_screen.dart';
@@ -21,20 +22,81 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+  //pour BottomBar
   int _currentIndex = 0;
+
+  //verifier le role entre des events
   bool _isOrganisateur = false;
   bool _isInviteur = false;
+
+  //configurer pour l'en-tete
+  Icon customIcon = const Icon(Icons.search_rounded);
+  Widget customWidget = AppBarTitle();
+  final TextEditingController _searchCtl = TextEditingController();
+  bool isFill = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    DatabaseTest.fetchNBRole();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomColors.firebaseNavy,
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: CustomColors.firebaseNavy,
-          title: AppBarTitle() //Text("Dashboard for Events") ,
-          ),
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: CustomColors.firebaseNavy,
+        //title: AppBarTitle(),
+        title: customWidget,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  if (customIcon.icon == Icons.search_rounded) {
+                    customIcon = const Icon(Icons.close);
+                    customWidget = ListTile(
+                      leading: const Icon(
+                        Icons.search_rounded,
+                        color: Colors.white60,
+                        size: 28,
+                      ),
+                      title: TextFormField(
+                        autofocus: true,
+                        keyboardType: TextInputType.text,
+                        controller: _searchCtl,
+                        decoration: const InputDecoration(
+                          hintText: 'Search by name of event',
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true,
+                        ),
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            DatabaseTest.searchSave = _searchCtl.text;
+                            print("search " + DatabaseTest.searchSave);
+                          });
+                        },
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      _searchCtl.clear();
+                      DatabaseTest.searchSave = _searchCtl.text;
+                    });
+                    customIcon = const Icon(Icons.search_rounded);
+                    customWidget = AppBarTitle();
+                  }
+                });
+              },
+              icon: customIcon)
+        ], //Text("Dashboard for Events") ,
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
@@ -50,22 +112,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           size: 32,
         ),
       ),
-      body:
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                right: 16.0,
-                bottom: 20.0,
-              ),
-              child:
-              ItemListTest(),
-
-
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            bottom: 20.0,
           ),
-
-
+          child: ItemListTest(),
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         //type: BottomNavigationBarType.fixed,

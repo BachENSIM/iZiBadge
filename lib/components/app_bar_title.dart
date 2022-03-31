@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
+import 'package:izibagde/components/search_form.dart';
 
 class AppBarTitle extends StatelessWidget {
   //const AppBarTitle({Key? key}) : super(key: key);
@@ -23,10 +24,17 @@ class AppBarTitle extends StatelessWidget {
           ),
         ),
         SizedBox(width: 225),
-        IconButton(
+        /*IconButton(
             onPressed: () {
+              *//*Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SearchForm()));*//*
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return SearchForm();
+                  });
             },
-            icon: Icon(Icons.search_rounded)),
+            icon: Icon(Icons.search_rounded)),*/
       ],
     );
   }

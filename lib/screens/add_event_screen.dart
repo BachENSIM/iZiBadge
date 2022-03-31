@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/add_item_form_v2.dart';
 import 'package:izibagde/components/custom_colors.dart';
+import 'package:izibagde/screens/add_group_screen.dart';
 
 class AddScreen extends StatelessWidget {
   //const AddScreen({Key? key}) : super(key: key);
@@ -28,28 +29,45 @@ class AddScreen extends StatelessWidget {
           centerTitle: true,
           leadingWidth: 100,
           leading: ElevatedButton.icon(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_left_sharp),
-            label: Text("Back"),
-            style: ElevatedButton.styleFrom(
-              elevation: 0, primary: Colors.transparent)
-          ),
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_left_sharp),
+              label: const Text("Back",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  )),
+              style: ElevatedButton.styleFrom(
+                  elevation: 0, primary: Colors.transparent)),
+          actions: [
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                CustomColors.firebaseNavy,
+              )),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => GroupScreen(),
+                  ),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const <Widget>[
+                  Text("Next",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      )),
+                  Icon(Icons.arrow_right_sharp)
+                ],
+              ),
+            )
 
+          ],
         ),
-        /*body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: 16.0,
-              right: 16.0,
-              bottom: 20.0,
-            ),
-            child: AddItemForm(
-              titleFocusNode: _titleFocusNode,
-              descFocusNode: _descFocusNode,
-              addrFocusNode: _addrFocusNode,
-            ),
-          ),
-        ),*/
         //scrollView
         body: Center(
           child: SingleChildScrollView(
@@ -71,5 +89,3 @@ class AddScreen extends StatelessWidget {
     );
   }
 }
-
-
