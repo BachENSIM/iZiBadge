@@ -6,6 +6,7 @@ import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/edit_event_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
+import 'package:izibagde/screens/scanner_screen.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class ItemListTestV2 extends StatelessWidget {
@@ -48,6 +49,7 @@ class ItemListTestV2 extends StatelessWidget {
               int header = index == 0 ? dateStart.month : _dateStart.month;
               if (index == 0 || index == 0 ? true : (currHeader != header)) {
                 return StickyHeader(
+                  overlapHeaders: true,
                   header: Container(
                     color: Colors.orangeAccent,
                     child:Center (
@@ -112,7 +114,15 @@ class ItemListTestV2 extends StatelessWidget {
                                 },
                                 icon: Icon(Icons.delete)),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                 /* Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => ScannerPage(
+                                        //documentId: docID,
+                                      ),
+                                    ),
+                                  );*/
+                                },
                                 icon: Icon(Icons.photo_camera)),
                             IconButton(
                                 onPressed: () {
@@ -185,7 +195,14 @@ class ItemListTestV2 extends StatelessWidget {
                             },
                             icon: Icon(Icons.delete)),
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                             /* Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ScannerPage(
+                                  ),
+                                ),
+                              );*/
+                            },
                             icon: Icon(Icons.photo_camera)),
                         IconButton(
                             onPressed: () {

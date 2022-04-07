@@ -115,7 +115,7 @@ class _GroupFormState extends State<GroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               SizedBox(height: 20),
               Container(
-                height: 350.0,
+                height: 600.0,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: _groupNameList.length,

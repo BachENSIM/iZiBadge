@@ -23,7 +23,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
   final TextEditingController _emailCtl = TextEditingController();
   final TextEditingController _guestCtl = TextEditingController();
 
-  String? _dropdownValue;
+  String? _dropdownValue = DatabaseTest.listNameGroup[0];
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +331,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                       end: DateTime.parse(DateTime.now().toString()),
                       role: "Organisateur",
                     );
-                    await DatabaseTest.addInviteList(list: _groupListUser);
+                    await DatabaseTest.addInviteList(listEmail: _groupListUser, listGroup: _groupDropdownValue);
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => DashboardScreen(),

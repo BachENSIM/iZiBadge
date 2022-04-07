@@ -97,6 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               icon: customIcon)
         ], //Text("Dashboard for Events") ,
       ),
+      extendBody: true,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(

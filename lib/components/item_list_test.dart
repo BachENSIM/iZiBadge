@@ -8,6 +8,7 @@ import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/edit_event_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
+import 'package:izibagde/screens/scanner_screen.dart';
 
 class ItemListTest extends StatefulWidget {
   @override
@@ -364,7 +365,15 @@ class _ItemListTestState extends State<ItemListTest> {
                                               icon: Icon(Icons.delete)),
                                         if (_organisateur || _scanneur)
                                           IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) => ScannerScreen(
+                                                      documentId: docID,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                               icon: Icon(Icons.photo_camera)),
                                         IconButton(
                                             onPressed: () {
@@ -453,7 +462,15 @@ class _ItemListTestState extends State<ItemListTest> {
                                           icon: Icon(Icons.delete)),
                                     if (_organisateur || _scanneur)
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) => ScannerScreen(
+                                                  documentId: docID,
+                                                ),
+                                              ),
+                                            );
+                                          },
                                           icon: Icon(Icons.photo_camera)),
                                     IconButton(
                                         onPressed: () {

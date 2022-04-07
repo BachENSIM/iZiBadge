@@ -29,6 +29,7 @@ class DatabaseTest {
   //pour save d'un nom de chaque groupe
   static List<String> listNameGroup = [];
 
+
   /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation') as Map<String, dynamic>;
   static List<String> listRole = map['email'];*/
 
@@ -215,7 +216,8 @@ class DatabaseTest {
 
   //how to add a list of mail into firebase in the same event
   static Future<void> addInviteList({
-    required List<String> list,
+    required List<String> listEmail,
+    required List<String> listGroup,
   }) async {
     //Step 1: add host to the list of invite
     DocumentReference documentReferencer = _mainCollection
@@ -230,6 +232,7 @@ class DatabaseTest {
       "statutEntree": true,
       "timestamp": DateTime.now(),
       "email": userUid,
+      "group" : "HOST"
     };
 
     await documentReferencer
@@ -239,7 +242,7 @@ class DatabaseTest {
         .catchError((e) => print(e));
 
     //Step 2: Save the list into database
-    for (int i = 0; i < list.length; i++) {
+    for (int i = 0; i < listEmail.length; i++) {
       DocumentReference documentReferencer = _mainCollection
           .doc(userUid)
           .collection('items')
@@ -251,7 +254,8 @@ class DatabaseTest {
         "role": "Invité",
         "statutEntree": false,
         "timestamp": DateTime.now(),
-        "email": list[i],
+        "email": listEmail[i],
+        "group" : listGroup[i]
       };
 
       await documentReferencer
@@ -263,7 +267,7 @@ class DatabaseTest {
           .catchError((e) => print(e));
       //Step 3: in the same time, create an event with each of email in the list
       syncItems(
-          email: list[i],
+          email: listEmail[i],
           title: nameSave!,
           description: descSave!,
           address: addrSave!,
@@ -272,14 +276,14 @@ class DatabaseTest {
           role: "Invité");
       //Step 4: in this event of this client, creat too an email in the collection "participation" for the content of QRCode
       await _mainCollection
-          .doc(list[i])
+          .doc(listEmail[i])
           .collection('items')
           .doc(docIdAdd)
           .collection('participation')
           .doc(documentReferencer.id)
           .set(data)
           .whenComplete(() => print("Add this event into email : " +
-              list[i] +
+          listEmail[i] +
               " with id: " +
               documentReferencer.id))
           .catchError((e) => print(e));
@@ -384,4 +388,26 @@ class DatabaseTest {
     listNbRole[1] = nbInv;
     listNbRole[2] = nbScan;
   }
+
+  //check status de QRCode
+  static bool status = false;
+  static String emailClient = "";
+  //fonction pour verifier le status du client
+  static void fetchDataCheck(String idParticipation,String contentQRCode) async {
+    var dataID = await FirebaseFirestore.instance
+        .collection('evenements')
+        .doc(userUid)
+        .collection('items')
+        .doc(idParticipation)
+        .collection('participation')
+        .get();
+    for (int i = 0; i < dataID.docs.length; i++) {
+      if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
+        status = true;
+        emailClient = dataID.docs[i].data()['email'];
+      }
+      else
+        status = false;
+      }
+    }
 }
