@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/components/checkbox_list_tile/gf_checkbox_list_tile.dart';
 import 'package:izibagde/model/database_test.dart';
 
 class FiltreForm extends StatefulWidget {
@@ -85,7 +86,17 @@ class _FiltreFormState extends State<FiltreForm> {
                           }),
                       Text("Count : " +  widget.nbScan.toString()),
                     ],
-                  )
+                  ),
+                  GFCheckboxListTile(
+                    titleText: "Scanneur :" +  widget.nbScan.toString(),
+                      value: DatabaseTest.isScan,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          DatabaseTest.isScan = value!;
+                          print("scanneur " + DatabaseTest.isScan.toString());
+                        });
+                      }
+                      )
                 ],
               ),
             ],

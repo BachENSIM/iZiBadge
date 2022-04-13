@@ -1,17 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/app_bar_title.dart';
-
 import 'package:izibagde/components/custom_colors.dart';
-import 'package:izibagde/components/item_list.dart';
 import 'package:izibagde/components/item_list_test.dart';
-import 'package:izibagde/components/item_list_test_v2.dart';
-import 'package:izibagde/components/search_form.dart';
-import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/add_event_screen.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -24,10 +16,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
   //pour BottomBar
   int _currentIndex = 0;
-
-  //verifier le role entre des events
-  bool _isOrganisateur = false;
-  bool _isInviteur = false;
 
   //configurer pour l'en-tete
   Icon customIcon = const Icon(Icons.search_rounded);
@@ -123,34 +111,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: ItemListTest(),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        //type: BottomNavigationBarType.fixed,
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: CustomColors.textSecondary,
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              //title: Text('Settings'),
-              label: 'Settings',
-              backgroundColor: CustomColors.accentLight),
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            /*  if (index == 1) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => GeneratePage(),
-                ),
-              );
-            }*/
-          });
-        },
-      ),
+      //Menu bottom bar
+      // bottomNavigationBar: BottomNavigationBar(
+      //   currentIndex: _currentIndex,
+      //   //type: BottomNavigationBarType.fixed,
+      //   items: const [
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.home),
+      //       label: 'Home',
+      //       backgroundColor: Colors.white38,
+      //     ),
+      //     BottomNavigationBarItem(
+      //         icon: Icon(Icons.settings),
+      //         //title: Text('Settings'),
+      //         label: 'Settings',
+      //         backgroundColor: Colors.green),
+      //   ],
+      //   onTap: (index) {
+      //     setState(() {
+      //       _currentIndex = index;
+      //       /*  if (index == 1) {
+      //         Navigator.of(context).push(
+      //           MaterialPageRoute(
+      //             builder: (context) => GeneratePage(),
+      //           ),
+      //         );
+      //       }*/
+      //     });
+      //   },
+      // ),
     );
   }
 }

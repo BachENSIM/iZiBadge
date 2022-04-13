@@ -64,38 +64,56 @@ class _ItemListTestState extends State<ItemListTest> {
                               PopupMenuItem(
                                 child: StatefulBuilder(
                                   builder: (_context, _setState) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        const SizedBox(
-                                          child: Text("Organisateur "),
-                                          width: 110,
-                                        ),
-                                        Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
-                                            .toString()),
-                                        Checkbox(
-                                            value: DatabaseTest.isOrgan,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                _setState(() {
-                                                  DatabaseTest.fetchNBRole();
-                                                  DatabaseTest.isOrgan = value!;
-                                                  print("organisateur " +
-                                                      DatabaseTest.isOrgan
-                                                          .toString());
-                                                });
-                                              });
-                                            }),
-                                      ],
+                                    // return Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: <Widget>[
+                                    //     const SizedBox(
+                                    //       child: Text("Organisateur "),
+                                    //       width: 110,
+                                    //     ),
+                                    //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
+                                    //         .toString()),
+                                    //     Checkbox(
+                                    //         value: DatabaseTest.isOrgan,
+                                    //         onChanged: (bool? value) {
+                                    //           setState(() {
+                                    //             _setState(() {
+                                    //               DatabaseTest.fetchNBRole();
+                                    //               DatabaseTest.isOrgan = value!;
+                                    //               print("organisateur " +
+                                    //                   DatabaseTest.isOrgan
+                                    //                       .toString());
+                                    //             });
+                                    //           });
+                                    //         }),
+                                    //   ],
+                                    // );
+                                    return GFCheckboxListTile(
+                                        titleText: DatabaseTest.listNbRole.isEmpty ? "Organisateur 0" : "Organisateur " + DatabaseTest.listNbRole[0]
+                                            .toString(),
+                                        type: GFCheckboxType.basic,
+                                        inactiveIcon: null,
+                                        value: DatabaseTest.isOrgan,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            _setState(() {
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isOrgan =
+                                              value!;
+
+                                            });
+                                          });
+                                        }
                                     );
+
                                   },
                                 ),
                               ),
                               PopupMenuItem(
                                 child: StatefulBuilder(
                                   builder: (_context, _setState) {
-                                    return Row(
+                                    /*return Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
@@ -120,6 +138,25 @@ class _ItemListTestState extends State<ItemListTest> {
                                               });
                                             }),
                                       ],
+                                    );*/
+                                    return GFCheckboxListTile(
+                                      titleText: DatabaseTest.listNbRole.isEmpty ? "Invité 0" : "Invité " + DatabaseTest.listNbRole[1]
+                                          .toString(),
+                                        type: GFCheckboxType.basic,
+                                        inactiveIcon: null,
+                                        value: DatabaseTest.isInvite,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            _setState(() {
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isInvite =
+                                              value!;
+                                              print("invité " +
+                                                  DatabaseTest.isInvite
+                                                      .toString());
+                                            });
+                                          });
+                                        }
                                     );
                                   },
                                 ),
@@ -127,7 +164,7 @@ class _ItemListTestState extends State<ItemListTest> {
                               PopupMenuItem(
                                 child: StatefulBuilder(
                                   builder: (_context, _setState) {
-                                    return Row(
+                                    /*return Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
@@ -152,6 +189,23 @@ class _ItemListTestState extends State<ItemListTest> {
                                               });
                                             }),
                                       ],
+                                    );*/
+                                    return GFCheckboxListTile(
+                                        titleText:  DatabaseTest.listNbRole.isEmpty ? "Scanneur 0" : "Scanneur " +DatabaseTest.listNbRole[2]
+                                            .toString(),
+                                        value: DatabaseTest.isScan,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            _setState(() {
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isScan =
+                                              value!;
+                                              print("scanneur " +
+                                                  DatabaseTest.isScan
+                                                      .toString());
+                                            });
+                                          });
+                                        }
                                     );
                                   },
                                 ),
@@ -164,7 +218,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: 425,
+                  height: 475,
                   child: ListView.separated(
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
@@ -185,11 +239,11 @@ class _ItemListTestState extends State<ItemListTest> {
                           as Map<String, dynamic>;
 
                       String docID = snapshot.data!.docs[index].id;
-                      String name = noteInfo['tittre'];
+                      String name = noteInfo['titre'];
                       String role = noteInfo['role'];
                       String address = noteInfo['adresse'];
                       String desc = noteInfo['description'];
-                      bool isDel = noteInfo['isDelete'];
+                      bool isDel = noteInfo['isEfface'];
                       if (role.compareTo("Organisateur") == 0) {
                         _organisateur = true;
                       } else {

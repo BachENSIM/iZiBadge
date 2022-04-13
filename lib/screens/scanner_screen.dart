@@ -8,7 +8,6 @@ import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-
 class ScannerScreen extends StatefulWidget {
   late final String documentId;
   ScannerScreen({required this.documentId});
@@ -18,6 +17,9 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
+  //cle pour le snackbar
+  //final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Barcode? result;
   QRViewController? controller;
   bool verify = false;
@@ -37,13 +39,14 @@ class _ScannerScreenState extends State<ScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //key: _scaffoldKey,
       appBar: AppBar(
         title: Text("QR Scanner"),
       ),
       body: Column(
         children: <Widget>[
-          Expanded(flex: 3, child:_buildQrView(context)),
-          Expanded(
+          Expanded(flex: 4, child: _buildQrView(context)),
+          /*Expanded(
             flex: 1,
             child: FittedBox(
               fit: BoxFit.contain,
@@ -59,45 +62,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: const <Widget>[
-                     /* if(verify) Icon(Icons.check_circle_outline,color: Colors.green,size: 40,)
-                      else Icon(Icons.cancel_outlined,color: Colors.red,size: 40)*/
-                        //final sna SnackBar(content: Text('no Permission')),
-                      /*SnackBar(content: verify ? const Icon(Icons.check_circle_outline,color: Colors.green,size: 40)
-                      :
-                      const Icon(Icons.cancel_outlined,color: Colors.red,size: 40))*/
-                      /*Container(
-                        margin: const EdgeInsets.all(8),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.toggleFlash();
-                              setState(() {});
-                            },
-                            child: FutureBuilder(
-                              future: controller?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                return Text('Flash: ${snapshot.data}');
-                              },
-                            )),
-                      ),*/
-
+                     */ /* if(verify) Icon(Icons.check_circle_outline,color: Colors.green,size: 40,)
+                      else Icon(Icons.cancel_outlined,color: Colors.red,size: 40)*/ /*
                     ],
                   ),
-
                 ],
               ),
             ),
-          )
+          )*/
         ],
       ), // Here the scanned result will be shown
-      );
-
-
+    );
   }
 
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-        MediaQuery.of(context).size.height < 400)
+            MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -120,12 +101,55 @@ class _ScannerScreenState extends State<ScannerScreen> {
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
+      setState(() async {
+        await controller.pauseCamera();
         result = scanData;
         DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
         print("Status: " + DatabaseTest.status.toString());
         verify = DatabaseTest.status;
+        if (verify) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Icon(Icons.check_circle_outline,
+                      color: Colors.green, size: 40),
+                  Text('Allow to enter')
+                ],
+              ),
 
+              duration: Duration(seconds: 365),
+              padding: const EdgeInsets.all(15.0),
+              action: SnackBarAction(
+                label: "Continue",
+                onPressed: () async {
+                  await controller.resumeCamera();
+                },
+              ),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
+                  Text('Denied... Need to re-scan')
+                ],
+              ),
+              duration: Duration(seconds: 365),
+              padding: const EdgeInsets.all(15.0),
+              action: SnackBarAction(
+                label: "Re-scan",
+                onPressed: () async {
+                  await controller.resumeCamera();
+                },
+              ),
+            ),
+          );
+        }
       });
     });
   }
@@ -138,6 +162,15 @@ class _ScannerScreenState extends State<ScannerScreen> {
       );
       Navigator.of(context).pop();
     }
+  }
+
+  void _showToast(BuildContext context) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Go'),
+      ),
+    );
   }
 
   @override
