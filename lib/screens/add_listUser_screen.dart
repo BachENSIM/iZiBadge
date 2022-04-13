@@ -29,7 +29,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.blueJeans,
+        backgroundColor: CustomColors.backgroundDark,
         centerTitle: true,
         title: const Text(
           'Add list of invite',
@@ -119,8 +119,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             padding: const EdgeInsets.all(15),
                                             borderRadius: BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: Colors.black12, width: 1),
-                                            dropdownButtonColor: Colors.white,
+                                                color: CustomColors.textPrimary, width: 1),
+                                            dropdownButtonColor: CustomColors.textSecondary,
                                             value: _dropdownValue,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -202,7 +202,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               });
                                             },
                                             shape: GFButtonShape.pills,
-                                            color: Colors.orangeAccent,
+                                            color: CustomColors.accentLight,
 
                                           )
                                         ]));
@@ -310,7 +310,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      CustomColors.firebaseOrange,
+                      CustomColors.accentLight,
                     ),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
@@ -345,7 +345,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: CustomColors.firebaseGrey,
+                        color: CustomColors.textPrimary,
                         letterSpacing: 2,
                       ),
                     ),

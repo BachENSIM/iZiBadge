@@ -1,8 +1,10 @@
 //Step 1 _ import the necessarylibrary
 import 'package:flutter/material.dart';
+import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/screens/login_screen.dart';
 import 'package:izibagde/services/authentication.dart';
 import 'package:provider/provider.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -96,20 +98,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }).catchError((e) => print(e));
                 },
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-                textColor: Colors.white,
+                textColor: CustomColors.textSecondary,
                 padding: const EdgeInsets.all(0),
                 child: Container(
                   alignment: Alignment.center,
                   height: 50.0,
                   width: size.width * 0.5,
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(80.0),
-                      gradient: new LinearGradient(
+                      gradient: LinearGradient(
                           colors: [
                             //Color.fromARGB(255, 255, 136, 34),
                             //Color.fromARGB(255, 255, 177, 41)
-                            Color.fromARGB(255, 15, 199, 245),
-                            Color.fromARGB(255, 130, 234, 234)
+                            CustomColors.backgroundLight,
+                            CustomColors.backgroundDark
                           ]
                       )
                   ),
@@ -137,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF2661FA)
+                      color: CustomColors.backgroundLight
                   ),
                 ),
               ),

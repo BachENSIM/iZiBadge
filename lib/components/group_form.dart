@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/model/database_test.dart';
 
+import 'custom_colors.dart';
+
 class GroupForm extends StatefulWidget {
   //const GroupForm({Key? key}) : super(key: key);
 
@@ -62,7 +64,7 @@ class _GroupFormState extends State<GroupForm> {
                         .never, //Hides label on focus or if filled
                     labelText: "Put a name for your group",
                     filled: true, // Needed for adding a fill color
-                    fillColor: Colors.blueGrey,
+                    fillColor: CustomColors.backgroundLight,
                     isDense: false, // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
@@ -104,7 +106,7 @@ class _GroupFormState extends State<GroupForm> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: CustomColors.textSecondary,
                           ))),
                 )
               ],
@@ -136,7 +138,7 @@ class _GroupFormState extends State<GroupForm> {
                           child: Text(
                             index.toString(),
                             style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
+                                fontSize: 15, color: CustomColors.secondaryText),
                           ),
                         ),
                         title: Text(_groupNameList[index]),
@@ -173,14 +175,14 @@ class _GroupFormState extends State<GroupForm> {
                             borderRadius: BorderRadius.circular(15)),
                       ),*/
                       GFListTile(
-                           color: Color(0xFFFF809B),
+                           color: CustomColors.accentLight,
                            avatar: CircleAvatar(
                              radius: 20,
-                             backgroundColor: Colors.brown[400],
+                             backgroundColor: CustomColors.accentDark,
                              child: Text(
                                index.toString(),
                                style: const TextStyle(
-                                   fontSize: 15, color: Colors.white),
+                                   fontSize: 15, color: CustomColors.textSecondary),
                              )
                            ),
                            titleText: _groupNameList[index],
@@ -196,7 +198,7 @@ class _GroupFormState extends State<GroupForm> {
                                     _modify(context, index);
                                   });
                                 },
-                                color: Colors.redAccent,
+                                color: CustomColors.accentDark,
                               ),
                               if (index != 0)
                                 IconButton(
@@ -207,7 +209,7 @@ class _GroupFormState extends State<GroupForm> {
                                         _groupNameList.removeAt(index);
                                     });
                                   },
-                                  color: _zero ? Colors.grey : Colors.redAccent,
+                                  color: _zero ? CustomColors.textPrimary : CustomColors.accentDark,
                                 )
                             ],
                           ),
@@ -232,7 +234,7 @@ class _GroupFormState extends State<GroupForm> {
             title: const Text('Please Confirm'),
             content: const Text('You want to rename?'),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black, width: 1),
+                side: const BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(

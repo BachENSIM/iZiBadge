@@ -45,11 +45,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
+      backgroundColor: CustomColors.backgroundDark,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: CustomColors.firebaseNavy,
+        backgroundColor: CustomColors.backgroundDark,
         //title: AppBarTitle(),
         title: customWidget,
         actions: [
@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     customWidget = ListTile(
                       leading: const Icon(
                         Icons.search_rounded,
-                        color: Colors.white60,
+                        color: CustomColors.textSecondary,
                         size: 28,
                       ),
                       title: TextFormField(
@@ -74,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isDense: true,
                         ),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: CustomColors.textSecondary,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -106,10 +106,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           );
         },
-        backgroundColor: CustomColors.firebaseOrange,
+        backgroundColor: CustomColors.accentLight,
         child: const Icon(
           Icons.add,
-          color: Colors.white,
+          color: CustomColors.textSecondary,
           size: 32,
         ),
       ),
@@ -126,17 +126,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         //type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.white38,
+            backgroundColor: CustomColors.textSecondary,
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings),
               //title: Text('Settings'),
               label: 'Settings',
-              backgroundColor: Colors.green),
+              backgroundColor: CustomColors.accentLight),
         ],
         onTap: (index) {
           setState(() {

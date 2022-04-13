@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/screens/login_screen.dart';
 import 'package:izibagde/services/authentication.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: <Widget>[
           CircleAvatar(
             radius: 70,
-            backgroundColor: Colors.grey.shade800,
+            backgroundColor: CustomColors.textPrimary,
             child: Image.asset(
                 "asset/image/internet-security.png",
                 width: size.width
@@ -53,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style:
                       TextStyle(
                         fontSize: 12.0,
-                        color: Colors.grey[600]
+                        color: CustomColors.textPrimary
                       ),
                   ),
                   const Divider(
@@ -68,12 +69,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Text(
+                  const Text(
                     "iziBagde",
                     style:
                     TextStyle(
                         fontSize: 12.0,
-                        color: Colors.grey[600]
+                        color: CustomColors.textPrimary
                     ),
                   ),
                   // Container(
@@ -108,25 +109,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                builder: (context) => const LoginScreen()), (route) => false);
                       },
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-                      textColor: Colors.white,
+                      textColor: CustomColors.textSecondary,
                       padding: const EdgeInsets.all(0),
                       child: Container(
                         alignment: Alignment.center,
                         height: 50.0,
                         width: size.width * 0.5,
-                        decoration: new BoxDecoration(
+                        decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(80.0),
-                            gradient: new LinearGradient(
+                            gradient: LinearGradient(
                                 colors: [
                                   //Color.fromARGB(255, 255, 136, 34),
                                   //Color.fromARGB(255, 255, 177, 41)
-                                  Color.fromARGB(255, 15, 199, 245),
-                                  Color.fromARGB(255, 130, 234, 234)
+                                  CustomColors.backgroundLight,
+                                  CustomColors.backgroundDark
                                 ]
                             )
                         ),
                         padding: const EdgeInsets.all(0),
-                        child: Text(
+                        child: const Text(
                           "LOGOUT",
                           textAlign: TextAlign.center,
                           style: TextStyle(

@@ -7,7 +7,7 @@ class Database {
   static String? userUid = "test@gmail.com";
   static List<String> listRole = [];
   DocumentSnapshot? snapshot;
-  //static Query<Map<String, dynamic>>   map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
+  //static Query<Map<String, dynamic>> map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
 
   void getRole() async {
     final data = await FirebaseFirestore.instance.collection('evenements').doc(userUid).collection('items').doc().collection('participation').get();

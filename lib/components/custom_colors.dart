@@ -9,4 +9,15 @@ class CustomColors {
   static final Color googleBackground = Color(0xFF4285F4);
   static final Color blueJeans = Color(0xFF759AAB);
   //static final Color googleBackground = Color(0xFF4285F4);
+
+
+  //New global color theme
+  static final backgroundLight = Color(0xFF8ECAE6);
+  static final backgroundDark = Color(0xFF487D97);
+  static final backgroundAppbar = Color(0xFF023047);
+  static final accentLight = Color(0xFFFFB703);
+  static final accentDark = Color(0xFFFB8500);
+  static const textPrimary = Colors.black;
+  static const textSecondary = Colors.white;
+
 }
