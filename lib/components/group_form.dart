@@ -184,14 +184,14 @@ class _GroupFormState extends State<GroupForm> {
                             borderRadius: BorderRadius.circular(15)),
                       ),*/
                       GFListTile(
-                        color: Color(0xFFFF809B),
+                        color: CustomColors.accentLight,
                         avatar: CircleAvatar(
                             radius: 20,
-                            backgroundColor: Colors.brown[400],
+                            backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
-                                  fontSize: 15, color: Colors.white),
+                                  fontSize: 15, color: CustomColors.textSecondary),
                             )),
                         titleText: _groupNameList[index],
                         icon: Row(
@@ -206,7 +206,7 @@ class _GroupFormState extends State<GroupForm> {
                                   _modify(context, index);
                                 });
                               },
-                              color: Colors.redAccent,
+                              color: CustomColors.accentDark,
                             ),
                             if (index != 0)
                               IconButton(
@@ -217,7 +217,7 @@ class _GroupFormState extends State<GroupForm> {
                                       _groupNameList.removeAt(index);
                                   });
                                 },
-                                color: _zero ? Colors.grey : Colors.redAccent,
+                                color: _zero ? Colors.grey : CustomColors.accentDark,
                               )
                           ],
                         ),

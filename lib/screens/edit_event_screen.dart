@@ -55,7 +55,7 @@ class _EditScreenState extends State<EditScreen> {
                     ),
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.redAccent,
+                        CustomColors.accentDark,
                       ),
                       strokeWidth: 3,
                     ),
