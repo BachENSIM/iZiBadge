@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -6,7 +5,7 @@ import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/dashboard_screen.dart';
 
 class ListUserScreen extends StatefulWidget {
-  const ListUserScreen({Key? key}) : super(key: key);
+  //const ListUserScreen({Key? key}) : super(key: key);
 
   @override
   _ListUserScreenState createState() => _ListUserScreenState();
@@ -14,72 +13,51 @@ class ListUserScreen extends StatefulWidget {
 
 class _ListUserScreenState extends State<ListUserScreen> {
   // The inital group value
-  String _selectedOption = 'Default';
-  String _selectedUser = '';
-  final List<String> _groupListUser = [];
-  final List<String> _groupDropdownValue = [];
-  int count = 0;
-  bool _selected = true;
-  final TextEditingController _emailCtl = TextEditingController();
-  final TextEditingController _guestCtl = TextEditingController();
+  static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
 
-  String? _dropdownValue = DatabaseTest.listNameGroup[0];
+  final List<String> _groupListUser = [];
+  final List<String> _groupDropdownGroup = [];
+  final List<String> _groupDropdownRole = [];
+  final TextEditingController _guestCtl = TextEditingController();
+  TextEditingController? _editGuestCtl;
+  //dropDown pour le group
+
+  String? _dropdownGroup = DatabaseTest.listNameGroup[0];
+  //dropDown pour le role
+  static final List<String> _roleDropDown = ["Invité", "Scanneur"];
+  String? _dropdownRole = _roleDropDown[0];
+
+  //final TextEditingController _guestEditCtl = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: CustomColors.blueJeans,
-        centerTitle: true,
-        title: const Text(
-          'Add list of invite',
+        appBar: AppBar(
+          backgroundColor: CustomColors.blueJeans,
+          centerTitle: true,
+          title: const Text(
+            'Add list of invite',
+          ),
+          leadingWidth: 100,
+          leading: ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_left_sharp),
+              label: const Text("Back"),
+              style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  primary: Colors.transparent,
+                  textStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold))),
         ),
-        leadingWidth: 100,
-        leading: ElevatedButton.icon(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_left_sharp),
-            label: const Text("Back"),
-            style: ElevatedButton.styleFrom(
-                elevation: 0,
-                primary: Colors.transparent,
-                textStyle: const TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold))),
-      ),
-      body: Padding(
+        body: Padding(
           padding: const EdgeInsets.all(25),
-          child: SingleChildScrollView(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Please chose which option you want:'),
-              ListTile(
-                leading: Radio<String>(
-                  value: 'Default',
-                  groupValue: _selectedOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOption = value!;
-                      _selected = true;
-                    });
-                  },
-                ),
-                title: const Text('Default'),
-              ),
-              ListTile(
-                leading: Radio<String>(
-                  value: 'Option',
-                  groupValue: _selectedOption,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOption = value!;
-                      _selected = false;
-                    });
-                  },
-                ),
-                title: const Text('Option'),
-              ),
-              //const SizedBox(height: 5),
-              _selected ?
+          child: Form(
+              key: _lstUserFormKey,
+              child: SingleChildScrollView(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   //ajouter d'une liste d'invitation (1 QRCode pour toute la durée)
                   Padding(
                       padding: const EdgeInsets.all(5),
@@ -91,25 +69,40 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             child: ListView(
                               shrinkWrap: true,
                               children: <Widget>[
+                                TextFormField(
+                                  maxLines: 1,
+                                  keyboardType: TextInputType.emailAddress,
+                                  controller: _guestCtl,
+                                  validator: (value) => value!.isEmpty
+                                      ? 'Email cannot be blank'
+                                      : null,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Example: tom@gmail.com',
+                                    contentPadding: EdgeInsets.all(8),
+                                    isDense: true,
+                                  ),
+                                ),
+                                /*Expanded(
+                                  child: TextFormField(
+                                    maxLines: 1,
+                                    keyboardType:
+                                    TextInputType.emailAddress,
+                                    controller: _guestCtl,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Enter email of guest',
+                                      contentPadding: EdgeInsets.all(8),
+                                      isDense: true,
+                                    ),
+                                  ),
+                                ),*/
                                 Container(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
-                                      Expanded(
-                                        child: TextFormField(
-                                          maxLines: 1,
-                                          keyboardType:
-                                              TextInputType.emailAddress,
-                                          controller: _guestCtl,
-                                          decoration: const InputDecoration(
-                                            hintText: 'Enter email of guest',
-                                            contentPadding: EdgeInsets.all(8),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
+                                      //Pour le groupe
                                       Container(
                                         height: 50,
                                         //width: MediaQuery.of(context).size.width,
@@ -117,251 +110,329 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         child: DropdownButtonHideUnderline(
                                           child: GFDropdown(
                                             padding: const EdgeInsets.all(15),
-                                            borderRadius: BorderRadius.circular(5),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: Colors.black12, width: 1),
+                                                color: Colors.black12,
+                                                width: 1),
                                             dropdownButtonColor: Colors.white,
-                                            value: _dropdownValue,
+                                            value: _dropdownGroup,
                                             onChanged: (newValue) {
                                               setState(() {
-                                                _dropdownValue = newValue as String?;
+                                                _dropdownGroup =
+                                                    newValue as String?;
                                               });
                                             },
                                             items: DatabaseTest.listNameGroup
-                                                .map((value) => DropdownMenuItem(
-                                              value: value,
-                                              child: Text(value),
-                                            ))
+                                                .map(
+                                                    (value) => DropdownMenuItem(
+                                                          value: value,
+                                                          child: Text(value),
+                                                        ))
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ),
+                                      //Pour le role
+                                      Container(
+                                        height: 50,
+                                        //width: MediaQuery.of(context).size.width,
+                                        margin: EdgeInsets.all(5),
+                                        child: DropdownButtonHideUnderline(
+                                          child: GFDropdown(
+                                            padding: const EdgeInsets.all(15),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            border: const BorderSide(
+                                                color: Colors.black12,
+                                                width: 1),
+                                            dropdownButtonColor: Colors.white,
+                                            value: _dropdownRole,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _dropdownRole =
+                                                    newValue as String?;
+                                                print(_dropdownRole);
+                                              });
+                                            },
+                                            items: _roleDropDown
+                                                .map(
+                                                    (value) => DropdownMenuItem(
+                                                          value: value,
+                                                          child: Text(value),
+                                                        ))
                                                 .toList(),
                                           ),
                                         ),
                                       )
-                                     /* ElevatedButton(
-                                          onPressed: () {
-                                            _groupListUser.add(_guestCtl.text);
-                                            _guestCtl.text = "";
-                                            setState(() {
-                                              // _selectedUser = _guestCtl.text;
-                                              //_groupListUser.add(_selectedUser);
-                                            });
-                                          },
-                                          child: Wrap(
-                                            children: const <Widget>[
-                                              Text('ADD')
-                                            ],
-                                          ))*/
                                     ],
                                   ),
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      _groupListUser.add(_guestCtl.text);
-                                      _groupDropdownValue.add(_dropdownValue!);
-                                      _guestCtl.text = "";
                                       setState(() {
-                                        // _selectedUser = _guestCtl.text;
-                                        //_groupListUser.add(_selectedUser);
+                                        String mess = _guestCtl.text;
+                                        if (_guestCtl.text.isEmpty) {
+                                          int size = _groupListUser.length + 1;
+                                          mess = "example" +  size.toString() +"@gmail.com";
+                                          _groupListUser.add(mess);
+                                        }
+                                        else {
+                                          _groupListUser.add(_guestCtl.text);
+                                        }
+
+                                        //_groupListUser.add(_guestCtl.text);
+                                        _groupDropdownGroup
+                                            .add(_dropdownGroup!);
+                                        _groupDropdownRole.add(_dropdownRole!);
+                                        _guestCtl.clear();
                                       });
                                     },
                                     child: Wrap(
-                                      children: const <Widget>[
-                                        Text('ADD')
-                                      ],
+                                      children: const <Widget>[Text('ADD')],
                                     )),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                //Container(
                                 //afficher la liste d'invitation afin de consulter avant de sauvegarder dans la BDD
                                 ListView(shrinkWrap: true, children: <Widget>[
                                   SizedBox(height: 15),
                                   Container(
-                                    height: 200.0,
+                                    height: 275.0,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _groupListUser.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Container(
-                                            child: Row(children: <Widget>[
-                                          GFButton(
-                                            icon: Icon(Icons.close),
-                                            text: "Email: " + _groupListUser[index] + " - Group: " + _groupDropdownValue[index],
-                                            onPressed: () {
-                                              setState(() {
-                                                print("del : " +
-                                                    _groupListUser[index]);
-                                                print("index : " +
-                                                    index.toString());
-                                                _groupListUser.removeAt(index);
-                                                DatabaseTest.listInvite =
-                                                    _groupListUser;
-                                                print("Data save : " +
-                                                    DatabaseTest.listInvite
-                                                        .toString());
-                                              });
-                                            },
-                                            shape: GFButtonShape.pills,
-                                            color: Colors.orangeAccent,
-
-                                          )
+                                            child: Column(children: <Widget>[
+                                          GFListTile(
+                                              onTap:() {
+                                                setState(() {
+                                                  _editGuestCtl = TextEditingController(text:  _groupListUser[index]);
+                                                  _modify(context, index);
+                                                });
+                                              },
+                                              color: Color(0xFFFF809B),
+                                              titleText: "Email: " +
+                                                  _groupListUser[index],
+                                              subTitleText: "Group: " +
+                                                  _groupDropdownGroup[index] +
+                                                  " - Role: " +
+                                                  _groupDropdownRole[index],
+                                              icon: IconButton(
+                                                icon:
+                                                    Icon(Icons.cancel_outlined),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _groupListUser
+                                                        .removeAt(index);
+                                                    _groupDropdownGroup
+                                                        .removeAt(index);
+                                                    _groupDropdownRole
+                                                        .removeAt(index);
+                                                    DatabaseTest.listInvite =
+                                                        _groupListUser;
+                                                    print(index);
+                                                  });
+                                                },
+                                                color: Colors.black,
+                                              )),
                                         ]));
                                       },
                                     ),
                                   )
                                 ]),
-                                SizedBox(
+                                const SizedBox(
                                   height: 25,
                                 ),
                               ],
                             ),
                           )
                         ],
-                      )))
-                  :
-                  //ajouter d'un groupe avec des personnes et chaque possède un QRCode
-                  ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              elevation: 16,
-                              child: Container(
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    const SizedBox(height: 20),
-                                    const Center(
-                                        child: const Text('Add something')),
-                                    const SizedBox(height: 20),
-                                    Container(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: TextFormField(
-                                              maxLines: 1,
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              controller: _guestCtl,
-                                              decoration: const InputDecoration(
-                                                hintText:
-                                                    'Enter email of guest',
-                                                contentPadding:
-                                                    EdgeInsets.all(8),
-                                                isDense: true,
-                                              ),
-                                            ),
-                                          ),
-                                          //const Text("data"),
-                                          //const SizedBox(width: 5),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                _selectedUser = _guestCtl.text;
-                                                _groupListUser
-                                                    .add(_selectedUser);
-                                                setState(() {
-                                                  // _selectedUser = _guestCtl.text;
-                                                  //_groupListUser.add(_selectedUser);
-                                                });
-                                              },
-                                              child: Wrap(
-                                                children: const <Widget>[
-                                                  Text('Add')
-                                                ],
-                                              ))
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    Text(_groupListUser.isEmpty
-                                        ? "Nothing to show"
-                                        : _groupListUser.toString()),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
+                      ))),
+                  Container(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                          CustomColors.firebaseOrange,
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        //print(DatabaseTest.nameSave.toString());
+                        //print(DatabaseTest.descSave.toString());
+                        //print(DatabaseTest.addrSave.toString());
+
+                        await DatabaseTest.addItem(
+                          title: DatabaseTest.nameSave.toString(),
+                          description: DatabaseTest.descSave.toString(),
+                          address: DatabaseTest.addrSave.toString(),
+                          start: DateTime.parse(DateTime.now().toString()),
+                          end: DateTime.parse(DateTime.now().toString()),
+                          role: "Organisateur",
                         );
-
-                        setState(() {});
+                        await DatabaseTest.addInviteList(
+                            listEmail: _groupListUser,
+                            listGroup: _groupDropdownGroup,
+                            listRole: _groupDropdownRole);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DashboardScreen(),
+                          ),
+                        );
                       },
-                      child: Wrap(
-                        children: const <Widget>[Text('Add')],
-                      )),
-              _selected
-                  ? const Text("")
-                  : TextFormField(
-                      maxLines: 5,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _emailCtl,
-                    ),
-              Container(
-                width: double.maxFinite,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      CustomColors.firebaseOrange,
-                    ),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: CustomColors.firebaseGrey,
+                            letterSpacing: 2,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  onPressed: () async {
-                    //print(DatabaseTest.nameSave.toString());
-                    //print(DatabaseTest.descSave.toString());
-                    //print(DatabaseTest.addrSave.toString());
-
-                    await DatabaseTest.addItem(
-                      title: DatabaseTest.nameSave.toString(),
-                      description: DatabaseTest.descSave.toString(),
-                      address: DatabaseTest.addrSave.toString(),
-                      start: DateTime.parse(DateTime.now().toString()),
-                      end: DateTime.parse(DateTime.now().toString()),
-                      role: "Organisateur",
-                    );
-                    await DatabaseTest.addInviteList(listEmail: _groupListUser, listGroup: _groupDropdownValue);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => DashboardScreen(),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: CustomColors.firebaseGrey,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-
-              //Text(_selectedOption == 'Option' ? 'You can create a group of user' : 'Add list of user you want to invite' )
-            ],
-          ))),
-    );
+                  )
+                ],
+              ))),
+        ));
   }
 
-  void _deleteItem() {
-    setState(() {
-      _groupListUser.removeLast();
-    });
+  void _modify(BuildContext context, int index) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            /*title: const Text('Please Confirm'),*/
+            content: const Text('Edit your information?'),
+            shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.black, width: 1),
+                borderRadius: BorderRadius.circular(15)),
+            actions: [
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    width: 250,
+                    child: TextFormField(
+                      maxLines: 1,
+                      keyboardType: TextInputType.text,
+                      controller: _editGuestCtl,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(8),
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //Pour le groupe
+                      Container(
+                        height: 50,
+                        //width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.all(5),
+                        child: DropdownButtonHideUnderline(
+                          child: GFDropdown(
+                            padding: const EdgeInsets.all(15),
+                            borderRadius:
+                            BorderRadius.circular(5),
+                            border: const BorderSide(
+                                color: Colors.black12,
+                                width: 1),
+                            dropdownButtonColor: Colors.white,
+                            value: _dropdownGroup,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _dropdownGroup =
+                                newValue as String?;
+                              });
+                            },
+                            items: DatabaseTest.listNameGroup
+                                .map(
+                                    (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ))
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                      //Pour le role
+                      Container(
+                        height: 50,
+                        //width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.all(5),
+                        child: DropdownButtonHideUnderline(
+                          child: GFDropdown(
+                            padding: const EdgeInsets.all(15),
+                            borderRadius:
+                            BorderRadius.circular(5),
+                            border: const BorderSide(
+                                color: Colors.black12,
+                                width: 1),
+                            dropdownButtonColor: Colors.white,
+                            value: _dropdownRole,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _dropdownRole =
+                                newValue as String?;
+                                print(_dropdownRole);
+                              });
+                            },
+                            items: _roleDropDown
+                                .map(
+                                    (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ))
+                                .toList(),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextButton(
+                          onPressed: () {
+                            // Remove the box
+                            setState(() {
+                              _groupListUser[index] = _editGuestCtl!.text;
+                              _groupDropdownGroup[index] = _dropdownGroup!;
+                              _groupDropdownRole[index] = _dropdownRole!;
+                            });
+
+                            // Close the dialog
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Edit')),
+                      TextButton(
+                          onPressed: () {
+                            // Close the dialog
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'))
+                    ],
+                  ),
+
+                ],
+              )
+              // The "Yes" button
+            ],
+          );
+        });
   }
 }

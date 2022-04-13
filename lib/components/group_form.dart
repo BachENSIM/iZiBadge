@@ -12,8 +12,7 @@ class GroupForm extends StatefulWidget {
 class _GroupFormState extends State<GroupForm> {
   final _groupNameCtl =
       TextEditingController(); // un autre controller pour saisir => creer des groupe differents
-  TextEditingController?
-      _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
+  TextEditingController?  _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
   //un controller par default => afficher un groupe par default
   String initialText = "Default Group 1";
   TextEditingController? _groupInitCtl;
@@ -29,7 +28,8 @@ class _GroupFormState extends State<GroupForm> {
   void initState() {
     super.initState();
     _groupInitCtl = TextEditingController(text: initialText);
-    if(DatabaseTest.listNameGroup.isNotEmpty) DatabaseTest.listNameGroup.clear();
+    if (DatabaseTest.listNameGroup.isNotEmpty)
+      DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
   }
 
@@ -55,7 +55,8 @@ class _GroupFormState extends State<GroupForm> {
               children: <Widget>[
                 Expanded(
                     child: TextField(
-                  keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.text,
+                  autofocus: true,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior
@@ -84,12 +85,20 @@ class _GroupFormState extends State<GroupForm> {
                 )),
                 SizedBox(
                   height: 59,
-                  width: 75,
+                  /*width: 75,*/
                   child: ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          _groupNameList.add(_groupNameCtl.text);
-                          DatabaseTest.listNameGroup.add(_groupNameCtl.text);
+                          String mess = _groupNameCtl.text;
+                          if (_groupNameCtl.text.isEmpty) {
+                            int size = _groupNameList.length + 1;
+                            mess = "Default Group " +  size.toString();
+                            _groupNameList.add(mess);
+                          }
+                          else {
+                            _groupNameList.add(_groupNameCtl.text);
+                          }
+                          DatabaseTest.listNameGroup.add(mess);
                           _groupNameCtl.clear();
                           print(DatabaseTest.listNameGroup.toString());
                         });
@@ -173,46 +182,44 @@ class _GroupFormState extends State<GroupForm> {
                             borderRadius: BorderRadius.circular(15)),
                       ),*/
                       GFListTile(
-                           color: Color(0xFFFF809B),
-                           avatar: CircleAvatar(
-                             radius: 20,
-                             backgroundColor: Colors.brown[400],
-                             child: Text(
-                               index.toString(),
-                               style: const TextStyle(
-                                   fontSize: 15, color: Colors.white),
-                             )
-                           ),
-                           titleText: _groupNameList[index],
-                          icon: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
+                        color: Color(0xFFFF809B),
+                        avatar: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.brown[400],
+                            child: Text(
+                              (index + 1).toString(),
+                              style: const TextStyle(
+                                  fontSize: 15, color: Colors.white),
+                            )),
+                        titleText: _groupNameList[index],
+                        icon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.edit_rounded),
+                              onPressed: () {
+                                _groupEditCtl = TextEditingController(
+                                    text: _groupNameList[index]);
+                                setState(() {
+                                  _modify(context, index);
+                                });
+                              },
+                              color: Colors.redAccent,
+                            ),
+                            if (index != 0)
                               IconButton(
-                                icon: Icon(Icons.edit_rounded),
+                                icon: Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
-                                  _groupEditCtl = TextEditingController(
-                                      text: _groupNameList[index]);
                                   setState(() {
-                                    _modify(context, index);
+                                    if (index != 0)
+                                      _groupNameList.removeAt(index);
                                   });
                                 },
-                                color: Colors.redAccent,
-                              ),
-                              if (index != 0)
-                                IconButton(
-                                  icon: Icon(Icons.delete_forever_sharp),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (index != 0)
-                                        _groupNameList.removeAt(index);
-                                    });
-                                  },
-                                  color: _zero ? Colors.grey : Colors.redAccent,
-                                )
-                            ],
-                          ),
-                         ),
-
+                                color: _zero ? Colors.grey : Colors.redAccent,
+                              )
+                          ],
+                        ),
+                      ),
                     ]));
                   },
                 ),
@@ -229,7 +236,7 @@ class _GroupFormState extends State<GroupForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            title: const Text('Please Confirm'),
+            /*title: const Text('Please Confirm'),*/
             content: const Text('You want to rename?'),
             shape: RoundedRectangleBorder(
                 side: BorderSide(color: Colors.black, width: 1),
@@ -257,9 +264,11 @@ class _GroupFormState extends State<GroupForm> {
                             // Remove the box
                             setState(() {
                               _groupNameList[index] = _groupEditCtl!.text;
-                              DatabaseTest.listNameGroup[index] = _groupNameList[index];
+                              DatabaseTest.listNameGroup[index] =
+                                  _groupNameList[index];
                               print("list" + _groupNameList[index]);
-                              print("data: " + DatabaseTest.listNameGroup.toString());
+                              print("data: " +
+                                  DatabaseTest.listNameGroup.toString());
                               _groupEditCtl?.clear();
                             });
 
@@ -273,30 +282,6 @@ class _GroupFormState extends State<GroupForm> {
                             Navigator.of(context).pop();
                           },
                           child: const Text('Cancel'))
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      ElevatedButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              _groupNameList[index] = _groupEditCtl!.text;
-                              print(_groupNameList[index]);
-                              _groupEditCtl?.clear();
-                            });
-
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('EDIT')),
-                      ElevatedButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: Text('CANCEL')),
                     ],
                   ),
                 ],

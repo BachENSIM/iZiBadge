@@ -7,6 +7,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   static String userUid = "test14@gmail.com";
+
   //des variables pour les sauvegarder dans la BDD (les mettre en variable pour les déplacer étape par étape)
   static String? docIdAdd; //renvoyer ID d'un event spécifique
   static String? addrSave; //Adresses
@@ -18,17 +19,18 @@ class DatabaseTest {
   static String searchSave = ""; //pour la barre de recherche
   //pour savoir si cet events est supprimé ou pas
   static bool isDel = false;
+
   //pour filtrer entre des roles
   static bool isOrgan = false;
   static bool isInvite = false;
   static bool isScan = false;
+
   //pour cette fonction fetchID => ne pas utiliser
   static List<String>? listInvite; // pas besoin pour l'instant
-  static List<String> listRole = [];// pas besoin pour l'instant
+  static List<String> listRole = []; // pas besoin pour l'instant
 
   //pour save d'un nom de chaque groupe
   static List<String> listNameGroup = [];
-
 
   /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation') as Map<String, dynamic>;
   static List<String> listRole = map['email'];*/
@@ -47,13 +49,13 @@ class DatabaseTest {
     //_mainCollection.doc("test@gmail.com").collection('items').doc();
 
     Map<String, dynamic> data = <String, dynamic>{
-      "tittre": title,
+      "titre": title,
       "description": description,
       "adresse": address,
       "dateDebut": start,
       "dateEnd": end,
       "role": role,
-      "isDelete": isDel,
+      "isEfface": isDel,
     };
     print("In Database_test : " + userUid);
     docIdAdd = documentReferencer.id;
@@ -78,10 +80,10 @@ class DatabaseTest {
     //_mainCollection.doc("test@gmail.com").collection('items').doc(docId);
 
     Map<String, dynamic> data = <String, dynamic>{
-      "tittre": title,
+      "titre": title,
       "description": description,
       "adresse": address,
-      "isDelete": isDel
+      "isEfface": isDel
     };
 
     await documentReferencer
@@ -130,8 +132,13 @@ class DatabaseTest {
     else if (searchSave.isNotEmpty) {
       return notesItemCollection
           .where("tittre",
-              isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave + 'z')
-          /*.startAt([searchSave]).endAt([searchSave + '\uf8ff'])*/
+              /*isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
+              //Same as below
+              isGreaterThanOrEqualTo: searchSave,
+              isLessThan: searchSave.substring(0, searchSave.length - 1) +
+                  String.fromCharCode(
+                      searchSave.codeUnitAt(searchSave.length - 1) + 1))
+          //.startAt([searchSave]).endAt([searchSave + '\uf8ff'])
           .orderBy("tittre", descending: true)
           .orderBy("dateDebut", descending: false)
           .snapshots();
@@ -182,13 +189,12 @@ class DatabaseTest {
       await _mainCollection
           .doc(data.docs[j].data()['email'])
           .collection('items')
-          .doc(docId).update({"isDelete" : false}).whenComplete(
-              () => print("Event of this account :" + data.docs[j].data()['email']+   "has been updated in the database"))
+          .doc(docId)
+          .update({"isEfface": false})
+          .whenComplete(() => print("Event of this account :" +
+              data.docs[j].data()['email'] +
+              "has been updated in the database"))
           .catchError((e) => print(e));
-
-      /*updateAttribute(
-          email: data.docs[j].data()['email'],
-          docId: docId);*/
     }
 
     //Step 2 : delete list of user (participation) of this event
@@ -218,6 +224,7 @@ class DatabaseTest {
   static Future<void> addInviteList({
     required List<String> listEmail,
     required List<String> listGroup,
+    required List<String> listRole,
   }) async {
     //Step 1: add host to the list of invite
     DocumentReference documentReferencer = _mainCollection
@@ -232,7 +239,7 @@ class DatabaseTest {
       "statutEntree": true,
       "timestamp": DateTime.now(),
       "email": userUid,
-      "group" : "HOST"
+      "group": "HOST"
     };
 
     await documentReferencer
@@ -251,11 +258,11 @@ class DatabaseTest {
           .doc();
 
       Map<String, dynamic> data = <String, dynamic>{
-        "role": "Invité",
+        "role": listRole[i],
         "statutEntree": false,
         "timestamp": DateTime.now(),
         "email": listEmail[i],
-        "group" : listGroup[i]
+        "group": listGroup[i]
       };
 
       await documentReferencer
@@ -273,7 +280,7 @@ class DatabaseTest {
           address: addrSave!,
           start: startSave!,
           end: endSave!,
-          role: "Invité");
+          role: listRole[i]);
       //Step 4: in this event of this client, creat too an email in the collection "participation" for the content of QRCode
       await _mainCollection
           .doc(listEmail[i])
@@ -283,7 +290,7 @@ class DatabaseTest {
           .doc(documentReferencer.id)
           .set(data)
           .whenComplete(() => print("Add this event into email : " +
-          listEmail[i] +
+              listEmail[i] +
               " with id: " +
               documentReferencer.id))
           .catchError((e) => print(e));
@@ -321,7 +328,7 @@ class DatabaseTest {
       "dateDebut": start,
       "dateEnd": end,
       "role": role,
-      "isDelete": isDel,
+      "isEfface": isDel,
     };
     await documentReferencer
         .set(data)
@@ -357,7 +364,7 @@ class DatabaseTest {
   }
 
   //create
-  static List<int> listNbRole = [0,0,0];
+  static List<int> listNbRole = [0, 0, 0];
 
   static void fetchNBRole() async {
     int nbOgani = 0;
@@ -392,8 +399,10 @@ class DatabaseTest {
   //check status de QRCode
   static bool status = false;
   static String emailClient = "";
+
   //fonction pour verifier le status du client
-  static void fetchDataCheck(String idParticipation,String contentQRCode) async {
+  static void fetchDataCheck(
+      String idParticipation, String contentQRCode) async {
     var dataID = await FirebaseFirestore.instance
         .collection('evenements')
         .doc(userUid)
@@ -405,9 +414,8 @@ class DatabaseTest {
       if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
         status = true;
         emailClient = dataID.docs[i].data()['email'];
-      }
-      else
+      } else
         status = false;
-      }
     }
+  }
 }
