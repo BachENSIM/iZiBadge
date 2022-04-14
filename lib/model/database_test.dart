@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   static String userUid = "test14@gmail.com";
+  //static String userUid = "example2@gmail.com";
 
   //des variables pour les sauvegarder dans la BDD (les mettre en variable pour les déplacer étape par étape)
   static String? docIdAdd; //renvoyer ID d'un event spécifique
@@ -131,7 +134,7 @@ class DatabaseTest {
     //Faire la recherche par le nom de titre
     else if (searchSave.isNotEmpty) {
       return notesItemCollection
-          .where("tittre",
+          .where("titre",
               /*isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
               //Same as below
               isGreaterThanOrEqualTo: searchSave,
@@ -139,17 +142,17 @@ class DatabaseTest {
                   String.fromCharCode(
                       searchSave.codeUnitAt(searchSave.length - 1) + 1))
           //.startAt([searchSave]).endAt([searchSave + '\uf8ff'])
-          .orderBy("tittre", descending: true)
+          .orderBy("titre", descending: true)
           .orderBy("dateDebut", descending: false)
           .snapshots();
     }
     //Revoyer toutes les infos dans la BDD
     else {
       return notesItemCollection
-          /*.where("tittre",
+          /*.where("titre",
           isGreaterThanOrEqualTo: searchSave,
           isLessThan: searchSave + 'z')
-          .orderBy("tittre", descending: true)*/
+          .orderBy("titre", descending: true)*/
           .orderBy("dateDebut", descending: false)
           .snapshots();
     }
@@ -322,7 +325,7 @@ class DatabaseTest {
         _mainCollection.doc(email).collection('items').doc(docIdAdd);
 
     Map<String, dynamic> data = <String, dynamic>{
-      "tittre": title,
+      "titre": title,
       "description": description,
       "adresse": address,
       "dateDebut": start,
@@ -398,11 +401,19 @@ class DatabaseTest {
 
   //check status de QRCode
   static bool status = false;
+  static late int nbPersonTotal = 0; //nb total de personne dans un events
+  late int countPersonEnter = 0; //compter cb de persons qui rentre
+  static int countPersonScanned = 0; //compter cb de fois qu'il rentre
   static String emailClient = "";
+  //static late HashMap lstPersonEnter ;
+  static HashMap lstPersonScanned = HashMap<String,int>();
 
   //fonction pour verifier le status du client
   static void fetchDataCheck(
       String idParticipation, String contentQRCode) async {
+    //lstPersonEnter = HashMap<String,bool>();
+    //lstPersonScanned = HashMap<String,int>();
+
     var dataID = await FirebaseFirestore.instance
         .collection('evenements')
         .doc(userUid)
@@ -410,12 +421,21 @@ class DatabaseTest {
         .doc(idParticipation)
         .collection('participation')
         .get();
+    nbPersonTotal = dataID.docs.length;
     for (int i = 0; i < dataID.docs.length; i++) {
       if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
         status = true;
+        //countPersonScanned++;
+        if(!lstPersonScanned.containsKey(contentQRCode)) {
+          lstPersonScanned.putIfAbsent(contentQRCode, () => 1);//ajouter une valeur dans la table de Hachage
+        }
+        else {
+          lstPersonScanned.update(contentQRCode, (value) => value++);//mettre à jour une valeur dans la liste
+        }
         emailClient = dataID.docs[i].data()['email'];
-      } else
+      } else {
         status = false;
+      }
     }
   }
 }

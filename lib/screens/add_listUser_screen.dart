@@ -28,7 +28,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
   String? _dropdownRole = _roleDropDown[0];
 
   //final TextEditingController _guestEditCtl = TextEditingController();
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(DatabaseTest.lstPersonScanned.isNotEmpty) DatabaseTest.lstPersonScanned.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
