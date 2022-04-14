@@ -20,10 +20,10 @@ class AddScreen extends StatelessWidget {
         //_startFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.blueJeans,
+        backgroundColor: CustomColors.backgroundLight,
         appBar: AppBar(
           //elevation: 0,
-          backgroundColor: CustomColors.firebaseNavy,
+          backgroundColor: CustomColors.backgroundDark,
           title: Text("Add an event"),
           //AppBarTitle()
           centerTitle: true,
@@ -35,7 +35,7 @@ class AddScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: CustomColors.textSecondary,
                   )),
               style: ElevatedButton.styleFrom(
                   elevation: 0, primary: Colors.transparent)),
@@ -43,7 +43,7 @@ class AddScreen extends StatelessWidget {
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                CustomColors.firebaseNavy,
+                CustomColors.backgroundDark,
               )),
               onPressed: () {
                 Navigator.of(context).push(
@@ -59,7 +59,7 @@ class AddScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: CustomColors.textSecondary,
                       )),
                   Icon(Icons.arrow_right_sharp)
                 ],

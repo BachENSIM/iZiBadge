@@ -99,10 +99,10 @@ class _EditItemFormState extends State<EditItemForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.0), //invisible box
-                  Text(
+                  const Text(
                     'Title',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -122,10 +122,10 @@ class _EditItemFormState extends State<EditItemForm> {
                     hint: 'Enter your title of this event',
                   ),
                   SizedBox(height: 24.0),
-                  Text(
+                  const Text(
                     'Description',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -146,10 +146,10 @@ class _EditItemFormState extends State<EditItemForm> {
                     hint: 'Enter your description of this event',
                   ),
                   SizedBox(height: 24.0),
-                  Text(
+                  const Text(
                     'Address',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   Text(
                     'Start Date',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.primaryText,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.calendar_today_rounded,
-                                color: Colors.deepOrange,
+                                color: CustomColors.accentDark,
                                 size: 32.0,
                               ),
                             ],
@@ -208,7 +208,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.timer_rounded,
-                                color: Colors.deepOrange,
+                                color: Colors.CustomColors.accentDark,
                                 size: 32.0,
                               ),
                             ],
@@ -223,7 +223,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   Text(
                     'End Date',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.primaryText,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -240,7 +240,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.calendar_today_rounded,
-                                color: Colors.deepOrange,
+                                color: CustomColors.accentDark,
                                 size: 32.0,
                               ),
                               //Text("Click me!", style:TextStyle(fontSize:20)),
@@ -260,7 +260,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.timer_rounded,
-                                color: Colors.deepOrange,
+                                color: CustomColors.accentDark,
                                 size: 32.0,
                               ),
                               //Text("Click me!", style:TextStyle(fontSize:20)),
@@ -277,7 +277,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   Text(
                     'Limit Date',
                     style: TextStyle(
-                      color: CustomColors.firebaseGrey,
+                      color: CustomColors.primaryText,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -294,7 +294,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.calendar_today_rounded,
-                                color: Colors.deepOrange,
+                                color: CustomColors.accentDark,
                                 size: 32.0,
                               ),
                               //Text("Click me!", style:TextStyle(fontSize:20)),
@@ -314,7 +314,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             children: const <Widget>[
                               Icon(
                                 Icons.timer_rounded,
-                                color: Colors.deepOrange,
+                                color: CustomColors.accentDark,
                                 size: 32.0,
                               ),
                               //Text("Click me!", style:TextStyle(fontSize:20)),
@@ -335,7 +335,7 @@ class _EditItemFormState extends State<EditItemForm> {
                     padding: const EdgeInsets.all(16.0),
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        CustomColors.firebaseOrange,
+                        CustomColors.accentLight,
                       ),
                     ),
                   )
@@ -344,7 +344,7 @@ class _EditItemFormState extends State<EditItemForm> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          CustomColors.firebaseOrange,
+                          CustomColors.accentLight,
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -380,14 +380,14 @@ class _EditItemFormState extends State<EditItemForm> {
                           Navigator.of(context).pop();
                         }
                       },
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
                           'UPDATE ITEM',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: CustomColors.firebaseGrey,
+                            color: CustomColors.textPrimary,
                             letterSpacing: 2,
                           ),
                         ),

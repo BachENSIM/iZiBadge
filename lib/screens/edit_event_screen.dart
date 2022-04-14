@@ -40,22 +40,22 @@ class _EditScreenState extends State<EditScreen> {
         _addrFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.firebaseNavy,
+        backgroundColor: CustomColors.backgroundDark,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.firebaseNavy,
+          backgroundColor: CustomColors.backgroundDark,
           title: Text("Edit An Event"),
           actions: [
             _isDel
-                ? Padding(
-                    padding: const EdgeInsets.only(
+                ? const Padding(
+                    padding: EdgeInsets.only(
                       top: 10.0,
                       bottom: 10.0,
                       right: 16.0,
                     ),
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.redAccent,
+                        CustomColors.accentDark,
                       ),
                       strokeWidth: 3,
                     ),

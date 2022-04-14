@@ -19,7 +19,7 @@ class AppBarTitle extends StatelessWidget {
         Text(
           'iziSecure',
           style: TextStyle(
-            color: CustomColors.firebaseYellow,
+            color: CustomColors.accentLight,
             fontSize: 18,
           ),
         ),

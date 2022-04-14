@@ -39,7 +39,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                       ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
-                            CustomColors.firebaseOrange,
+                            CustomColors.accentLight,
                           ),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
@@ -58,7 +58,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: CustomColors.firebaseGrey,
+                              color: CustomColors.textPrimary,
                               letterSpacing: 2,
                             ),
                           ),
@@ -71,7 +71,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                CustomColors.firebaseOrange,
+                CustomColors.accentLight,
               ),
             ),
           );
