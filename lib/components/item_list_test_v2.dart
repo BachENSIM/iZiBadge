@@ -51,7 +51,7 @@ class ItemListTestV2 extends StatelessWidget {
                 return StickyHeader(
                   overlapHeaders: true,
                   header: Container(
-                    color: Colors.orangeAccent,
+                    color: CustomColors.accentLight,
                     child:Center (
                             child:Text(
                               currHeader.toString() +
@@ -64,7 +64,7 @@ class ItemListTestV2 extends StatelessWidget {
                   content:
                     Ink(
                       decoration: BoxDecoration(
-                        color: CustomColors.firebaseGrey.withOpacity(0.1),
+                        color: CustomColors.textPrimary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: ListTile(
@@ -145,7 +145,7 @@ class ItemListTestV2 extends StatelessWidget {
               else {
                 return  Ink(
                   decoration: BoxDecoration(
-                    color: CustomColors.firebaseGrey.withOpacity(0.1),
+                    color: CustomColors.textPrimary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: ListTile(
@@ -388,7 +388,7 @@ class ItemListTestV2 extends StatelessWidget {
         return Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.firebaseOrange,
+              CustomColors.accentLight,
             ),
           ),
         );

@@ -58,10 +58,10 @@ class _AddItemFormState extends State<AddItemForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 12.0),
-                Text(
+                const Text(
                   'Title',
                   style: TextStyle(
-                    color: CustomColors.firebaseGrey,
+                    color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -81,10 +81,10 @@ class _AddItemFormState extends State<AddItemForm> {
                   hint: 'Enter a name of event',
                 ),
                 const SizedBox(height: 24.0),
-                Text(
+                const Text(
                   'Description',
                   style: TextStyle(
-                    color: CustomColors.firebaseGrey,
+                    color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -105,10 +105,10 @@ class _AddItemFormState extends State<AddItemForm> {
                   hint: 'Enter a description for this event',
                 ),
                 const SizedBox(height: 24.0),
-                Text(
+                const Text(
                   'Address',
                   style: TextStyle(
-                    color: CustomColors.firebaseGrey,
+                    color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -129,10 +129,10 @@ class _AddItemFormState extends State<AddItemForm> {
                   hint: 'Enter a address for this event',
                 ),
                 const SizedBox(height: 24.0),
-                Text(
+                const Text(
                   'Start Date',
                   style: TextStyle(
-                    color: CustomColors.firebaseGrey,
+                    color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -147,12 +147,12 @@ class _AddItemFormState extends State<AddItemForm> {
                         },
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.white38)),
+                                MaterialStateProperty.all(CustomColors.textSecondary)),
                         child: Wrap(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: Colors.orangeAccent,
+                              color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -167,12 +167,12 @@ class _AddItemFormState extends State<AddItemForm> {
                         },
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.white38)),
+                                MaterialStateProperty.all(CustomColors.textSecondary)),
                         child: Wrap(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: Colors.orangeAccent,
+                              color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -183,10 +183,10 @@ class _AddItemFormState extends State<AddItemForm> {
                   ],
                 ),
                 const SizedBox(height: 24.0),
-                Text(
+                const Text(
                   'End Date',
                   style: TextStyle(
-                    color: CustomColors.firebaseGrey,
+                    color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -201,12 +201,12 @@ class _AddItemFormState extends State<AddItemForm> {
                         },
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.white38)),
+                                MaterialStateProperty.all(CustomColors.textSecondary)),
                         child: Wrap(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: Colors.orangeAccent,
+                              color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -221,12 +221,12 @@ class _AddItemFormState extends State<AddItemForm> {
                         },
                         style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.white38)),
+                                MaterialStateProperty.all(CustomColors.textSecondary)),
                         child: Wrap(
-                          children: const <Widget>[
+                          children: <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: Colors.orangeAccent,
+                              color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -244,7 +244,7 @@ class _AddItemFormState extends State<AddItemForm> {
                   padding: const EdgeInsets.all(16.0),
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
-                      CustomColors.firebaseOrange,
+                      CustomColors.accentLight,
                     ),
                   ),
                 )
@@ -253,7 +253,7 @@ class _AddItemFormState extends State<AddItemForm> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        CustomColors.firebaseOrange,
+                        CustomColors.accentLight,
                       ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -301,14 +301,14 @@ class _AddItemFormState extends State<AddItemForm> {
                                 builder: (context) => GroupScreen()));
                       }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                    child: const Padding(
+                      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                       child: Text(
                         'Next',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: CustomColors.firebaseGrey,
+                          color: CustomColors.textPrimary,
                           letterSpacing: 2,
                         ),
                       ),

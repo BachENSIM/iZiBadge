@@ -33,11 +33,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.firebaseNavy,
+      backgroundColor: CustomColors.backgroundDark,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: CustomColors.firebaseNavy,
+        backgroundColor: CustomColors.backgroundDark,
         //title: AppBarTitle(),
         title: customWidget,
         actions: [
@@ -49,7 +49,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     customWidget = ListTile(
                       leading: const Icon(
                         Icons.search_rounded,
-                        color: Colors.white60,
+                        color: CustomColors.textSecondary,
                         size: 28,
                       ),
                       title: TextFormField(
@@ -62,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isDense: true,
                         ),
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: CustomColors.textSecondary,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -94,10 +94,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           );
         },
-        backgroundColor: CustomColors.firebaseOrange,
+        backgroundColor: CustomColors.accentLight,
         child: const Icon(
           Icons.add,
-          color: Colors.white,
+          color: CustomColors.textSecondary,
           size: 32,
         ),
       ),

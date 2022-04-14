@@ -70,14 +70,14 @@ class ItemList extends StatelessWidget {
               }
 
               return Ink(
-                //color: Colors.lightBlue,
+                //color: CustomColors.backgroundLight,
                 decoration: BoxDecoration(
-                  //color: !isDel ? CustomColors.firebaseGrey.withOpacity(0.1) : Color(0xFF2E9598),
+                  //color: !isDel ? CustomColors.primaryText.withOpacity(0.1) : Color(0xFF2E9598),
 
                   gradient: !isDel
-                      ? const LinearGradient(colors: [
-                          Color.fromARGB(255, 15, 199, 245),
-                          Color.fromARGB(255, 130, 234, 234)
+                      ? LinearGradient(colors: [
+                          CustomColors.backgroundLight,
+                          CustomColors.backgroundDark
                         ])
                       : const LinearGradient(colors: [
                           Color.fromARGB(255, 122, 146, 183),
@@ -94,9 +94,8 @@ class ItemList extends StatelessWidget {
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        //color: Color(0xFFB38305),
-                        color: Colors.white,
+                      style: const TextStyle(
+                        color: CustomColors.textSecondary,
                         fontSize: 20,
                       ),
                     ),
@@ -106,7 +105,7 @@ class ItemList extends StatelessWidget {
                       setUp(dateStart, isDel),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Color(0xFF665017), fontSize: 14),
+                      style: TextStyle(color: CustomColors.accentDark, fontSize: 14),
                     ),
                     trailing: _organisateur
                         ? Row(
@@ -128,7 +127,7 @@ class ItemList extends StatelessWidget {
                                 },
                                 icon: Icon(
                                   Icons.edit,
-                                  color: Color(0xFFB38305),
+                                  color: CustomColors.accentDark,
                                 ),
                               ),
                               IconButton(
@@ -143,7 +142,7 @@ class ItemList extends StatelessWidget {
                                   onPressed: () {},
                                   icon: Icon(
                                     Icons.photo_camera,
-                                    color: Color(0xFFB38305),
+                                    color: CustomColors.accentDark,
                                   )),
                               IconButton(
                                   onPressed: () {
@@ -160,7 +159,7 @@ class ItemList extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.qr_code_scanner_outlined,
-                                    color: Color(0xFFB38305),
+                                    color: CustomColors.accentDark,
                                   )),
                             ],
                           )
@@ -215,7 +214,7 @@ class ItemList extends StatelessWidget {
         return Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.firebaseOrange,
+              CustomColors.accentLight,
             ),
           ),
         );

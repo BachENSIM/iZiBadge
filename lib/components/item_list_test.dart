@@ -42,7 +42,7 @@ class _ItemListTestState extends State<ItemListTest> {
             children: <Widget>[
               Container(
                 height: 50,
-                color: Colors.indigoAccent  ,
+                color: CustomColors.backgroundDark,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -50,11 +50,11 @@ class _ItemListTestState extends State<ItemListTest> {
                     PopupMenuButton(
                         icon: Icon(
                           Icons.menu,
-                          color: Colors.white,
+                          color: CustomColors.textSecondary,
                           size: 32.0,
                         ),
                         offset: Offset(-40, 0),
-                        color: Colors.lightBlue,
+                        color: CustomColors.backgroundLight,
                         elevation: 20,
                         enabled: true,
                         onCanceled: () {
@@ -279,7 +279,7 @@ class _ItemListTestState extends State<ItemListTest> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                color: Colors.blueGrey,
+                                color: CustomColors.backgroundLight,
                                 padding: EdgeInsets.only(
                                     left: 30, top: 10, bottom: 10),
                                 child: Center(
@@ -298,9 +298,9 @@ class _ItemListTestState extends State<ItemListTest> {
                                 color:
                                     //CustomColors.firebaseGrey.withOpacity(0.1),
                                     !isDel
-                                        ? CustomColors.firebaseGrey
+                                        ? CustomColors.textPrimary
                                             .withOpacity(0.1)
-                                        : Color(0xFF7EEDF3),
+                                        : CustomColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               /*child: ListTile(
@@ -389,7 +389,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                       setUp(dateStart, isDel),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: Color(0xFFEEBA46), fontSize: 14),
+                                      style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
                                     ),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -453,7 +453,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     //color: Color(0xFFB38305),
-                                    color: Colors.white,
+                                    color: CustomColors.textSecondary,
                                     fontSize: 20,
                                   ),
                                 ),
@@ -467,9 +467,9 @@ class _ItemListTestState extends State<ItemListTest> {
                             color:
                             //CustomColors.firebaseGrey.withOpacity(0.1),
                             !isDel
-                                ? CustomColors.firebaseGrey
+                                ? CustomColors.textPrimary
                                 .withOpacity(0.1)
-                                : Color(0xFF7EEDF3),
+                                : CustomColors.backgroundLight,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: ExpansionTile(
@@ -486,7 +486,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                   setUp(dateStart, isDel),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Color(0xFFEEBA46), fontSize: 14),
+                                  style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -550,7 +550,7 @@ class _ItemListTestState extends State<ItemListTest> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 //color: Color(0xFFB38305),
-                                color: Colors.white,
+                                color: CustomColors.textSecondary,
                                 fontSize: 20,
                               ),
                             ),
@@ -567,7 +567,7 @@ class _ItemListTestState extends State<ItemListTest> {
         return Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.firebaseOrange,
+              CustomColors.accentLight,
             ),
           ),
         );

@@ -34,7 +34,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CustomColors.blueJeans,
+          backgroundColor: CustomColors.backgroundDark,
           centerTitle: true,
           title: const Text(
             'Add list of invite',
@@ -113,9 +113,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: Colors.black12,
+                                                color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: Colors.white,
+                                            dropdownButtonColor: CustomColors.textSecondary,
                                             value: _dropdownGroup,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -144,9 +144,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: Colors.black12,
+                                                color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: Colors.white,
+                                            dropdownButtonColor: CustomColors.textSecondary,
                                             value: _dropdownRole,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -213,7 +213,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                   _modify(context, index);
                                                 });
                                               },
-                                              color: Color(0xFFFF809B),
+                                              color: CustomColors.accentDark,
                                               titleText: "Email: " +
                                                   _groupListUser[index],
                                               subTitleText: "Group: " +
@@ -236,7 +236,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     print(index);
                                                   });
                                                 },
-                                                color: Colors.black,
+                                                color: CustomColors.textPrimary,
                                               )),
                                         ]));
                                       },
@@ -256,7 +256,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                          CustomColors.firebaseOrange,
+                          CustomColors.accentDark,
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -294,7 +294,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: CustomColors.firebaseGrey,
+                            color: CustomColors.textSecondary,
                             letterSpacing: 2,
                           ),
                         ),
@@ -314,7 +314,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
             /*title: const Text('Please Confirm'),*/
             content: const Text('Edit your information?'),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black, width: 1),
+                side: BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -349,9 +349,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             borderRadius:
                             BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: Colors.black12,
+                                color: CustomColors.textPrimary,
                                 width: 1),
-                            dropdownButtonColor: Colors.white,
+                            dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownGroup,
                             onChanged: (newValue) {
                               setState(() {
@@ -380,9 +380,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             borderRadius:
                             BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: Colors.black12,
+                                color: CustomColors.textPrimary,
                                 width: 1),
-                            dropdownButtonColor: Colors.white,
+                            dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownRole,
                             onChanged: (newValue) {
                               setState(() {
