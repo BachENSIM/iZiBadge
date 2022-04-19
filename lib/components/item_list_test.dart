@@ -42,7 +42,7 @@ class _ItemListTestState extends State<ItemListTest> {
             children: <Widget>[
               Container(
                 height: 50,
-                color: CustomColors.backgroundDark,
+                color: CustomColors.backgroundColor,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -90,8 +90,12 @@ class _ItemListTestState extends State<ItemListTest> {
                                     //   ],
                                     // );
                                     return GFCheckboxListTile(
-                                        titleText: DatabaseTest.listNbRole.isEmpty ? "Organisateur 0" : "Organisateur " + DatabaseTest.listNbRole[0]
-                                            .toString(),
+                                        titleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "Organisateur 0"
+                                                : "Organisateur " +
+                                                    DatabaseTest.listNbRole[0]
+                                                        .toString(),
                                         type: GFCheckboxType.basic,
                                         inactiveIcon: null,
                                         value: DatabaseTest.isOrgan,
@@ -99,14 +103,10 @@ class _ItemListTestState extends State<ItemListTest> {
                                           setState(() {
                                             _setState(() {
                                               DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isOrgan =
-                                              value!;
-
+                                              DatabaseTest.isOrgan = value!;
                                             });
                                           });
-                                        }
-                                    );
-
+                                        });
                                   },
                                 ),
                               ),
@@ -140,8 +140,12 @@ class _ItemListTestState extends State<ItemListTest> {
                                       ],
                                     );*/
                                     return GFCheckboxListTile(
-                                      titleText: DatabaseTest.listNbRole.isEmpty ? "Invité 0" : "Invité " + DatabaseTest.listNbRole[1]
-                                          .toString(),
+                                        titleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "Invité 0"
+                                                : "Invité " +
+                                                    DatabaseTest.listNbRole[1]
+                                                        .toString(),
                                         type: GFCheckboxType.basic,
                                         inactiveIcon: null,
                                         value: DatabaseTest.isInvite,
@@ -149,15 +153,13 @@ class _ItemListTestState extends State<ItemListTest> {
                                           setState(() {
                                             _setState(() {
                                               DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isInvite =
-                                              value!;
+                                              DatabaseTest.isInvite = value!;
                                               print("invité " +
                                                   DatabaseTest.isInvite
                                                       .toString());
                                             });
                                           });
-                                        }
-                                    );
+                                        });
                                   },
                                 ),
                               ),
@@ -191,22 +193,24 @@ class _ItemListTestState extends State<ItemListTest> {
                                       ],
                                     );*/
                                     return GFCheckboxListTile(
-                                        titleText:  DatabaseTest.listNbRole.isEmpty ? "Scanneur 0" : "Scanneur " +DatabaseTest.listNbRole[2]
-                                            .toString(),
+                                        titleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "Scanneur 0"
+                                                : "Scanneur " +
+                                                    DatabaseTest.listNbRole[2]
+                                                        .toString(),
                                         value: DatabaseTest.isScan,
                                         onChanged: (bool? value) {
                                           setState(() {
                                             _setState(() {
                                               DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isScan =
-                                              value!;
+                                              DatabaseTest.isScan = value!;
                                               print("scanneur " +
                                                   DatabaseTest.isScan
                                                       .toString());
                                             });
                                           });
-                                        }
-                                    );
+                                        });
                                   },
                                 ),
                               ),
@@ -226,8 +230,6 @@ class _ItemListTestState extends State<ItemListTest> {
                         SizedBox(height: 16.0),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-
-
                       //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
                       //Dart doesn’t know which type of object it is getting.
 
@@ -298,8 +300,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                 color:
                                     //CustomColors.firebaseGrey.withOpacity(0.1),
                                     !isDel
-                                        ? CustomColors.textPrimary
-                                            .withOpacity(0.1)
+                                        ? CustomColors.backgroundColor
                                         : CustomColors.backgroundLight,
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
@@ -382,14 +383,19 @@ class _ItemListTestState extends State<ItemListTest> {
                                 children: <Widget>[
                                   ListTile(
                                     isThreeLine: true,
-                                    title: Text("Address: " + address + "\nDescription: " + desc),
+                                    title: Text("Address: " +
+                                        address +
+                                        "\nDescription: " +
+                                        desc),
                                     subtitle: Text(
                                       //"Desc: " + description + "\nAdresse: " + address,
                                       //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
                                       setUp(dateStart, isDel),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
+                                      style: TextStyle(
+                                          color: CustomColors.accentLight,
+                                          fontSize: 14),
                                     ),
                                     trailing: Row(
                                       mainAxisSize: MainAxisSize.min,
@@ -399,7 +405,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                             onPressed: () {
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
-                                                  builder: (context) => EditScreen(
+                                                  builder: (context) =>
+                                                      EditScreen(
                                                     currTitle: "title",
                                                     currDesc: "description",
                                                     currAddr: "address",
@@ -422,7 +429,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                               onPressed: () {
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
-                                                    builder: (context) => ScannerScreen(
+                                                    builder: (context) =>
+                                                        ScannerScreen(
                                                       documentId: docID,
                                                     ),
                                                   ),
@@ -431,22 +439,23 @@ class _ItemListTestState extends State<ItemListTest> {
                                               icon: Icon(Icons.photo_camera)),
                                         IconButton(
                                             onPressed: () {
-                                              print("Event id to qrcode: " + docID);
+                                              print("Event id to qrcode: " +
+                                                  docID);
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
-                                                  builder: (context) => QRCodeScreen(
+                                                  builder: (context) =>
+                                                      QRCodeScreen(
                                                     documentId: docID,
                                                   ),
                                                 ),
                                               );
                                             },
-                                            icon: const Icon(
-                                                Icons.qr_code_scanner_outlined)),
+                                            icon: const Icon(Icons
+                                                .qr_code_scanner_outlined)),
                                       ],
                                     ),
                                   )
                                 ],
-
                                 title: Text(
                                   name,
                                   maxLines: 1,
@@ -465,11 +474,10 @@ class _ItemListTestState extends State<ItemListTest> {
                         return Ink(
                           decoration: BoxDecoration(
                             color:
-                            //CustomColors.firebaseGrey.withOpacity(0.1),
-                            !isDel
-                                ? CustomColors.textPrimary
-                                .withOpacity(0.1)
-                                : CustomColors.backgroundLight,
+                                //CustomColors.firebaseGrey.withOpacity(0.1),
+                                !isDel
+                                    ? CustomColors.textPrimary.withOpacity(0.1)
+                                    : CustomColors.backgroundColorDark,
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: ExpansionTile(
@@ -479,14 +487,19 @@ class _ItemListTestState extends State<ItemListTest> {
                             children: <Widget>[
                               ListTile(
                                 isThreeLine: true,
-                                title: Text("Address: " + address + "\nDescription: " + desc),
+                                title: Text("Address: " +
+                                    address +
+                                    "\nDescription: " +
+                                    desc),
                                 subtitle: Text(
                                   //"Desc: " + description + "\nAdresse: " + address,
                                   //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
                                   setUp(dateStart, isDel),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
+                                  style: TextStyle(
+                                      color: CustomColors.accentLight,
+                                      fontSize: 14),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -519,7 +532,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                           onPressed: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                builder: (context) => ScannerScreen(
+                                                builder: (context) =>
+                                                    ScannerScreen(
                                                   documentId: docID,
                                                 ),
                                               ),
@@ -531,7 +545,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                           print("Event id to qrcode: " + docID);
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (context) => QRCodeScreen(
+                                              builder: (context) =>
+                                                  QRCodeScreen(
                                                 documentId: docID,
                                               ),
                                             ),
@@ -543,7 +558,6 @@ class _ItemListTestState extends State<ItemListTest> {
                                 ),
                               )
                             ],
-
                             title: Text(
                               name,
                               maxLines: 1,
@@ -555,7 +569,6 @@ class _ItemListTestState extends State<ItemListTest> {
                               ),
                             ),
                           ),
-
                         );
                       }
                     },

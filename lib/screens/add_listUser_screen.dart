@@ -32,14 +32,15 @@ class _ListUserScreenState extends State<ListUserScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(DatabaseTest.lstPersonScanned.isNotEmpty) DatabaseTest.lstPersonScanned.clear();
+    if (DatabaseTest.lstPersonScanned.isNotEmpty)
+      DatabaseTest.lstPersonScanned.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CustomColors.backgroundDark,
+          backgroundColor: CustomColors.backgroundColorDark,
           centerTitle: true,
           title: const Text(
             'Add list of invite',
@@ -120,7 +121,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             border: const BorderSide(
                                                 color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: CustomColors.textSecondary,
+                                            dropdownButtonColor:
+                                                CustomColors.textSecondary,
                                             value: _dropdownGroup,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -151,7 +153,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             border: const BorderSide(
                                                 color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: CustomColors.textSecondary,
+                                            dropdownButtonColor:
+                                                CustomColors.textSecondary,
                                             value: _dropdownRole,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -179,10 +182,11 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         String mess = _guestCtl.text;
                                         if (_guestCtl.text.isEmpty) {
                                           int size = _groupListUser.length + 1;
-                                          mess = "example" +  size.toString() +"@gmail.com";
+                                          mess = "example" +
+                                              size.toString() +
+                                              "@gmail.com";
                                           _groupListUser.add(mess);
-                                        }
-                                        else {
+                                        } else {
                                           _groupListUser.add(_guestCtl.text);
                                         }
 
@@ -212,9 +216,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         return Container(
                                             child: Column(children: <Widget>[
                                           GFListTile(
-                                              onTap:() {
+                                              onTap: () {
                                                 setState(() {
-                                                  _editGuestCtl = TextEditingController(text:  _groupListUser[index]);
+                                                  _editGuestCtl =
+                                                      TextEditingController(
+                                                          text: _groupListUser[
+                                                              index]);
                                                   _modify(context, index);
                                                 });
                                               },
@@ -338,10 +345,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //Pour le groupe
                       Container(
@@ -351,25 +356,21 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
-                            borderRadius:
-                            BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: CustomColors.textPrimary,
-                                width: 1),
+                                color: CustomColors.textPrimary, width: 1),
                             dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownGroup,
                             onChanged: (newValue) {
                               setState(() {
-                                _dropdownGroup =
-                                newValue as String?;
+                                _dropdownGroup = newValue as String?;
                               });
                             },
                             items: DatabaseTest.listNameGroup
-                                .map(
-                                    (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ))
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -382,26 +383,22 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
-                            borderRadius:
-                            BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: CustomColors.textPrimary,
-                                width: 1),
+                                color: CustomColors.textPrimary, width: 1),
                             dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownRole,
                             onChanged: (newValue) {
                               setState(() {
-                                _dropdownRole =
-                                newValue as String?;
+                                _dropdownRole = newValue as String?;
                                 print(_dropdownRole);
                               });
                             },
                             items: _roleDropDown
-                                .map(
-                                    (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ))
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -432,7 +429,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           child: const Text('Cancel'))
                     ],
                   ),
-
                 ],
               )
               // The "Yes" button

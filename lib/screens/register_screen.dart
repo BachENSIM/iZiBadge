@@ -5,7 +5,6 @@ import 'package:izibagde/screens/login_screen.dart';
 import 'package:izibagde/services/authentication.dart';
 import 'package:provider/provider.dart';
 
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -45,44 +44,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-                padding: const EdgeInsets.all(8.0),
-                //Step 6
-                child: TextFormField (
-                  decoration: const InputDecoration(
+              padding: const EdgeInsets.all(8.0),
+              //Step 6
+              child: TextFormField(
+                decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: "Enter your email"
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (String? value) {
-                    if(value == null || value.isEmpty) {
-                      return "Email is required";
-                    }
-                    return  null;
-                  },
-                  controller: _emailCtl,
-                ),
+                    labelText: "Enter your email"),
+                keyboardType: TextInputType.emailAddress,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Email is required";
+                  }
+                  return null;
+                },
+                controller: _emailCtl,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               //Step 7
-              child: TextFormField (
+              child: TextFormField(
                 obscureText: false,
                 controller: _passCtl,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: "Enter your password"
-                ),
+                    labelText: "Enter your password"),
                 keyboardType: TextInputType.emailAddress,
                 validator: (String? value) {
-                  if(value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty) {
                     return "Password is required";
                   } else if (value.length < 6) {
                     return "Password should be at least 6 characters";
                   }
-                  return  null;
+                  return null;
                 },
-
-
               ),
             ),
             Container(
@@ -92,12 +87,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   //Step 8
-                  await auth.handleSignUp(_emailCtl.text, _passCtl.text).then((value) {
+                  await auth
+                      .handleSignUp(_emailCtl.text, _passCtl.text)
+                      .then((value) {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const LoginScreen()));
                   }).catchError((e) => print(e));
                 },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(80.0)),
                 textColor: CustomColors.textSecondary,
                 padding: const EdgeInsets.all(0),
                 child: Container(
@@ -106,41 +104,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   width: size.width * 0.5,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(80.0),
-                      gradient: LinearGradient(
-                          colors: [
-                            //Color.fromARGB(255, 255, 136, 34),
-                            //Color.fromARGB(255, 255, 177, 41)
-                            CustomColors.backgroundLight,
-                            CustomColors.backgroundDark
-                          ]
-                      )
-                  ),
+                      gradient: LinearGradient(colors: [
+                        //Color.fromARGB(255, 255, 136, 34),
+                        //Color.fromARGB(255, 255, 177, 41)
+                        CustomColors.backgroundLight,
+                        CustomColors.backgroundColorDark
+                      ])),
                   padding: const EdgeInsets.all(0),
                   child: Text(
                     "SIGN UP",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ),
-
             Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: GestureDetector(
                 onTap: () => {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()))
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()))
                 },
                 child: Text(
                   "Already Have an Account? Sign in",
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.backgroundLight
-                  ),
+                      color: CustomColors.backgroundLight),
                 ),
               ),
             )

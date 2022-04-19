@@ -77,7 +77,7 @@ class ItemList extends StatelessWidget {
                   gradient: !isDel
                       ? LinearGradient(colors: [
                           CustomColors.backgroundLight,
-                          CustomColors.backgroundDark
+                          CustomColors.backgroundColorDark
                         ])
                       : const LinearGradient(colors: [
                           Color.fromARGB(255, 122, 146, 183),
@@ -105,7 +105,8 @@ class ItemList extends StatelessWidget {
                       setUp(dateStart, isDel),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: CustomColors.accentDark, fontSize: 14),
+                      style: TextStyle(
+                          color: CustomColors.accentDark, fontSize: 14),
                     ),
                     trailing: _organisateur
                         ? Row(

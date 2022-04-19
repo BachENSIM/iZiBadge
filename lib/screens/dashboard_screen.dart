@@ -29,15 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     DatabaseTest.fetchNBRole();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.backgroundDark,
+      backgroundColor: CustomColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
+        backgroundColor: CustomColors.backgroundAppbar,
         //title: AppBarTitle(),
         title: customWidget,
         actions: [

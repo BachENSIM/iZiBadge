@@ -40,15 +40,15 @@ class _EditScreenState extends State<EditScreen> {
         _addrFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.backgroundDark,
+        backgroundColor: CustomColors.backgroundColorDark,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.backgroundDark,
+          backgroundColor: CustomColors.backgroundColorDark,
           title: Text("Edit An Event"),
           actions: [
             _isDel
-                ? const Padding(
-                    padding: EdgeInsets.only(
+                ? Padding(
+                    padding: const EdgeInsets.only(
                       top: 10.0,
                       bottom: 10.0,
                       right: 16.0,

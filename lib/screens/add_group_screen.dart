@@ -4,7 +4,6 @@ import 'package:izibagde/components/group_form.dart';
 import 'package:izibagde/screens/add_listUser_screen.dart';
 
 class GroupScreen extends StatefulWidget {
-
   @override
   _GroupScreenState createState() => _GroupScreenState();
 }
@@ -15,7 +14,7 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
+        backgroundColor: CustomColors.backgroundColorDark,
         title: Text("Add group"),
         //AppBarTitle()
         centerTitle: true,
@@ -35,8 +34,8 @@ class _GroupScreenState extends State<GroupScreen> {
           ElevatedButton(
             style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  CustomColors.backgroundDark,
-                )),
+              CustomColors.backgroundColorDark,
+            )),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -59,12 +58,12 @@ class _GroupScreenState extends State<GroupScreen> {
           )
         ],
       ),
-      body:SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: GroupForm(),
-          ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: GroupForm(),
         ),
+      ),
     );
   }
 }

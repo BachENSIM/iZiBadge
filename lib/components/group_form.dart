@@ -14,7 +14,8 @@ class GroupForm extends StatefulWidget {
 class _GroupFormState extends State<GroupForm> {
   final _groupNameCtl =
       TextEditingController(); // un autre controller pour saisir => creer des groupe differents
-  TextEditingController?  _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
+  TextEditingController?
+      _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
   //un controller par default => afficher un groupe par default
   String initialText = "Default Group 1";
   TextEditingController? _groupInitCtl;
@@ -57,7 +58,7 @@ class _GroupFormState extends State<GroupForm> {
               children: <Widget>[
                 Expanded(
                     child: TextField(
-                    keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.text,
                   autofocus: true,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
@@ -94,10 +95,9 @@ class _GroupFormState extends State<GroupForm> {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
                             int size = _groupNameList.length + 1;
-                            mess = "Default Group " +  size.toString();
+                            mess = "Default Group " + size.toString();
                             _groupNameList.add(mess);
-                          }
-                          else {
+                          } else {
                             _groupNameList.add(_groupNameCtl.text);
                           }
                           DatabaseTest.listNameGroup.add(mess);
@@ -184,14 +184,15 @@ class _GroupFormState extends State<GroupForm> {
                             borderRadius: BorderRadius.circular(15)),
                       ),*/
                       GFListTile(
-                        color: CustomColors.accentLight,
+                        color: CustomColors.backgroundColorDark,
                         avatar: CircleAvatar(
                             radius: 20,
                             backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
-                                  fontSize: 15, color: CustomColors.textSecondary),
+                                  fontSize: 15,
+                                  color: CustomColors.textSecondary),
                             )),
                         titleText: _groupNameList[index],
                         icon: Row(
@@ -217,7 +218,9 @@ class _GroupFormState extends State<GroupForm> {
                                       _groupNameList.removeAt(index);
                                   });
                                 },
-                                color: _zero ? Colors.grey : CustomColors.accentDark,
+                                color: _zero
+                                    ? Colors.grey
+                                    : CustomColors.accentDark,
                               )
                           ],
                         ),
@@ -241,7 +244,8 @@ class _GroupFormState extends State<GroupForm> {
             /*title: const Text('Please Confirm'),*/
             content: const Text('You want to rename?'),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(color: CustomColors.textPrimary, width: 1),
+                side:
+                    const BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(

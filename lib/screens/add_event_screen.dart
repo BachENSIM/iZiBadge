@@ -23,7 +23,7 @@ class AddScreen extends StatelessWidget {
         backgroundColor: CustomColors.backgroundLight,
         appBar: AppBar(
           //elevation: 0,
-          backgroundColor: CustomColors.backgroundDark,
+          backgroundColor: CustomColors.backgroundColorDark,
           title: Text("Add an event"),
           //AppBarTitle()
           centerTitle: true,
@@ -43,7 +43,7 @@ class AddScreen extends StatelessWidget {
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                CustomColors.backgroundDark,
+                CustomColors.backgroundColorDark,
               )),
               onPressed: () {
                 Navigator.of(context).push(
@@ -65,7 +65,6 @@ class AddScreen extends StatelessWidget {
                 ],
               ),
             )
-
           ],
         ),
         //scrollView
