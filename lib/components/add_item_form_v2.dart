@@ -59,7 +59,7 @@ class _AddItemFormState extends State<AddItemForm> {
               children: [
                 const SizedBox(height: 12.0),
                 const Text(
-                  'Title',
+                  'Titre',
                   style: TextStyle(
                     color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -77,8 +77,8 @@ class _AddItemFormState extends State<AddItemForm> {
                   validator: (value) => Validator.validateField(
                     value: value,
                   ),
-                  label: 'Title',
-                  hint: 'Enter a name of event',
+                  label: 'Titre',
+                  hint: "Saisir le titre d'un événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
@@ -102,11 +102,11 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Description',
-                  hint: 'Enter a description for this event',
+                  hint: 'Saisir la description pour cet événement',
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Address',
+                  'Adresse',
                   style: TextStyle(
                     color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -125,12 +125,12 @@ class _AddItemFormState extends State<AddItemForm> {
                   validator: (value) => Validator.validateField(
                     value: value,
                   ),
-                  label: 'Address',
-                  hint: 'Enter a address for this event',
+                  label: 'Adresse',
+                  hint: "Saisir l'adresse",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Start Date',
+                  'Date pour commencer',
                   style: TextStyle(
                     color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -184,7 +184,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'End Date',
+                  'Date pour terminer',
                   style: TextStyle(
                     color: CustomColors.textPrimary,
                     fontSize: 22.0,
