@@ -19,16 +19,18 @@ class _GroupFormState extends State<GroupForm> {
   String initialText = "Default Group 1";
   TextEditingController? _groupInitCtl;
 
-  bool _zero =
-      true; //verifier l'indice de la liste => si = 0 => c'est le default
+  bool _zero = true; //verifier l'indice de la liste => si = 0 => c'est le default
 
+  //pour sauvegarder dans la BDD
   final List<String> _groupNameList = [
     "Default Group 1"
-  ]; //pour sauvegarder dans la BDD
+  ];
+  late int taille ;
 
   @override
   void initState() {
     super.initState();
+    taille = _groupNameList.length+1;
     _groupInitCtl = TextEditingController(text: initialText);
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
@@ -63,7 +65,7 @@ class _GroupFormState extends State<GroupForm> {
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior
                         .never, //Hides label on focus or if filled
-                    labelText: "Put a name for your group",
+                    labelText: "Ex: Groupe Etudiant",
                     filled: true, // Needed for adding a fill color
                     fillColor: CustomColors.backgroundLight,
                     isDense: false, // Reduces height a bit
@@ -93,8 +95,7 @@ class _GroupFormState extends State<GroupForm> {
                         setState(() {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
-                            int size = _groupNameList.length + 1;
-                            mess = "Default Group " +  size.toString();
+                            mess = "Default Group " +  (taille++).toString();
                             _groupNameList.add(mess);
                           }
                           else {
@@ -120,11 +121,11 @@ class _GroupFormState extends State<GroupForm> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ListView(shrinkWrap: true, children: <Widget>[
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 height: 600.0,
                 child: ListView.builder(
@@ -213,8 +214,11 @@ class _GroupFormState extends State<GroupForm> {
                                 icon: Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
                                   setState(() {
-                                    if (index != 0)
+                                    if (index != 0){
                                       _groupNameList.removeAt(index);
+                                      DatabaseTest.listNameGroup.removeAt(index);
+                                    }
+
                                   });
                                 },
                                 color: _zero ? Colors.grey : CustomColors.accentDark,

@@ -26,12 +26,16 @@ class _ListUserScreenState extends State<ListUserScreen> {
   //dropDown pour le role
   static final List<String> _roleDropDown = ["Invité", "Scanneur"];
   String? _dropdownRole = _roleDropDown[0];
+  late int taille;
+  //pour éviter appuyer plusieurs fois
+  bool _isProcessing = false;
 
   //final TextEditingController _guestEditCtl = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    taille = _groupListUser.length + 1;
     if(DatabaseTest.lstPersonScanned.isNotEmpty) DatabaseTest.lstPersonScanned.clear();
   }
 
@@ -42,7 +46,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
           backgroundColor: CustomColors.backgroundDark,
           centerTitle: true,
           title: const Text(
-            'Add list of invite',
+            "Ajout de la liste d'user",
           ),
           leadingWidth: 100,
           leading: ElevatedButton.icon(
@@ -82,24 +86,11 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       ? 'Email cannot be blank'
                                       : null,
                                   decoration: const InputDecoration(
-                                    hintText: 'Example: tom@gmail.com',
+                                    hintText: 'Ex: tom@gmail.com',
                                     contentPadding: EdgeInsets.all(8),
                                     isDense: true,
                                   ),
                                 ),
-                                /*Expanded(
-                                  child: TextFormField(
-                                    maxLines: 1,
-                                    keyboardType:
-                                    TextInputType.emailAddress,
-                                    controller: _guestCtl,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter email of guest',
-                                      contentPadding: EdgeInsets.all(8),
-                                      isDense: true,
-                                    ),
-                                  ),
-                                ),*/
                                 Container(
                                   child: Row(
                                     mainAxisAlignment:
@@ -178,8 +169,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       setState(() {
                                         String mess = _guestCtl.text;
                                         if (_guestCtl.text.isEmpty) {
-                                          int size = _groupListUser.length + 1;
-                                          mess = "example" +  size.toString() +"@gmail.com";
+                                          mess = "example" +  (taille++).toString() +"@gmail.com";
                                           _groupListUser.add(mess);
                                         }
                                         else {
@@ -194,7 +184,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       });
                                     },
                                     child: Wrap(
-                                      children: const <Widget>[Text('ADD')],
+                                      children: const <Widget>[Text('AJOUTER')],
                                     )),
                                 const SizedBox(
                                   height: 10,
@@ -203,7 +193,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 ListView(shrinkWrap: true, children: <Widget>[
                                   SizedBox(height: 15),
                                   Container(
-                                    height: 275.0,
+                                    height: 300.0,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _groupListUser.length,
@@ -221,7 +211,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               color: CustomColors.accentDark,
                                               titleText: "Email: " +
                                                   _groupListUser[index],
-                                              subTitleText: "Group: " +
+                                              subTitleText: "Groupe²: " +
                                                   _groupDropdownGroup[index] +
                                                   " - Role: " +
                                                   _groupDropdownRole[index],
@@ -256,7 +246,19 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           )
                         ],
                       ))),
-                  Container(
+                  _isProcessing ?
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              CustomColors.accentLight,
+                            ),
+                          ),
+                        ),
+                      )
+                    :
+                    Container(
                     width: double.maxFinite,
                     child: ElevatedButton(
                       style: ButtonStyle(
@@ -270,10 +272,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         ),
                       ),
                       onPressed: () async {
-                        //print(DatabaseTest.nameSave.toString());
-                        //print(DatabaseTest.descSave.toString());
-                        //print(DatabaseTest.addrSave.toString());
-
+                        setState(() {
+                          _isProcessing = true;
+                        });
                         await DatabaseTest.addItem(
                           title: DatabaseTest.nameSave.toString(),
                           description: DatabaseTest.descSave.toString(),
@@ -285,7 +286,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         await DatabaseTest.addInviteList(
                             listEmail: _groupListUser,
                             listGroup: _groupDropdownGroup,
-                            listRole: _groupDropdownRole);
+                            listRole: _groupDropdownRole
+                        );
+
+                        setState(() {
+                          _isProcessing = false;
+                        });
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => DashboardScreen(),
@@ -295,7 +301,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
-                          'Submit',
+                          'VALIDER',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -317,7 +323,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             /*title: const Text('Please Confirm'),*/
-            content: const Text('Edit your information?'),
+            content: const Text('Editer vos informations?'),
             shape: RoundedRectangleBorder(
                 side: BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
@@ -423,13 +429,13 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Edit')),
+                          child: const Text('Modifier')),
                       TextButton(
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Cancel'))
+                          child: const Text('Anuler'))
                     ],
                   ),
 
