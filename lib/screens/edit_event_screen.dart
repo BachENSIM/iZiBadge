@@ -47,8 +47,8 @@ class _EditScreenState extends State<EditScreen> {
           title: const Text("Modfier l'événement"),
           actions: [
             _isDel
-                ? const Padding(
-                    padding: EdgeInsets.only(
+                ? Padding(
+                    padding: const EdgeInsets.only(
                       top: 10.0,
                       bottom: 10.0,
                       right: 16.0,
