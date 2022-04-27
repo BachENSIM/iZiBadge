@@ -14,8 +14,8 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        //backgroundColor: CustomColors.backgroundColorDark,
-        title: Text("Add group"),
+        backgroundColor: CustomColors.backgroundDark,
+        title: Text("Ajout de group"),
         //AppBarTitle()
         centerTitle: true,
         leadingWidth: 100,

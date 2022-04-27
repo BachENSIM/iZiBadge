@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/model/database_test.dart';
+import 'package:izibagde/screens/dashboard_screen.dart';
 
-import 'custom_colors.dart';
+class EditGroupForm extends StatefulWidget {
+  //const EditGroupForm({Key? key}) : super(key: key);
+  late final String documentId;
 
-class GroupForm extends StatefulWidget {
-  //const GroupForm({Key? key}) : super(key: key);
+  EditGroupForm({
+    required this.documentId,
+  });
 
   @override
-  _GroupFormState createState() => _GroupFormState();
+  _EditGroupFormState createState() => _EditGroupFormState();
 }
 
-class _GroupFormState extends State<GroupForm> {
-  final _groupNameCtl =
-      TextEditingController(); // un autre controller pour saisir => creer des groupe differents
-  TextEditingController?
-      _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
+class _EditGroupFormState extends State<EditGroupForm> {
+  // un autre controller pour saisir => creer des groupe differents
+  final _groupNameCtl = TextEditingController();
+  //un autre controller pour modifier le nom d'un groupe
+  TextEditingController? _groupEditCtl;
   //un controller par default => afficher un groupe par default
   String initialText = "Default Group 1";
   TextEditingController? _groupInitCtl;
-
-  bool _zero =
-      true; //verifier l'indice de la liste => si = 0 => c'est le default
+  //verifier l'indice de la liste => si = 0 => c'est le default
+  bool _one = false;
+  bool _isProcessing = false;
 
   //pour sauvegarder dans la BDD
-  final List<String> _groupNameList = ["Default Group 1"];
-  late int taille;
+
+  late int taille = 1;
 
   @override
   void initState() {
     super.initState();
-    taille = _groupNameList.length + 1;
     _groupInitCtl = TextEditingController(text: initialText);
-    if (DatabaseTest.listNameGroup.isNotEmpty)
-      DatabaseTest.listNameGroup.clear();
-    DatabaseTest.listNameGroup.add(_groupNameList[0]);
+    //_groupNameList = DatabaseTest.lstGrAdded;
+    //print("qdqsd" + DatabaseTest.lstGrAdded.length.toString());
   }
 
   @override
@@ -60,21 +63,20 @@ class _GroupFormState extends State<GroupForm> {
                 Expanded(
                     child: TextField(
                   keyboardType: TextInputType.text,
-                  autofocus: true,
+                  autofocus: false,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
                     floatingLabelBehavior: FloatingLabelBehavior
                         .never, //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
                     filled: true, // Needed for adding a fill color
-                    //fillColor: CustomColors.backgroundLight,
+                    fillColor: CustomColors.backgroundLight,
                     isDense: false, // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(12.0),
-                          bottomLeft:
-                              Radius.circular(12.0)), // Apply corner radius
+                          bottomLeft: Radius.circular(12.0)),
                     ),
                     prefixIcon: const Icon(Icons.group_add, size: 22),
                     suffixIcon: Padding(
@@ -96,13 +98,11 @@ class _GroupFormState extends State<GroupForm> {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Default Group " + (taille++).toString();
-                            _groupNameList.add(mess);
-                          } else {
-                            _groupNameList.add(_groupNameCtl.text);
                           }
-                          DatabaseTest.listNameGroup.add(mess);
+                          //_groupNameList.add(mess);
+                          DatabaseTest.lstGrAdded.add(mess);
                           _groupNameCtl.clear();
-                          print(DatabaseTest.listNameGroup.toString());
+                          //print(DatabaseTest.listNameGroup.toString());
                         });
                       },
                       //style:  ElevatedButton.styleFrom(side: ),
@@ -111,11 +111,11 @@ class _GroupFormState extends State<GroupForm> {
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(12.0),
                                   bottomRight: Radius.circular(12.0)))),
-                      child: const Text("ADD",
+                      child: const Text("AJOUTER",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            //color: CustomColors.textSecondary,
+                            color: CustomColors.textSecondary,
                           ))),
                 )
               ],
@@ -126,76 +126,35 @@ class _GroupFormState extends State<GroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: 600.0,
+                height: 375.0,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: _groupNameList.length,
+                  //itemCount: _groupNameList.length,
+                  itemCount: DatabaseTest.lstGrAdded.length,
                   itemBuilder: (BuildContext context, int index) {
-                    if (index != 0)
-                      _zero = false;
+                    //if (_groupNameList.length == 1)
+                    if (DatabaseTest.lstGrAdded.length == 1)
+                      _one = true;
                     else
-                      _zero = true;
+                      _one = false;
                     return Container(
                         child: Column(children: <Widget>[
                       const SizedBox(
                         height: 0,
                       ),
-                      /*ListTile(
-                        leading: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.brown[400],
-                          child: Text(
-                            index.toString(),
-                            style: const TextStyle(
-                                fontSize: 15, color: CustomColors.secondaryText),
-                          ),
-                        ),
-                        title: Text(_groupNameList[index]),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.edit_rounded),
-                              onPressed: () {
-                                _groupEditCtl = TextEditingController(
-                                    text: _groupNameList[index]);
-                                setState(() {
-                                  _modify(context, index);
-                                });
-                              },
-                              color: Colors.redAccent,
-                            ),
-                            if (index != 0)
-                              IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
-                                onPressed: () {
-                                  setState(() {
-                                    if (index != 0)
-                                      _groupNameList.removeAt(index);
-                                  });
-                                },
-                                color: _zero ? Colors.grey : Colors.redAccent,
-                              )
-                          ],
-                        ),
-                        //iconColor: _zero ? Colors.grey : Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.black, width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                      ),*/
                       GFListTile(
-                        color: CustomColors.lightPrimaryColor,
+                        color: CustomColors.accentLight,
                         avatar: CircleAvatar(
                             radius: 20,
-                            //backgroundColor: CustomColors.accentDark,
+                            backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
-                                fontSize: 15,
-                                //color: CustomColors.textSecondary
-                              ),
+                                  fontSize: 15,
+                                  color: CustomColors.textSecondary),
                             )),
-                        titleText: _groupNameList[index],
+                        //titleText: _groupNameList[index],
+                        titleText: DatabaseTest.lstGrAdded[index],
                         icon: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -203,28 +162,29 @@ class _GroupFormState extends State<GroupForm> {
                               icon: Icon(Icons.edit_rounded),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
-                                    text: _groupNameList[index]);
+                                    //text: _groupNameList[index]);
+                                    text: DatabaseTest.lstGrAdded[index]);
                                 setState(() {
                                   _modify(context, index);
                                 });
                               },
-                              //color: CustomColors.accentDark,
+                              color: CustomColors.accentDark,
                             ),
-                            if (index != 0)
+                            if (!_one)
                               IconButton(
                                 icon: Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
                                   setState(() {
-                                    if (index != 0) {
-                                      _groupNameList.removeAt(index);
-                                      DatabaseTest.listNameGroup
-                                          .removeAt(index);
+                                    if (!_one) {
+                                      //_groupNameList.removeAt(index);
+                                      DatabaseTest.lstGrAdded.removeAt(index);
+                                      //DatabaseTest.listNameGroup.removeAt(index);
                                     }
                                   });
                                 },
-                                //color: _zero
-                                //     ? Colors.grey
-                                //     : CustomColors.accentDark,
+                                color: _one
+                                    ? Colors.grey
+                                    : CustomColors.accentDark,
                               )
                           ],
                         ),
@@ -234,6 +194,62 @@ class _GroupFormState extends State<GroupForm> {
                 ),
               )
             ]),
+            const SizedBox(
+              height: 15,
+            ),
+            _isProcessing ?
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    CustomColors.accentLight,
+                  ),
+                ),
+              ),
+            )
+            :
+            Container(
+              width: double.maxFinite,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    CustomColors.accentDark,
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    _isProcessing = false;
+                  });
+                  await DatabaseTest.updateGroup(docId: widget.documentId, lstGroupUpdate: DatabaseTest.lstGrAdded);
+                  setState(() {
+                    _isProcessing = true;
+                  });
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => DashboardScreen(),
+                    ),
+                  );
+                },
+                child: const Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                  child: Text(
+                    'VALIDER',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.textSecondary,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -246,11 +262,10 @@ class _GroupFormState extends State<GroupForm> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             /*title: const Text('Please Confirm'),*/
-            content: const Text('You want to rename?'),
+            content: const Text('Souhaitez-vous modifier le nom de ce group?'),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    // color: CustomColors.textPrimary,
-                    width: 1),
+                side:
+                    const BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -274,25 +289,25 @@ class _GroupFormState extends State<GroupForm> {
                           onPressed: () {
                             // Remove the box
                             setState(() {
-                              _groupNameList[index] = _groupEditCtl!.text;
-                              DatabaseTest.listNameGroup[index] =
-                                  _groupNameList[index];
-                              print("list" + _groupNameList[index]);
-                              print("data: " +
-                                  DatabaseTest.listNameGroup.toString());
+                              DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
+                              // DatabaseTest.listNameGroup[index] =
+                              // _groupNameList[index];
+                              //print("list" +  DatabaseTest.lstGrAdded[index]);
+                              // print("data: " +
+                              //     DatabaseTest.listNameGroup.toString());
                               _groupEditCtl?.clear();
                             });
 
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Edit')),
+                          child: const Text('Modifiez')),
                       TextButton(
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Cancel'))
+                          child: const Text('Annulez'))
                     ],
                   ),
                 ],

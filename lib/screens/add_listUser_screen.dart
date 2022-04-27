@@ -26,12 +26,16 @@ class _ListUserScreenState extends State<ListUserScreen> {
   //dropDown pour le role
   static final List<String> _roleDropDown = ["Invité", "Scanneur"];
   String? _dropdownRole = _roleDropDown[0];
+  late int taille;
+  //pour éviter appuyer plusieurs fois
+  bool _isProcessing = false;
 
   //final TextEditingController _guestEditCtl = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    taille = _groupListUser.length + 1;
     if (DatabaseTest.lstPersonScanned.isNotEmpty)
       DatabaseTest.lstPersonScanned.clear();
   }
@@ -43,7 +47,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
           //backgroundColor: CustomColors.backgroundColorDark,
           centerTitle: true,
           title: const Text(
-            'Add list of invite',
+            "Ajout de la liste d'user",
           ),
           leadingWidth: 100,
           leading: ElevatedButton.icon(
@@ -82,29 +86,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                   validator: (value) => value!.isEmpty
                                       ? 'Email cannot be blank'
                                       : null,
-                                  decoration: InputDecoration(
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: CustomColors.primaryText),
-                                    ),
-                                    hintText: 'Example: email@gmail.com',
+                                  decoration: const InputDecoration(
+                                    hintText: 'Ex: tom@gmail.com',
                                     contentPadding: EdgeInsets.all(8),
                                     isDense: false,
                                   ),
                                 ),
-                                /*Expanded(
-                                  child: TextFormField(
-                                    maxLines: 1,
-                                    keyboardType:
-                                    TextInputType.emailAddress,
-                                    controller: _guestCtl,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Enter email of guest',
-                                      contentPadding: EdgeInsets.all(8),
-                                      isDense: true,
-                                    ),
-                                  ),
-                                ),*/
                                 Container(
                                   child: Row(
                                     mainAxisAlignment:
@@ -185,9 +172,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       setState(() {
                                         String mess = _guestCtl.text;
                                         if (_guestCtl.text.isEmpty) {
-                                          int size = _groupListUser.length + 1;
                                           mess = "example" +
-                                              size.toString() +
+                                              (taille++).toString() +
                                               "@gmail.com";
                                           _groupListUser.add(mess);
                                         } else {
@@ -202,7 +188,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       });
                                     },
                                     child: Wrap(
-                                      children: const <Widget>[Text('ADD')],
+                                      children: const <Widget>[Text('AJOUTER')],
                                     )),
                                 const SizedBox(
                                   height: 10,
@@ -211,7 +197,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 ListView(shrinkWrap: true, children: <Widget>[
                                   SizedBox(height: 15),
                                   Container(
-                                    height: 275.0,
+                                    height: 300.0,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _groupListUser.length,
@@ -232,7 +218,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               //color: CustomColors.accentDark,
                                               titleText: "Email: " +
                                                   _groupListUser[index],
-                                              subTitleText: "Group: " +
+                                              subTitleText: "Groupe²: " +
                                                   _groupDropdownGroup[index] +
                                                   " - Role: " +
                                                   _groupDropdownRole[index],
@@ -267,56 +253,72 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           )
                         ],
                       ))),
-                  Container(
-                    width: double.maxFinite,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        // backgroundColor: MaterialStateProperty.all(
-                        //   CustomColors.accentDark,
-                        // ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  _isProcessing
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                CustomColors.accentLight,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        //print(DatabaseTest.nameSave.toString());
-                        //print(DatabaseTest.descSave.toString());
-                        //print(DatabaseTest.addrSave.toString());
+                        )
+                      : Container(
+                          width: double.maxFinite,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              // backgroundColor: MaterialStateProperty.all(
+                              //   CustomColors.accentDark,
+                              // ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                              await DatabaseTest.addItem(
+                                title: DatabaseTest.nameSave.toString(),
+                                description: DatabaseTest.descSave.toString(),
+                                address: DatabaseTest.addrSave.toString(),
+                                start:
+                                    DateTime.parse(DateTime.now().toString()),
+                                end: DateTime.parse(DateTime.now().toString()),
+                                role: "Organisateur",
+                              );
+                              await DatabaseTest.addInviteList(
+                                  listEmail: _groupListUser,
+                                  listGroup: _groupDropdownGroup,
+                                  listRole: _groupDropdownRole);
 
-                        await DatabaseTest.addItem(
-                          title: DatabaseTest.nameSave.toString(),
-                          description: DatabaseTest.descSave.toString(),
-                          address: DatabaseTest.addrSave.toString(),
-                          start: DateTime.parse(DateTime.now().toString()),
-                          end: DateTime.parse(DateTime.now().toString()),
-                          role: "Organisateur",
-                        );
-                        await DatabaseTest.addInviteList(
-                            listEmail: _groupListUser,
-                            listGroup: _groupDropdownGroup,
-                            listRole: _groupDropdownRole);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DashboardScreen(),
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DashboardScreen(),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16.0, bottom: 16.0),
+                              child: Text(
+                                'VALIDER',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  //color: CustomColors.textSecondary,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ),
                           ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            //color: CustomColors.textSecondary,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                        )
                 ],
               ))),
         ));
@@ -328,7 +330,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             /*title: const Text('Please Confirm'),*/
-            content: const Text('Edit your information?'),
+            content: const Text('Editer vos informations?'),
             shape: RoundedRectangleBorder(
                 side: BorderSide(
                     // color: CustomColors.textPrimary,
@@ -428,13 +430,13 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Edit')),
+                          child: const Text('Modifier')),
                       TextButton(
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Cancel'))
+                          child: const Text('Anuler'))
                     ],
                   ),
                 ],

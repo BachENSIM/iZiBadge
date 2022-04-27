@@ -9,8 +9,17 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   static String userUid = "test14@gmail.com";
-  //static String userUid = "example2@gmail.com";
-
+  //static String userUid = "example1@gmail.com";
+  /*---------------------------------------*/
+  //variable globale pour changer la BDD
+  static String nameDB = "evenements"; //nom de bdd
+  static String eventRelated = "items"; //nom de la premiere collection
+  static String participants = "participation"; //nom de la 2eme collection
+  static String participantsGr =
+      "groupe"; //nom de la collection qui sauvegarde les groupes dans un event
+  static String listeGroupe =
+      "listeGroupe"; //nom du document de la collection "groupe"
+  /*---------------------------------------*/
   //des variables pour les sauvegarder dans la BDD (les mettre en variable pour les déplacer étape par étape)
   static String? docIdAdd; //renvoyer ID d'un event spécifique
   static String? addrSave; //Adresses
@@ -18,26 +27,26 @@ class DatabaseTest {
   static String? descSave; //description
   static DateTime? startSave; //date commencé
   static DateTime? endSave; //date fin
-
+  /*---------------------------------------*/
   static String searchSave = ""; //pour la barre de recherche
   //pour savoir si cet events est supprimé ou pas
   static bool isDel = false;
-
+  /*---------------------------------------*/
   //pour filtrer entre des roles
   static bool isOrgan = false;
   static bool isInvite = false;
   static bool isScan = false;
-
+  /*---------------------------------------*/
   //pour cette fonction fetchID => ne pas utiliser
   static List<String>? listInvite; // pas besoin pour l'instant
   static List<String> listRole = []; // pas besoin pour l'instant
-
+  /*---------------------------------------*/
   //pour save d'un nom de chaque groupe
   static List<String> listNameGroup = [];
 
-  /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation') as Map<String, dynamic>;
+  /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection(eventRelated).doc().collection(participants) as Map<String, dynamic>;
   static List<String> listRole = map['email'];*/
-
+  /*---------------------------------------*/
   //pour ajouter un events dans la BDD avec des attributs
   static Future<void> addItem({
     required String title,
@@ -48,8 +57,8 @@ class DatabaseTest {
     required String role,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection('items').doc();
-    //_mainCollection.doc("test@gmail.com").collection('items').doc();
+        _mainCollection.doc(userUid).collection(eventRelated).doc();
+    //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc();
 
     Map<String, dynamic> data = <String, dynamic>{
       "titre": title,
@@ -71,6 +80,7 @@ class DatabaseTest {
         .catchError((e) => print("Error " + e));
   }
 
+  /*---------------------------------------*/
   //pour modifier un events
   static Future<void> updateItem({
     required String title,
@@ -79,8 +89,8 @@ class DatabaseTest {
     required String docId,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection('items').doc(docId);
-    //_mainCollection.doc("test@gmail.com").collection('items').doc(docId);
+        _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
+    //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc(docId);
 
     Map<String, dynamic> data = <String, dynamic>{
       "titre": title,
@@ -96,18 +106,20 @@ class DatabaseTest {
         .catchError((e) => print(e));
   }
 
+  /*---------------------------------------*/
   //pour récupérer tous les events dans la BDD et les metrre dans un listview
   static Stream<QuerySnapshot> readItems() {
     Query<Map<String, dynamic>> notesItemCollection = _mainCollection
         .doc(userUid)
         .collection("items")
         .orderBy("dateDebut", descending: true);
-    //_mainCollection.doc("test@gmail.com").collection('items');
+    //_mainCollection.doc("test@gmail.com").collection(eventRelated);
 
     return notesItemCollection.snapshots();
   }
 
-  ////pour récupérer tous les events dans la BDD mais trier par "role"
+  /*---------------------------------------*/
+  //pour récupérer tous les events dans la BDD mais trier par "role"
   static Stream<QuerySnapshot> readRoles(
       bool _isOrganisateur, bool _isInviteur, bool _isScanneur) {
     /*  print("or : " +
@@ -158,40 +170,42 @@ class DatabaseTest {
     }
   }
 
+  /*---------------------------------------*/
   static Stream<QuerySnapshot> readEmails() {
     Query<Map<String, dynamic>> itemsEmailCollection =
         _mainCollection.doc(userUid).collection("emails");
-    //_mainCollection.doc("test@gmail.com").collection('items');
+    //_mainCollection.doc("test@gmail.com").collection(eventRelated);
 
     return itemsEmailCollection.snapshots();
   }
 
+  /*---------------------------------------*/
   //pour effacer un events
   static Future<void> deleteItem({
     required String docId,
   }) async {
     //Step 1: need to update another events - put an attribute isDel = true to know this event has been deleted (synchronization)
     var data = await FirebaseFirestore.instance
-        .collection('evenements')
+        .collection(nameDB)
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .doc(docId)
-        .collection('participation')
+        .collection(participants)
         .get();
     isDel = true;
     for (int j = 0; j < data.docs.length; j++) {
       /*DocumentReference documentReferencer = _mainCollection
           .doc()
-          .collection('items')
+          .collection(eventRelated)
           .doc(docId);*/
       /*var update = await FirebaseFirestore.instance
           .collection('evenements')
           .doc(data.docs[j].data()['email'])
-          .collection('items')
+          .collection(eventRelated)
           .get();*/
       await _mainCollection
           .doc(data.docs[j].data()['email'])
-          .collection('items')
+          .collection(eventRelated)
           .doc(docId)
           .update({"isEfface": false})
           .whenComplete(() => print("Event of this account :" +
@@ -199,13 +213,12 @@ class DatabaseTest {
               "has been updated in the database"))
           .catchError((e) => print(e));
     }
-
     //Step 2 : delete list of user (participation) of this event
     final documentRefList = _mainCollection
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .doc(docId)
-        .collection('participation')
+        .collection(participants)
         .get();
     await documentRefList.then((value) => value.docs.forEach((element) {
           element.reference.delete();
@@ -213,8 +226,8 @@ class DatabaseTest {
 
     //Step 3 : delete this event from DB
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection('items').doc(docId);
-    //_mainCollection.doc("test@gmail.com").collection('items').doc(docId);
+        _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
+    //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc(docId);
     await documentReferencer
         .delete()
         .whenComplete(() => print('Event with id ' +
@@ -223,6 +236,7 @@ class DatabaseTest {
         .catchError((e) => print(e));
   }
 
+  /*---------------------------------------*/
   //how to add a list of mail into firebase in the same event
   static Future<void> addInviteList({
     required List<String> listEmail,
@@ -232,9 +246,9 @@ class DatabaseTest {
     //Step 1: add host to the list of invite
     DocumentReference documentReferencer = _mainCollection
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .doc(docIdAdd)
-        .collection('participation')
+        .collection(participants)
         .doc();
 
     Map<String, dynamic> data = <String, dynamic>{
@@ -255,9 +269,9 @@ class DatabaseTest {
     for (int i = 0; i < listEmail.length; i++) {
       DocumentReference documentReferencer = _mainCollection
           .doc(userUid)
-          .collection('items')
+          .collection(eventRelated)
           .doc(docIdAdd)
-          .collection('participation')
+          .collection(participants)
           .doc();
 
       Map<String, dynamic> data = <String, dynamic>{
@@ -287,9 +301,9 @@ class DatabaseTest {
       //Step 4: in this event of this client, creat too an email in the collection "participation" for the content of QRCode
       await _mainCollection
           .doc(listEmail[i])
-          .collection('items')
+          .collection(eventRelated)
           .doc(docIdAdd)
-          .collection('participation')
+          .collection(participants)
           .doc(documentReferencer.id)
           .set(data)
           .whenComplete(() => print("Add this event into email : " +
@@ -300,6 +314,7 @@ class DatabaseTest {
     }
   }
 
+  /*---------------------------------------*/
   //return id of an event for the QRCode => create QRCode with the id client in the list of invite
   static Stream<QuerySnapshot> readListInvite(String docID) {
     Query<Map<String, dynamic>> notesItemCollection = _mainCollection
@@ -311,6 +326,7 @@ class DatabaseTest {
     return notesItemCollection.snapshots();
   }
 
+  /*---------------------------------------*/
   //essayer d'ajouter en meme temps un events pour tous les personnes qui ont été invitées par organisateur => synchroniser
   static Future<void> syncItems({
     required String email,
@@ -322,7 +338,7 @@ class DatabaseTest {
     required String role,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(email).collection('items').doc(docIdAdd);
+        _mainCollection.doc(email).collection(eventRelated).doc(docIdAdd);
 
     Map<String, dynamic> data = <String, dynamic>{
       "titre": title,
@@ -339,22 +355,23 @@ class DatabaseTest {
         .catchError((e) => print("Error " + e));
   }
 
+  /*---------------------------------------*/
   //static late List<String> listID = [];
   //cette methode n'a pas besoin d'utiliser
   static void fetchDataID() async {
     var dataID = await FirebaseFirestore.instance
-        .collection('evenements')
+        .collection(nameDB)
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .get();
     for (int i = 0; i < dataID.docs.length; i++) {
       //listID.add(dataID.docs[i].id);
       var data = await FirebaseFirestore.instance
-          .collection('evenements')
+          .collection(nameDB)
           .doc(userUid)
-          .collection('items')
+          .collection(eventRelated)
           .doc(dataID.docs[i].id)
-          .collection('participation')
+          .collection(participants)
           .get();
       for (int j = 0; j < data.docs.length; j++) {
         if (data.docs[j].data()['email'] == userUid) {
@@ -366,6 +383,7 @@ class DatabaseTest {
     print("length : " + listRole.length.toString() + " " + listRole.toString());
   }
 
+  /*---------------------------------------*/
   //create
   static List<int> listNbRole = [0, 0, 0];
 
@@ -374,9 +392,9 @@ class DatabaseTest {
     int nbInv = 0;
     int nbScan = 0;
     var dataID = await FirebaseFirestore.instance
-        .collection('evenements')
+        .collection(nameDB)
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .get();
     for (int i = 0; i < dataID.docs.length; i++) {
       if (dataID.docs[i].data()['role'] == "Organisateur") {
@@ -399,14 +417,15 @@ class DatabaseTest {
     listNbRole[2] = nbScan;
   }
 
+  /*---------------------------------------*/
   //check status de QRCode
   static bool status = false;
   static late int nbPersonTotal = 0; //nb total de personne dans un events
-  late int countPersonEnter = 0; //compter cb de persons qui rentre
+  static late int countPersonEnter = 0; //compter cb de persons qui rentre
   static int countPersonScanned = 0; //compter cb de fois qu'il rentre
   static String emailClient = "";
   //static late HashMap lstPersonEnter ;
-  static HashMap lstPersonScanned = HashMap<String,int>();
+  static HashMap lstPersonScanned = HashMap<String, int>();
 
   //fonction pour verifier le status du client
   static void fetchDataCheck(
@@ -415,27 +434,110 @@ class DatabaseTest {
     //lstPersonScanned = HashMap<String,int>();
 
     var dataID = await FirebaseFirestore.instance
-        .collection('evenements')
+        .collection(nameDB)
         .doc(userUid)
-        .collection('items')
+        .collection(eventRelated)
         .doc(idParticipation)
-        .collection('participation')
+        .collection(participants)
         .get();
     nbPersonTotal = dataID.docs.length;
+    //countPersonEnter = 0;
     for (int i = 0; i < dataID.docs.length; i++) {
       if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
         status = true;
-        //countPersonScanned++;
-        if(!lstPersonScanned.containsKey(contentQRCode)) {
-          lstPersonScanned.putIfAbsent(contentQRCode, () => 1);//ajouter une valeur dans la table de Hachage
-        }
-        else {
-          lstPersonScanned.update(contentQRCode, (value) => value++);//mettre à jour une valeur dans la liste
-        }
         emailClient = dataID.docs[i].data()['email'];
+        //countPersonScanned++;
+        if (!lstPersonScanned.containsKey(contentQRCode)) {
+          lstPersonScanned.putIfAbsent(contentQRCode,
+              () => 1); //ajouter une valeur dans la table de Hachage
+          //mettre à jour le statut d'entrée d'une personne = true
+          await _mainCollection
+              .doc(userUid)
+              .collection(eventRelated)
+              .doc(idParticipation)
+              .update({"statutEntree": status})
+              .whenComplete(() => print("Updated email: " +
+                  emailClient +
+                  "with status: " +
+                  status.toString()))
+              .catchError((e) => print(e));
+          //countPersonEnter++;
+        } else {
+          lstPersonScanned.update(contentQRCode,
+              (value) => value++); //mettre à jour une valeur dans la liste
+        }
       } else {
         status = false;
       }
     }
+  }
+
+  /*---------------------------------------*/
+  //pour récupérer tous les groupes dans la BDD
+  static List<String> lstGrAdded = [];
+  //méthode pour récupérer les groupes dans la liste d'invitation
+  /*static void fetchGroupAdded(String idParticipation) async{
+    var dataID = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(idParticipation)
+        .collection(participants)
+        .get();
+    late String nameGr;//nom de groupe
+    late String idPers;//id de cette personne qui possède ce nom au-dessus
+    late HashMap lstGr = HashMap<String,String>();
+
+    for (int i = 0; i < dataID.docs.length; i++) {
+      nameGr = dataID.docs[i].data()['group'];
+      idPers = dataID.docs[i].id;
+      if(!lstGr.containsValue(nameGr) && nameGr.compareTo("HOST") != 0) {
+        lstGr.putIfAbsent(idPers, () => nameGr);
+      }
+    }
+    print("avant" + lstGrAdded.length.toString());
+    if(lstGrAdded.isNotEmpty) {
+      lstGrAdded.clear();
+    }
+    lstGrAdded = lstGr.values.toList(growable: true) as List<String>;
+    print("apres empty" + lstGrAdded.toString());
+
+  }*/
+  //méthode pour récupérer les groupes dans la collection "groupe"
+
+  static void fetchGroupAdded(String idParticipation) async {
+    var dataID = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(idParticipation)
+        .collection(participantsGr)
+        .get();
+
+    for (int i = 0; i < dataID.docs.length; i++) {
+      //faut convertir en String parce qu'au début c'est le type dynamic pour que je puisse sauvegarder dans la BDD
+      lstGrAdded = (dataID.docs[i].data()['nomListeGroupe']).cast<String>();
+    }
+  }
+
+  /*---------------------------------------*/
+  //avoir besoins de sauvegarder touts les groupes sur BDD pour
+  static Future<void> updateGroup(
+      {required String docId, required List<String> lstGroupUpdate}) async {
+    DocumentReference documentReferencer = _mainCollection
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participantsGr)
+        .doc(listeGroupe);
+
+    Map<String, dynamic> data = <String, dynamic>{
+      "nomListeGroupe": lstGroupUpdate
+    };
+
+    await documentReferencer
+        .update(data)
+        .whenComplete(() => print("Updated group for event ${docId}"))
+        .catchError((e) => print(e));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:izibagde/components/filtre_form.dart';
 import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/edit_event_screen.dart';
+import 'package:izibagde/screens/edit_group_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
 import 'package:izibagde/screens/scanner_screen.dart';
 
@@ -34,190 +37,29 @@ class _ItemListTestState extends State<ItemListTest> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
+        } else if (snapshot.data?.size == 0) {
+          return SingleChildScrollView(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              buildMenu(context),
+              const SizedBox(height: 20),
+              const Center(
+                child: Text('Aucun événement trouvé....',
+                    style: TextStyle(
+                      fontSize: 24,
+                    )),
+              )
+            ],
+          ));
         } else if (snapshot.hasData || snapshot.data != null) {
           return SingleChildScrollView(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                height: 50,
-                //color: CustomColors.backgroundColor,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    //pour le filtre par le role
-                    PopupMenuButton(
-                        icon: Icon(
-                          Icons.menu,
-                          //color: CustomColors.textSecondary,
-                          size: 32.0,
-                        ),
-                        offset: Offset(-40, 0),
-                        //color: CustomColors.backgroundLight,
-                        elevation: 20,
-                        enabled: true,
-                        onCanceled: () {
-                          //do something
-                        },
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                child: StatefulBuilder(
-                                  builder: (_context, _setState) {
-                                    // return Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceBetween,
-                                    //   children: <Widget>[
-                                    //     const SizedBox(
-                                    //       child: Text("Organisateur "),
-                                    //       width: 110,
-                                    //     ),
-                                    //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
-                                    //         .toString()),
-                                    //     Checkbox(
-                                    //         value: DatabaseTest.isOrgan,
-                                    //         onChanged: (bool? value) {
-                                    //           setState(() {
-                                    //             _setState(() {
-                                    //               DatabaseTest.fetchNBRole();
-                                    //               DatabaseTest.isOrgan = value!;
-                                    //               print("organisateur " +
-                                    //                   DatabaseTest.isOrgan
-                                    //                       .toString());
-                                    //             });
-                                    //           });
-                                    //         }),
-                                    //   ],
-                                    // );
-                                    return GFCheckboxListTile(
-                                        titleText:
-                                            DatabaseTest.listNbRole.isEmpty
-                                                ? "Organisateur 0"
-                                                : "Organisateur " +
-                                                    DatabaseTest.listNbRole[0]
-                                                        .toString(),
-                                        type: GFCheckboxType.basic,
-                                        inactiveIcon: null,
-                                        value: DatabaseTest.isOrgan,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _setState(() {
-                                              DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isOrgan = value!;
-                                            });
-                                          });
-                                        });
-                                  },
-                                ),
-                              ),
-                              PopupMenuItem(
-                                child: StatefulBuilder(
-                                  builder: (_context, _setState) {
-                                    /*return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          child: Text("Invité"),
-                                          width: 110,
-                                        ),
-                                        Text(DatabaseTest.listNbRole.isEmpty ? "0" : DatabaseTest.listNbRole[1]
-                                            .toString()),
-                                        Checkbox(
-                                            value: DatabaseTest.isInvite,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                _setState(() {
-                                                  DatabaseTest.fetchNBRole();
-                                                  DatabaseTest.isInvite =
-                                                      value!;
-                                                  print("invité " +
-                                                      DatabaseTest.isInvite
-                                                          .toString());
-                                                });
-                                              });
-                                            }),
-                                      ],
-                                    );*/
-                                    return GFCheckboxListTile(
-                                        titleText:
-                                            DatabaseTest.listNbRole.isEmpty
-                                                ? "Invité 0"
-                                                : "Invité " +
-                                                    DatabaseTest.listNbRole[1]
-                                                        .toString(),
-                                        type: GFCheckboxType.basic,
-                                        inactiveIcon: null,
-                                        value: DatabaseTest.isInvite,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _setState(() {
-                                              DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isInvite = value!;
-                                              print("invité " +
-                                                  DatabaseTest.isInvite
-                                                      .toString());
-                                            });
-                                          });
-                                        });
-                                  },
-                                ),
-                              ),
-                              PopupMenuItem(
-                                child: StatefulBuilder(
-                                  builder: (_context, _setState) {
-                                    /*return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          child: Text("Scanneur"),
-                                          width: 110,
-                                        ),
-                                        Text(DatabaseTest.listNbRole.isEmpty ? "0" : DatabaseTest.listNbRole[2]
-                                            .toString()),
-                                        Checkbox(
-                                            value: DatabaseTest.isScan,
-                                            onChanged: (bool? value) {
-                                              setState(() {
-                                                _setState(() {
-                                                  DatabaseTest.fetchNBRole();
-                                                  DatabaseTest.isScan =
-                                                      value!;
-                                                  print("scanneur " +
-                                                      DatabaseTest.isScan
-                                                          .toString());
-                                                });
-                                              });
-                                            }),
-                                      ],
-                                    );*/
-                                    return GFCheckboxListTile(
-                                        titleText:
-                                            DatabaseTest.listNbRole.isEmpty
-                                                ? "Scanneur 0"
-                                                : "Scanneur " +
-                                                    DatabaseTest.listNbRole[2]
-                                                        .toString(),
-                                        value: DatabaseTest.isScan,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _setState(() {
-                                              DatabaseTest.fetchNBRole();
-                                              DatabaseTest.isScan = value!;
-                                              print("scanneur " +
-                                                  DatabaseTest.isScan
-                                                      .toString());
-                                            });
-                                          });
-                                        });
-                                  },
-                                ),
-                              ),
-                            ]),
-                  ],
-                ),
-              ),
+              buildMenu(context),
               const SizedBox(
                 height: 15,
               ),
@@ -300,277 +142,14 @@ class _ItemListTestState extends State<ItemListTest> {
                                         fontSize: 26),
                                   ),
                                 )),
-                            SizedBox(height: 10),
-                            Ink(
-                              decoration: BoxDecoration(
-                                color: !isDel
-                                    ? CustomColors.primaryColor
-                                    : Theme.of(context).disabledColor,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              /*child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                onTap: () {},
-                                title: Text(
-                                  name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    //color: Color(0xFFB38305),
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  //"Desc: " + description + "\nAdresse: " + address,
-                                  //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
-                                  setUp(dateStart, isDel),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Color(0xFF665017), fontSize: 14),
-                                ),
-
-                                //trailing: Icon(Icons.edit),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    if (_organisateur)
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => EditScreen(
-                                                currTitle: "title",
-                                                currDesc: "description",
-                                                currAddr: "address",
-                                                //currStartDate: startDate.toDate(),
-                                                documentId: docID,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(Icons.edit),
-                                      ),
-                                    if (_organisateur)
-                                      IconButton(
-                                          onPressed: () {
-                                            _delete(context, docID);
-                                          },
-                                          icon: Icon(Icons.delete)),
-                                    if (_organisateur || _scanneur)
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.photo_camera)),
-                                    IconButton(
-                                        onPressed: () {
-                                          print("Event id to qrcode: " + docID);
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QRCodeScreen(
-                                                documentId: docID,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(
-                                            Icons.qr_code_scanner_outlined)),
-                                  ],
-                                ),
-                              ),*/
-                              child: ExpansionTile(
-                                /*shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),*/
-                                children: <Widget>[
-                                  ListTile(
-                                    isThreeLine: true,
-                                    title: Text("Address: " +
-                                        address +
-                                        "\nDescription: " +
-                                        desc),
-                                    subtitle: Text(
-                                      //"Desc: " + description + "\nAdresse: " + address,
-                                      //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
-                                      setUp(dateStart, isDel),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          //color: CustomColors.accentLight,
-                                          fontSize: 14),
-                                    ),
-                                    trailing: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        if (_organisateur)
-                                          IconButton(
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EditScreen(
-                                                    currTitle: "title",
-                                                    currDesc: "description",
-                                                    currAddr: "address",
-                                                    //currStartDate: startDate.toDate(),
-                                                    documentId: docID,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            icon: Icon(Icons.edit),
-                                          ),
-                                        if (_organisateur)
-                                          IconButton(
-                                              onPressed: () {
-                                                _delete(context, docID);
-                                              },
-                                              icon: Icon(Icons.delete)),
-                                        if (_organisateur || _scanneur)
-                                          IconButton(
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ScannerScreen(
-                                                      documentId: docID,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              icon: Icon(Icons.photo_camera)),
-                                        IconButton(
-                                            onPressed: () {
-                                              print("Event id to qrcode: " +
-                                                  docID);
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      QRCodeScreen(
-                                                    documentId: docID,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            icon: const Icon(Icons
-                                                .qr_code_scanner_outlined)),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                                title: Text(
-                                  name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    //color: Color(0xFFB38305),
-                                    color: CustomColors.textIcons,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            const SizedBox(height: 10),
+                            buildListe(context, isDel, address, desc, docID,
+                                dateStart, name)
                           ],
                         );
                       } else {
-                        return Ink(
-                          decoration: BoxDecoration(
-                            color: !isDel
-                                ? CustomColors.primaryColor
-                                : Theme.of(context).disabledColor,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: ExpansionTile(
-                            /*shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),*/
-                            children: <Widget>[
-                              ListTile(
-                                isThreeLine: true,
-                                title: Text("Address: " +
-                                    address +
-                                    "\nDescription: " +
-                                    desc),
-                                subtitle: Text(
-                                  //"Desc: " + description + "\nAdresse: " + address,
-                                  //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
-                                  setUp(dateStart, isDel),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      //color: CustomColors.accentLight,
-                                      fontSize: 14),
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    if (_organisateur)
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) => EditScreen(
-                                                currTitle: "title",
-                                                currDesc: "description",
-                                                currAddr: "address",
-                                                //currStartDate: startDate.toDate(),
-                                                documentId: docID,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        icon: Icon(Icons.edit),
-                                      ),
-                                    if (_organisateur)
-                                      IconButton(
-                                          onPressed: () {
-                                            _delete(context, docID);
-                                          },
-                                          icon: Icon(Icons.delete)),
-                                    if (_organisateur || _scanneur)
-                                      IconButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ScannerScreen(
-                                                  documentId: docID,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          icon: Icon(Icons.photo_camera)),
-                                    IconButton(
-                                        onPressed: () {
-                                          print("Event id to qrcode: " + docID);
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QRCodeScreen(
-                                                documentId: docID,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(
-                                            Icons.qr_code_scanner_outlined)),
-                                  ],
-                                ),
-                              )
-                            ],
-                            title: Text(
-                              name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: CustomColors.textIcons,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                        );
+                        return buildListe(context, isDel, address, desc, docID,
+                            dateStart, name);
                       }
                     },
                   ))
@@ -646,5 +225,285 @@ class _ItemListTestState extends State<ItemListTest> {
             ],
           );
         });
+  }
+
+  //widget pour le menu (filtrer les 3 roles)
+  Widget buildMenu(BuildContext context) {
+    return Container(
+      height: 40,
+      color: CustomColors.backgroundDark,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          //pour le filtre par le role
+          PopupMenuButton(
+              icon: const Icon(
+                Icons.menu,
+                color: CustomColors.textSecondary,
+                size: 32.0,
+              ),
+              offset: Offset(-40, 0),
+              color: CustomColors.backgroundLight,
+              elevation: 20,
+              enabled: true,
+              onCanceled: () {},
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: StatefulBuilder(
+                        builder: (_context, _setState) {
+                          // return Row(
+                          //   mainAxisAlignment:
+                          //       MainAxisAlignment.spaceBetween,
+                          //   children: <Widget>[
+                          //     const SizedBox(
+                          //       child: Text("Organisateur "),
+                          //       width: 110,
+                          //     ),
+                          //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
+                          //         .toString()),
+                          //     Checkbox(
+                          //         value: DatabaseTest.isOrgan,
+                          //         onChanged: (bool? value) {
+                          //           setState(() {
+                          //             _setState(() {
+                          //               DatabaseTest.fetchNBRole();
+                          //               DatabaseTest.isOrgan = value!;
+                          //               print("organisateur " +
+                          //                   DatabaseTest.isOrgan
+                          //                       .toString());
+                          //             });
+                          //           });
+                          //         }),
+                          //   ],
+                          // );
+                          return GFCheckboxListTile(
+                              titleText: DatabaseTest.listNbRole.isEmpty
+                                  ? "Organisateur 0"
+                                  : "Organisateur " +
+                                      DatabaseTest.listNbRole[0].toString(),
+                              type: GFCheckboxType.basic,
+                              inactiveIcon: null,
+                              value: DatabaseTest.isOrgan,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _setState(() {
+                                    DatabaseTest.fetchNBRole();
+                                    DatabaseTest.isOrgan = value!;
+                                  });
+                                });
+                              });
+                        },
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: StatefulBuilder(
+                        builder: (_context, _setState) {
+                          return GFCheckboxListTile(
+                              titleText: DatabaseTest.listNbRole.isEmpty
+                                  ? "Invité 0"
+                                  : "Invité " +
+                                      DatabaseTest.listNbRole[1].toString(),
+                              type: GFCheckboxType.basic,
+                              inactiveIcon: null,
+                              value: DatabaseTest.isInvite,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _setState(() {
+                                    DatabaseTest.fetchNBRole();
+                                    DatabaseTest.isInvite = value!;
+                                    print("invité " +
+                                        DatabaseTest.isInvite.toString());
+                                  });
+                                });
+                              });
+                        },
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: StatefulBuilder(
+                        builder: (_context, _setState) {
+                          return GFCheckboxListTile(
+                              titleText: DatabaseTest.listNbRole.isEmpty
+                                  ? "Scanneur 0"
+                                  : "Scanneur " +
+                                      DatabaseTest.listNbRole[2].toString(),
+                              value: DatabaseTest.isScan,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _setState(() {
+                                    DatabaseTest.fetchNBRole();
+                                    DatabaseTest.isScan = value!;
+                                    print("scanneur " +
+                                        DatabaseTest.isScan.toString());
+                                  });
+                                });
+                              });
+                        },
+                      ),
+                    ),
+                  ]),
+        ],
+      ),
+    );
+  }
+
+  //widget pour le contenu de la liste
+  Widget buildListe(BuildContext context, bool isDel, String address,
+      String desc, String docID, DateTime dateStart, String name) {
+    return Ink(
+      decoration: BoxDecoration(
+        color:
+            //CustomColors.firebaseGrey.withOpacity(0.1),
+            !isDel
+                ? CustomColors.textPrimary.withOpacity(0.1)
+                : CustomColors.backgroundLight,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ExpansionTile(
+        /*shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),*/
+        children: <Widget>[
+          ListTile(
+            isThreeLine: true,
+            title: Text("Address: " + address + "\nDescription: " + desc),
+            subtitle: Text(
+              //"Desc: " + description + "\nAdresse: " + address,
+              //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
+              setUp(dateStart, isDel),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (_organisateur)
+                  PopupMenuButton(
+                      icon: const Icon(
+                        Icons.edit,
+                      ),
+                      offset: Offset(200, 40),
+                      color: CustomColors.backgroundLight,
+                      elevation: 20,
+                      enabled: true,
+                      onCanceled: () {
+                        //do something
+                      },
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(15.0))),
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                                height: 10,
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      StatefulBuilder(
+                                        builder: (_context, _setState) {
+                                          return IconButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditScreen(
+                                                      currTitle: name,
+                                                      currDesc: desc,
+                                                      currAddr: address,
+                                                      //currStartDate: startDate.toDate(),
+                                                      documentId: docID,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.event_note_sharp,
+                                              ));
+                                        },
+                                      ),
+                                      StatefulBuilder(
+                                        builder: (_context, _setState) {
+                                          return IconButton(
+                                              onPressed: () {
+                                                DatabaseTest.fetchGroupAdded(
+                                                    docID);
+                                                print("editedi " +
+                                                    DatabaseTest.lstGrAdded
+                                                        .toString());
+                                                //un astuce => mettre .5s de pause pour charger la BDD
+                                                sleep(const Duration(
+                                                    milliseconds: 250));
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditGroupScreen(
+                                                      documentId: docID,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.group_add_rounded,
+                                              ));
+                                        },
+                                      ),
+                                      StatefulBuilder(
+                                        builder: (_context, _setState) {
+                                          return IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                Icons.attach_email,
+                                              ));
+                                        },
+                                      ),
+                                    ]))
+                          ]),
+                if (_organisateur)
+                  IconButton(
+                      onPressed: () {
+                        _delete(context, docID);
+                      },
+                      icon: Icon(Icons.delete)),
+                if (_organisateur || _scanneur)
+                  IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ScannerScreen(
+                              documentId: docID,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.photo_camera)),
+                IconButton(
+                    onPressed: () {
+                      print("Event id to qrcode: " + docID);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QRCodeScreen(
+                            documentId: docID,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.qr_code_scanner_outlined)),
+              ],
+            ),
+          )
+        ],
+        title: Text(
+          name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            //color: Color(0xFFB38305),
+            color: CustomColors.textSecondary,
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
   }
 }

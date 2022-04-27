@@ -54,8 +54,8 @@ class _AddItemFormState extends State<AddItemForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 12.0),
-                Text(
-                  'Title',
+                const Text(
+                  'Titre',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -73,11 +73,11 @@ class _AddItemFormState extends State<AddItemForm> {
                   validator: (value) => Validator.validateField(
                     value: value,
                   ),
-                  label: 'Title',
-                  hint: 'Enter a name of event',
+                  label: 'Titre',
+                  hint: "Saisir le titre d'un événement",
                 ),
                 const SizedBox(height: 24.0),
-                Text(
+                const Text(
                   'Description',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
@@ -98,11 +98,11 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Description',
-                  hint: 'Enter a description for this event',
+                  hint: 'Saisir la description pour cet événement',
                 ),
                 const SizedBox(height: 24.0),
-                Text(
-                  'Address',
+                const Text(
+                  'Adresse',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -121,12 +121,12 @@ class _AddItemFormState extends State<AddItemForm> {
                   validator: (value) => Validator.validateField(
                     value: value,
                   ),
-                  label: 'Address',
-                  hint: 'Enter a address for this event',
+                  label: 'Adresse',
+                  hint: "Saisir l'adresse",
                 ),
                 const SizedBox(height: 24.0),
-                Text(
-                  'Start Date',
+                const Text(
+                  'Date pour commencer',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -180,7 +180,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'End Date',
+                  'Date pour terminer',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
