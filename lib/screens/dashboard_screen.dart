@@ -32,11 +32,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.backgroundLight,
+      //backgroundColor: CustomColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: CustomColors.backgroundAppbar,
+        //backgroundColor: CustomColors.backgroundAppbar,
         //title: AppBarTitle(),
         title: customWidget,
         actions: [
@@ -48,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     customWidget = ListTile(
                       leading: const Icon(
                         Icons.search_rounded,
-                        color: CustomColors.textSecondary,
+                        //color: CustomColors.textSecondary,
                         size: 28,
                       ),
                       title: TextFormField(
@@ -61,8 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isDense: true,
                         ),
                         style: const TextStyle(
-                          color: CustomColors.textSecondary,
-                        ),
+                            //color: CustomColors.textSecondary,
+                            ),
                         onChanged: (value) {
                           setState(() {
                             DatabaseTest.searchSave = _searchCtl.text;
@@ -93,10 +93,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           );
         },
-        backgroundColor: CustomColors.accentLight,
-        child: const Icon(
+        backgroundColor: CustomColors.accentColor,
+        child: Icon(
           Icons.add,
-          color: CustomColors.textSecondary,
+          // color: CustomColors.textIcons,
           size: 32,
         ),
       ),

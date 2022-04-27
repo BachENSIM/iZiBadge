@@ -52,13 +52,19 @@ class _CameraFormState extends State<CameraForm> {
                           width: 250,
                           height: 50,
                           child: Text(
-                            "Nombre de persons entrés: \n" + DatabaseTest.lstPersonScanned.length.toString() + "/" +  DatabaseTest.nbPersonTotal.toString(),
+                            "Nombre de persons entrés: \n" +
+                                DatabaseTest.lstPersonScanned.length
+                                    .toString() +
+                                "/" +
+                                DatabaseTest.nbPersonTotal.toString(),
                             style: TextStyle(
-                              color: Colors.white,
+                              //color: Colors.white,
                               fontSize: 16,
                             ),
                           ))),
-                  SizedBox(width: 90,),
+                  SizedBox(
+                    width: 90,
+                  ),
                   Positioned(
                       left: 0.0,
                       right: 0.0,
@@ -69,11 +75,10 @@ class _CameraFormState extends State<CameraForm> {
                           child: IconButton(
                               icon: flash
                                   ? Icon(
-                                Icons.flash_on,
-                                color: Colors.white,
-                              )
-                                  : Icon(Icons.flash_off,
-                                  color: Colors.white),
+                                      Icons.flash_on,
+                                      //color: Colors.white,
+                                    )
+                                  : Icon(Icons.flash_off, color: Colors.white),
                               onPressed: () async {
                                 await controller!.toggleFlash();
                                 flash = !flash;
@@ -109,10 +114,11 @@ class _CameraFormState extends State<CameraForm> {
       ],
     );
   }
+
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-        MediaQuery.of(context).size.height < 400)
+            MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -121,7 +127,7 @@ class _CameraFormState extends State<CameraForm> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.orangeAccent,
+          // borderColor: Colors.orangeAccent,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -139,10 +145,12 @@ class _CameraFormState extends State<CameraForm> {
         await controller.pauseCamera();
         result = scanData;
         DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-        print("Status: " + DatabaseTest.status.toString() + "\nemail:" + DatabaseTest.emailClient);
+        print("Status: " +
+            DatabaseTest.status.toString() +
+            "\nemail:" +
+            DatabaseTest.emailClient);
         verify = DatabaseTest.status;
         if (verify) {
-
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Row(
@@ -150,7 +158,8 @@ class _CameraFormState extends State<CameraForm> {
                 children: <Widget>[
                   Icon(Icons.check_circle_outline,
                       color: Colors.green, size: 40),
-                  Text("Numbre d'entrés: " + DatabaseTest.lstPersonScanned[result])
+                  Text("Numbre d'entrés: " +
+                      DatabaseTest.lstPersonScanned[result])
                 ],
               ),
               duration: Duration(seconds: 365),

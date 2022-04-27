@@ -96,20 +96,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80.0)),
-                textColor: CustomColors.textSecondary,
+                // textColor: CustomColors.textSecondary,
                 padding: const EdgeInsets.all(0),
                 child: Container(
                   alignment: Alignment.center,
                   height: 50.0,
                   width: size.width * 0.5,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(80.0),
-                      gradient: LinearGradient(colors: [
-                        //Color.fromARGB(255, 255, 136, 34),
-                        //Color.fromARGB(255, 255, 177, 41)
-                        CustomColors.backgroundLight,
-                        CustomColors.backgroundColorDark
-                      ])),
+                    borderRadius: BorderRadius.circular(80.0),
+                    // gradient: LinearGradient(colors: [
+                    //   //Color.fromARGB(255, 255, 136, 34),
+                    //   //Color.fromARGB(255, 255, 177, 41)
+                    //   CustomColors.backgroundLight,
+                    //   CustomColors.backgroundColorDark
+                    // ])
+                  ),
                   padding: const EdgeInsets.all(0),
                   child: Text(
                     "SIGN UP",
@@ -130,9 +131,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Text(
                   "Already Have an Account? Sign in",
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.backgroundLight),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    //color: CustomColors.backgroundLight
+                  ),
                 ),
               ),
             )

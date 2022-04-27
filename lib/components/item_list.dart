@@ -74,15 +74,15 @@ class ItemList extends StatelessWidget {
                 decoration: BoxDecoration(
                   //color: !isDel ? CustomColors.primaryText.withOpacity(0.1) : Color(0xFF2E9598),
 
-                  gradient: !isDel
-                      ? LinearGradient(colors: [
-                          CustomColors.backgroundLight,
-                          CustomColors.backgroundColorDark
-                        ])
-                      : const LinearGradient(colors: [
-                          Color.fromARGB(255, 122, 146, 183),
-                          Color.fromARGB(255, 243, 244, 246)
-                        ]),
+                  // gradient: !isDel
+                  //     ? LinearGradient(colors: [
+                  //         CustomColors.backgroundLight,
+                  //         CustomColors.backgroundColorDark
+                  //       ])
+                  //     : const LinearGradient(colors: [
+                  //         Color.fromARGB(255, 122, 146, 183),
+                  //         Color.fromARGB(255, 243, 244, 246)
+                  //       ]),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: ListTile(
@@ -95,7 +95,7 @@ class ItemList extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: CustomColors.textSecondary,
+                        //color: CustomColors.textSecondary,
                         fontSize: 20,
                       ),
                     ),
@@ -105,8 +105,8 @@ class ItemList extends StatelessWidget {
                       setUp(dateStart, isDel),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: CustomColors.accentDark, fontSize: 14),
+                      // style: TextStyle(
+                      //color: CustomColors.accentDark, fontSize: 14),
                     ),
                     trailing: _organisateur
                         ? Row(
@@ -128,7 +128,7 @@ class ItemList extends StatelessWidget {
                                 },
                                 icon: Icon(
                                   Icons.edit,
-                                  color: CustomColors.accentDark,
+                                  //color: CustomColors.accentDark,
                                 ),
                               ),
                               IconButton(
@@ -137,13 +137,13 @@ class ItemList extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.delete,
-                                    color: Colors.red,
+                                    //color: Colors.red,
                                   )),
                               IconButton(
                                   onPressed: () {},
                                   icon: Icon(
                                     Icons.photo_camera,
-                                    color: CustomColors.accentDark,
+                                    //color: CustomColors.accentDark,
                                   )),
                               IconButton(
                                   onPressed: () {
@@ -160,7 +160,7 @@ class ItemList extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.qr_code_scanner_outlined,
-                                    color: CustomColors.accentDark,
+                                    //color: CustomColors.accentDark,
                                   )),
                             ],
                           )
@@ -214,10 +214,10 @@ class ItemList extends StatelessWidget {
 
         return Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.accentLight,
-            ),
-          ),
+              // valueColor: AlwaysStoppedAnimation<Color>(
+              //   CustomColors.accentLight,
+              // ),
+              ),
         );
       },
     );

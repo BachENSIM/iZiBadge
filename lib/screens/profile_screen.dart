@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: <Widget>[
           CircleAvatar(
             radius: 70,
-            backgroundColor: CustomColors.textPrimary,
+            //backgroundColor: CustomColors.textPrimary,
             child: Image.asset("asset/image/internet-security.png",
                 width: size.width),
           ),
@@ -46,7 +46,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     "iziBagde",
                     style: TextStyle(
-                        fontSize: 12.0, color: CustomColors.textPrimary),
+                      fontSize: 12.0,
+                      //color: CustomColors.textPrimary
+                    ),
                   ),
                   const Divider(
                     thickness: 1,
@@ -60,7 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Text(
                     "iziBagde",
                     style: TextStyle(
-                        fontSize: 12.0, color: CustomColors.textPrimary),
+                      fontSize: 12.0,
+                      //color: CustomColors.textPrimary
+                    ),
                   ),
                   // Container(
                   //   alignment: Alignment.centerRight,
@@ -96,20 +100,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(80.0)),
-                      textColor: CustomColors.textSecondary,
+                      // textColor: CustomColors.textSecondary,
                       padding: const EdgeInsets.all(0),
                       child: Container(
                         alignment: Alignment.center,
                         height: 50.0,
                         width: size.width * 0.5,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(80.0),
-                            gradient: LinearGradient(colors: [
-                              //Color.fromARGB(255, 255, 136, 34),
-                              //Color.fromARGB(255, 255, 177, 41)
-                              CustomColors.backgroundLight,
-                              CustomColors.backgroundColorDark
-                            ])),
+                          borderRadius: BorderRadius.circular(80.0),
+                          // gradient: LinearGradient(colors: [
+                          //   //Color.fromARGB(255, 255, 136, 34),
+                          //   //Color.fromARGB(255, 255, 177, 41)
+                          //   CustomColors.backgroundLight,
+                          //   CustomColors.backgroundColorDark
+                          // ])
+                        ),
                         padding: const EdgeInsets.all(0),
                         child: const Text(
                           "LOGOUT",

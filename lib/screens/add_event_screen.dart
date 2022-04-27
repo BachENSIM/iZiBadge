@@ -20,10 +20,10 @@ class AddScreen extends StatelessWidget {
         //_startFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.backgroundLight,
+        //backgroundColor: CustomColors.backgroundLight,
         appBar: AppBar(
           //elevation: 0,
-          backgroundColor: CustomColors.backgroundColorDark,
+          //backgroundColor: CustomColors.backgroundColorDark,
           title: Text("Add an event"),
           //AppBarTitle()
           centerTitle: true,
@@ -35,16 +35,18 @@ class AddScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: CustomColors.textSecondary,
+                    //color: CustomColors.textSecondary,
                   )),
               style: ElevatedButton.styleFrom(
-                  elevation: 0, primary: Colors.transparent)),
+                elevation: 0,
+                // primary: Colors.transparent
+              )),
           actions: [
             ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                CustomColors.backgroundColorDark,
-              )),
+              // style: ButtonStyle(
+              //     backgroundColor: MaterialStateProperty.all(
+              //   CustomColors.backgroundColorDark,
+              // )),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -59,7 +61,7 @@ class AddScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: CustomColors.textSecondary,
+                        //color: CustomColors.textSecondary,
                       )),
                   Icon(Icons.arrow_right_sharp)
                 ],

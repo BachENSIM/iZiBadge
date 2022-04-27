@@ -10,7 +10,6 @@ import 'package:izibagde/screens/scanner_screen.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 class ItemListTestV2 extends StatelessWidget {
-
   //static Query<Map<String, dynamic>>   map =  _mainCollection.doc(userUid).collection('items').doc().collection('participation').snapshots() as Query<Map<String, dynamic>>;
 
   @override
@@ -28,11 +27,11 @@ class ItemListTestV2 extends StatelessWidget {
               //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
               //Dart doesn’t know which type of object it is getting.
               var noteInfo =
-              snapshot.data!.docs[index].data()! as Map<String, dynamic>;
+                  snapshot.data!.docs[index].data()! as Map<String, dynamic>;
               var _noteInfo = (index == 0
-                  ? snapshot.data!.docs[index].data()!
-                  : snapshot.data!.docs[index - 1].data()!)
-              as Map<String, dynamic>;
+                      ? snapshot.data!.docs[index].data()!
+                      : snapshot.data!.docs[index - 1].data()!)
+                  as Map<String, dynamic>;
 
               String docID = snapshot.data!.docs[index].id;
               String name = noteInfo['tittre'];
@@ -40,7 +39,7 @@ class ItemListTestV2 extends StatelessWidget {
                   ? snapshot.data!.docs[index].id
                   : snapshot.data!.docs[index - 1].id;
               DateTime dateStart =
-              (noteInfo['dateDebut'] as Timestamp).toDate();
+                  (noteInfo['dateDebut'] as Timestamp).toDate();
               DateTime _dateStart = index == 0
                   ? (noteInfo['dateDebut'] as Timestamp).toDate()
                   : (_noteInfo['dateDebut'] as Timestamp).toDate();
@@ -51,101 +50,97 @@ class ItemListTestV2 extends StatelessWidget {
                 return StickyHeader(
                   overlapHeaders: true,
                   header: Container(
-                    color: CustomColors.accentLight,
-                    child:Center (
-                            child:Text(
-                              currHeader.toString() +
-                                  " / " +
-                                  dateStart.year.toString(),
-                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26),
-                            ) ,
-                          )
-                  ),
-                  content:
-                    Ink(
-                      decoration: BoxDecoration(
-                        color: CustomColors.textPrimary.withOpacity(0.1),
+                      //color: CustomColors.accentLight,
+                      child: Center(
+                    child: Text(
+                      currHeader.toString() + " / " + dateStart.year.toString(),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                    ),
+                  )),
+                  content: Ink(
+                    decoration: BoxDecoration(
+                      //color: CustomColors.textPrimary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EditScreen(
-                              currTitle: "title",
-                              currDesc: "description",
-                              currAddr: "address",
-                              //currStartDate: startDate.toDate(),
-                              documentId: docID,
-                            ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditScreen(
+                            currTitle: "title",
+                            currDesc: "description",
+                            currAddr: "address",
+                            //currStartDate: startDate.toDate(),
+                            documentId: docID,
                           ),
                         ),
-                        title: Text(
-                          name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      ),
+                      title: Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
 
-                        //trailing: Icon(Icons.edit),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => EditScreen(
-                                      currTitle: "title",
-                                      currDesc: "description",
-                                      currAddr: "address",
-                                      //currStartDate: startDate.toDate(),
-                                      documentId: docID,
-                                    ),
+                      //trailing: Icon(Icons.edit),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => EditScreen(
+                                    currTitle: "title",
+                                    currDesc: "description",
+                                    currAddr: "address",
+                                    //currStartDate: startDate.toDate(),
+                                    documentId: docID,
                                   ),
-                                );
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.edit),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                _delete(context, docID);
                               },
-                              icon: Icon(Icons.edit),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  _delete(context, docID);
-                                },
-                                icon: Icon(Icons.delete)),
-                            IconButton(
-                                onPressed: () {
-                                 /* Navigator.of(context).push(
+                              icon: Icon(Icons.delete)),
+                          IconButton(
+                              onPressed: () {
+                                /* Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => ScannerPage(
                                         //documentId: docID,
                                       ),
                                     ),
                                   );*/
-                                },
-                                icon: Icon(Icons.photo_camera)),
-                            IconButton(
-                                onPressed: () {
-                                  print("Event id to qrcode: " + docID);
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => QRCodeScreen(
-                                        documentId: docID,
-                                      ),
+                              },
+                              icon: Icon(Icons.photo_camera)),
+                          IconButton(
+                              onPressed: () {
+                                print("Event id to qrcode: " + docID);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => QRCodeScreen(
+                                      documentId: docID,
                                     ),
-                                  );
-                                },
-                                icon: Icon(Icons.qr_code_scanner_outlined)),
-                          ],
-                        ),
+                                  ),
+                                );
+                              },
+                              icon: Icon(Icons.qr_code_scanner_outlined)),
+                        ],
                       ),
                     ),
-                  );
-              }
-              else {
-                return  Ink(
+                  ),
+                );
+              } else {
+                return Ink(
                   decoration: BoxDecoration(
-                    color: CustomColors.textPrimary.withOpacity(0.1),
+                    //color: CustomColors.textPrimary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: ListTile(
@@ -196,7 +191,7 @@ class ItemListTestV2 extends StatelessWidget {
                             icon: Icon(Icons.delete)),
                         IconButton(
                             onPressed: () {
-                             /* Navigator.of(context).push(
+                              /* Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ScannerPage(
                                   ),
@@ -222,8 +217,7 @@ class ItemListTestV2 extends StatelessWidget {
                 );
               }
 
-
-               /* return StickyHeader(
+              /* return StickyHeader(
                   header: Container(
                       color: Colors.orangeAccent,
                       child:Center (
@@ -308,8 +302,6 @@ class ItemListTestV2 extends StatelessWidget {
                   ),
                 );*/
 
-
-
 /*              return Ink(
                 decoration: BoxDecoration(
                   color: CustomColors.firebaseGrey.withOpacity(0.1),
@@ -387,10 +379,10 @@ class ItemListTestV2 extends StatelessWidget {
 
         return Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.accentLight,
-            ),
-          ),
+              // valueColor: AlwaysStoppedAnimation<Color>(
+              //   CustomColors.accentLight,
+              // ),
+              ),
         );
       },
     );

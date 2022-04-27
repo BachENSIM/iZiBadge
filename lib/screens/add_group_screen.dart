@@ -14,7 +14,7 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        backgroundColor: CustomColors.backgroundColorDark,
+        //backgroundColor: CustomColors.backgroundColorDark,
         title: Text("Add group"),
         //AppBarTitle()
         centerTitle: true,
@@ -26,16 +26,18 @@ class _GroupScreenState extends State<GroupScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: CustomColors.textSecondary,
+                  //color: CustomColors.textSecondary,
                 )),
             style: ElevatedButton.styleFrom(
-                elevation: 0, primary: Colors.transparent)),
+              elevation: 0,
+              // primary: Colors.transparent
+            )),
         actions: [
           ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-              CustomColors.backgroundColorDark,
-            )),
+            // style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(
+            //   CustomColors.backgroundColorDark,
+            // )),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -50,7 +52,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: CustomColors.textSecondary,
+                      //color: CustomColors.textSecondary,
                     )),
                 Icon(Icons.arrow_right_sharp)
               ],

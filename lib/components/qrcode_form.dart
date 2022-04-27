@@ -38,9 +38,9 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                       QrImage(data: docID),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                            CustomColors.accentLight,
-                          ),
+                          // backgroundColor: MaterialStateProperty.all(
+                          //   CustomColors.accentLight,
+                          // ),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -58,7 +58,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: CustomColors.textPrimary,
+                              //color: CustomColors.textPrimary,
                               letterSpacing: 2,
                             ),
                           ),
@@ -70,10 +70,10 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
           }
           return Center(
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                CustomColors.accentLight,
-              ),
-            ),
+                // valueColor: AlwaysStoppedAnimation<Color>(
+                //   CustomColors.accentLight,
+                // ),
+                ),
           );
         });
   }

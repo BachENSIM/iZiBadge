@@ -183,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "LOGIN",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 36),
                 textAlign: TextAlign.left,
               ),
@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .never, //Hides label on focus or if filled
                   labelText: "Email",
                   filled: true, // Needed for adding a fill color
-                  fillColor: CustomColors.backgroundLight,
+                  //fillColor: CustomColors.backgroundLight,
                   isDense: true, // Reduces height a bit
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none, // No border
@@ -259,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .never, //Hides label on focus or if filled
                   labelText: "Password",
                   filled: true, // Needed for adding a fill color
-                  fillColor: CustomColors.backgroundLight,
+                  //fillColor: CustomColors.backgroundLight,
                   isDense: true, // Reduces height a bit
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none, // No border
@@ -289,7 +289,9 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(
                 "Forgot your password?",
                 style: TextStyle(
-                    fontSize: 12, color: CustomColors.backgroundLight),
+                  fontSize: 12,
+                  //color: CustomColors.backgroundLight
+                ),
               ),
             ),
 
@@ -324,18 +326,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80.0)),
-                textColor: CustomColors.textSecondary,
+                // textColor: CustomColors.textSecondary,
                 padding: const EdgeInsets.all(0),
                 child: Container(
                   alignment: Alignment.center,
                   height: 50.0,
                   width: size.width * 0.5,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(80.0),
-                      gradient: LinearGradient(colors: [
-                        CustomColors.backgroundColorDark,
-                        CustomColors.backgroundLight
-                      ])),
+                    borderRadius: BorderRadius.circular(80.0),
+                    // gradient: LinearGradient(colors: [
+                    //   CustomColors.backgroundColorDark,
+                    //   CustomColors.backgroundLight
+                    // ])
+                  ),
                   padding: const EdgeInsets.all(0),
                   child: const Text(
                     "LOGIN",
@@ -362,7 +365,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.backgroundLight,
+                    //color: CustomColors.backgroundLight,
                   ),
                 ),
               ),

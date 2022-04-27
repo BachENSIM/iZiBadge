@@ -19,15 +19,15 @@ class AppBarTitle extends StatelessWidget {
         Text(
           'iziSecure',
           style: TextStyle(
-            color: CustomColors.accentLight,
+            //color: CustomColors.accentLight,
             fontSize: 18,
           ),
         ),
         SizedBox(width: 225),
         /*IconButton(
             onPressed: () {
-              *//*Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SearchForm()));*//*
+              */ /*Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SearchForm()));*/ /*
               showDialog(
                   context: context,
                   builder: (context) {

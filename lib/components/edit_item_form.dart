@@ -74,7 +74,7 @@ class _EditItemFormState extends State<EditItemForm> {
     _titleCtl = TextEditingController(text: widget.currTitle);
     _descCtl = TextEditingController(text: widget.currDesc);
     _addrCtl = TextEditingController(text: widget.currAddr);
-   // _startDateCtl = Text(widget.currStartDate.toString());
+    // _startDateCtl = Text(widget.currStartDate.toString());
     /*_startTimeCtl = Text(widget.currStartTime);
     _endDateCtl = Text(widget.currEndDate);
     _endTimeCtl = Text(widget.currEndTime);
@@ -102,7 +102,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   const Text(
                     'Title',
                     style: TextStyle(
-                      color: CustomColors.textPrimary,
+                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   const Text(
                     'Description',
                     style: TextStyle(
-                      color: CustomColors.textPrimary,
+                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   const Text(
                     'Address',
                     style: TextStyle(
-                      color: CustomColors.textPrimary,
+                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
                       letterSpacing: 1,
                       fontWeight: FontWeight.bold,
@@ -334,18 +334,18 @@ class _EditItemFormState extends State<EditItemForm> {
                 ? Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        CustomColors.accentLight,
-                      ),
-                    ),
+                        // valueColor: AlwaysStoppedAnimation<Color>(
+                        //   CustomColors.accentLight,
+                        // ),
+                        ),
                   )
                 : Container(
                     width: double.maxFinite,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          CustomColors.accentLight,
-                        ),
+                        // backgroundColor: MaterialStateProperty.all(
+                        //   CustomColors.accentLight,
+                        // ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -387,7 +387,7 @@ class _EditItemFormState extends State<EditItemForm> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: CustomColors.textPrimary,
+                            //color: CustomColors.textPrimary,
                             letterSpacing: 2,
                           ),
                         ),
@@ -395,8 +395,7 @@ class _EditItemFormState extends State<EditItemForm> {
                     ),
                   )
           ],
-        )
-    );
+        ));
   }
 
   /*_selectDateStart(BuildContext context) async {
