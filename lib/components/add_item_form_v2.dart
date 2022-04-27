@@ -75,7 +75,7 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Titre',
-                  hint: "Saisir le titre d'un événement",
+                  hint: "Saisir le titre de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
@@ -99,7 +99,7 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Description',
-                  hint: 'Saisir la description pour cet événement',
+                  hint: "Saisir la description de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
@@ -123,11 +123,11 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Adresse',
-                  hint: "Saisir l'adresse",
+                  hint: "Saisir l'adresse de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Date pour commencer',
+                  'Date et heure de début',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -181,7 +181,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Date pour terminer',
+                  'Date et heure de fin',
                   style: TextStyle(
                     //color: CustomColors.textPrimary,
                     fontSize: 22.0,
@@ -309,7 +309,7 @@ class _AddItemFormState extends State<AddItemForm> {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                       child: Text(
-                        'Next',
+                        'Suivant',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

@@ -17,7 +17,7 @@ class AppBarTitle extends StatelessWidget {
         ),
         SizedBox(width: 8),
         Text(
-          'iziSecure',
+          'iZiBadge',
           style: TextStyle(
             //color: CustomColors.accentLight,
             fontSize: 18,

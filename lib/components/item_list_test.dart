@@ -193,7 +193,7 @@ class _ItemListTestState extends State<ItemListTest> {
     }
 
     if (!isDel)
-      return "Time: " + startDate;
+      return "Date: " + startDate;
     else
       return "(Annulé par l'organisateur)";
   }
@@ -203,8 +203,8 @@ class _ItemListTestState extends State<ItemListTest> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            title: const Text('Please Confirm'),
-            content: const Text('Are you sure to remove this item?'),
+            title: const Text('Supprimer'),
+            content: const Text("Voulez-vous supprimer cet événement ?"),
             actions: [
               // The "Yes" button
               TextButton(
@@ -215,13 +215,13 @@ class _ItemListTestState extends State<ItemListTest> {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Yes')),
+                  child: const Text('Oui')),
               TextButton(
                   onPressed: () {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text('No'))
+                  child: const Text('Annuler'))
             ],
           );
         });
@@ -231,19 +231,19 @@ class _ItemListTestState extends State<ItemListTest> {
   Widget buildMenu(BuildContext context) {
     return Container(
       height: 40,
-      color: CustomColors.backgroundDark,
+      // color: CustomColors.backgroundDark,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           //pour le filtre par le role
           PopupMenuButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.menu,
-                color: CustomColors.textSecondary,
+                // color: CustomColors.secondaryText,
                 size: 32.0,
               ),
               offset: Offset(-40, 0),
-              color: CustomColors.backgroundLight,
+              // color: CustomColors.lightPrimaryColor,
               elevation: 20,
               enabled: true,
               onCanceled: () {},
@@ -355,8 +355,8 @@ class _ItemListTestState extends State<ItemListTest> {
         color:
             //CustomColors.firebaseGrey.withOpacity(0.1),
             !isDel
-                ? CustomColors.textPrimary.withOpacity(0.1)
-                : CustomColors.backgroundLight,
+                ? CustomColors.primaryColor
+                : Theme.of(context).disabledColor,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: ExpansionTile(
@@ -366,14 +366,16 @@ class _ItemListTestState extends State<ItemListTest> {
         children: <Widget>[
           ListTile(
             isThreeLine: true,
-            title: Text("Address: " + address + "\nDescription: " + desc),
+            title: Text("Adresse: " + address + "\nDescription: " + desc),
             subtitle: Text(
               //"Desc: " + description + "\nAdresse: " + address,
               //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
               setUp(dateStart, isDel),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
+              style: TextStyle(
+                  // color: CustomColors.secondaryText,
+                  fontSize: 14),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -384,7 +386,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         Icons.edit,
                       ),
                       offset: Offset(200, 40),
-                      color: CustomColors.backgroundLight,
+                      // color: CustomColors.backgroundLight,
                       elevation: 20,
                       enabled: true,
                       onCanceled: () {
@@ -464,7 +466,7 @@ class _ItemListTestState extends State<ItemListTest> {
                       onPressed: () {
                         _delete(context, docID);
                       },
-                      icon: Icon(Icons.delete)),
+                      icon: const Icon(Icons.delete)),
                 if (_organisateur || _scanneur)
                   IconButton(
                       onPressed: () {
@@ -476,7 +478,7 @@ class _ItemListTestState extends State<ItemListTest> {
                           ),
                         );
                       },
-                      icon: Icon(Icons.photo_camera)),
+                      icon: const Icon(Icons.photo_camera)),
                 IconButton(
                     onPressed: () {
                       print("Event id to qrcode: " + docID);
@@ -497,9 +499,9 @@ class _ItemListTestState extends State<ItemListTest> {
           name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             //color: Color(0xFFB38305),
-            color: CustomColors.textSecondary,
+            color: CustomColors.textIcons,
             fontSize: 20,
           ),
         ),

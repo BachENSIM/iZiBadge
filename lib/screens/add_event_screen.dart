@@ -24,7 +24,7 @@ class AddScreen extends StatelessWidget {
         appBar: AppBar(
           //elevation: 0,
           //backgroundColor: CustomColors.backgroundColorDark,
-          title: Text("Add an event"),
+          title: const Text("Evénement"),
           //AppBarTitle()
           centerTitle: true,
           leadingWidth: 100,
@@ -57,7 +57,7 @@ class AddScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Next",
+                  Text("Suivant",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,

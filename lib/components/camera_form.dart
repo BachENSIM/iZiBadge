@@ -52,7 +52,7 @@ class _CameraFormState extends State<CameraForm> {
                           width: 250,
                           height: 50,
                           child: Text(
-                            "Nombre de persons entrés: \n" +
+                            "Nombre de persons entrées: \n" +
                                 DatabaseTest.lstPersonScanned.length
                                     .toString() +
                                 "/" +

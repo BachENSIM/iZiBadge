@@ -47,7 +47,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
           //backgroundColor: CustomColors.backgroundColorDark,
           centerTitle: true,
           title: const Text(
-            "Ajout de la liste d'user",
+            "Ajout d'invités",
           ),
           leadingWidth: 100,
           leading: ElevatedButton.icon(
@@ -84,10 +84,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                   keyboardType: TextInputType.emailAddress,
                                   controller: _guestCtl,
                                   validator: (value) => value!.isEmpty
-                                      ? 'Email cannot be blank'
+                                      ? "L'email ne peut pas être vide"
                                       : null,
                                   decoration: const InputDecoration(
-                                    hintText: 'Ex: tom@gmail.com',
+                                    hintText: 'Ex: email@gmail.com',
                                     contentPadding: EdgeInsets.all(8),
                                     isDense: false,
                                   ),
@@ -258,10 +258,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                CustomColors.accentLight,
-                              ),
-                            ),
+                                // valueColor: AlwaysStoppedAnimation<Color>(
+                                //   CustomColors.accentLight,
+                                // ),
+                                ),
                           ),
                         )
                       : Container(

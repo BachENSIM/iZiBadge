@@ -21,12 +21,12 @@ class CustomColors {
   // static const Color textSecondary = Colors.white;
 
   //Global color theme from materialpalette.com
-  static Color darkPrimaryColor = const Color(0xFF303F9F);
-  static Color lightPrimaryColor = const Color(0xFFC5CAE9);
-  static Color primaryColor = const Color(0xFF3F51B5);
-  static Color textIcons = const Color(0xFFFFFFFF);
-  static Color accentColor = const Color(0xFFFF9800);
-  static Color primaryText = const Color(0xFF212121);
-  static Color secondaryText = const Color(0xFF757575);
-  static Color dividerColor = const Color(0xFFBDBDBD);
+  static Color darkPrimaryColor = Color(0xFF303F9F);
+  static Color lightPrimaryColor = Color(0xFFC5CAE9);
+  static Color primaryColor = Color(0xFF3F51B5);
+  static Color textIcons = Color(0xFFFFFFFF);
+  static Color accentColor = Color(0xFFFF9800);
+  static Color primaryText = Color(0xFF212121);
+  static Color secondaryText = Color(0xFF757575);
+  static Color dividerColor = Color(0xFFBDBDBD);
 }

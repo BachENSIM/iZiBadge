@@ -100,7 +100,7 @@ class _EditItemFormState extends State<EditItemForm> {
                 children: [
                   const SizedBox(height: 12.0), //invisible box
                   const Text(
-                    'Title',
+                    'Titre',
                     style: TextStyle(
                       //color: CustomColors.textPrimary,
                       fontSize: 22.0,
@@ -118,8 +118,8 @@ class _EditItemFormState extends State<EditItemForm> {
                     validator: (value) => Validator.validateField(
                       value: value,
                     ),
-                    label: 'Title',
-                    hint: 'Enter your title of this event',
+                    label: 'Titre',
+                    hint: "Saisir le titre de l'événement",
                   ),
                   SizedBox(height: 24.0),
                   const Text(
@@ -143,11 +143,11 @@ class _EditItemFormState extends State<EditItemForm> {
                       value: value,
                     ),
                     label: 'Description',
-                    hint: 'Enter your description of this event',
+                    hint: "Saisir la description de l'événement",
                   ),
                   SizedBox(height: 24.0),
                   const Text(
-                    'Address',
+                    'Adresse',
                     style: TextStyle(
                       //color: CustomColors.textPrimary,
                       fontSize: 22.0,
@@ -166,8 +166,8 @@ class _EditItemFormState extends State<EditItemForm> {
                     validator: (value) => Validator.validateField(
                       value: value,
                     ),
-                    label: 'Address',
-                    hint: 'Enter your address of this event',
+                    label: 'Adresse',
+                    hint: "Saisir l'adresse de l'événement",
                   ),
                   /*const SizedBox(height: 24.0),
                   Text(
@@ -331,8 +331,8 @@ class _EditItemFormState extends State<EditItemForm> {
               ),
             ),
             _isProcessing
-                ? Padding(
-                    padding: const EdgeInsets.all(16.0),
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
                     child: CircularProgressIndicator(
                         // valueColor: AlwaysStoppedAnimation<Color>(
                         //   CustomColors.accentLight,
@@ -383,7 +383,7 @@ class _EditItemFormState extends State<EditItemForm> {
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
-                          'UPDATE ITEM',
+                          "Sauvegarder",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,

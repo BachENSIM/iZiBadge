@@ -111,7 +111,7 @@ class _GroupFormState extends State<GroupForm> {
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(12.0),
                                   bottomRight: Radius.circular(12.0)))),
-                      child: const Text("ADD",
+                      child: const Text("Ajouter",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -246,7 +246,7 @@ class _GroupFormState extends State<GroupForm> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             /*title: const Text('Please Confirm'),*/
-            content: const Text('You want to rename?'),
+            content: const Text('Renommer'),
             shape: RoundedRectangleBorder(
                 side: const BorderSide(
                     // color: CustomColors.textPrimary,
@@ -286,13 +286,13 @@ class _GroupFormState extends State<GroupForm> {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Edit')),
+                          child: const Text('OK')),
                       TextButton(
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Cancel'))
+                          child: const Text('Annuler'))
                     ],
                   ),
                 ],

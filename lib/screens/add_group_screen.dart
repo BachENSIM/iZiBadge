@@ -14,8 +14,8 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
-        title: Text("Ajout de group"),
+        // backgroundColor: CustomColors.backgroundDark,
+        title: const Text("Ajout de groupe"),
         //AppBarTitle()
         centerTitle: true,
         leadingWidth: 100,
@@ -48,7 +48,7 @@ class _GroupScreenState extends State<GroupScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: const <Widget>[
-                Text("Next",
+                Text("Suivant",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

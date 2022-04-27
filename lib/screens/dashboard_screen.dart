@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         keyboardType: TextInputType.text,
                         controller: _searchCtl,
                         decoration: const InputDecoration(
-                          hintText: 'Search by name of event',
+                          hintText: 'Recherche par nom',
                           contentPadding: EdgeInsets.all(8),
                           isDense: true,
                         ),

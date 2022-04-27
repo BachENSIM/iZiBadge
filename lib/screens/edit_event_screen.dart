@@ -44,11 +44,11 @@ class _EditScreenState extends State<EditScreen> {
         appBar: AppBar(
           elevation: 0,
           //backgroundColor: CustomColors.backgroundColorDark,
-          title: Text("Edit An Event"),
+          title: const Text("Modfier l'événement"),
           actions: [
             _isDel
-                ? Padding(
-                    padding: const EdgeInsets.only(
+                ? const Padding(
+                    padding: EdgeInsets.only(
                       top: 10.0,
                       bottom: 10.0,
                       right: 16.0,
@@ -73,7 +73,7 @@ class _EditScreenState extends State<EditScreen> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      //color: Colors.redAccent,
+                      // color: Colors.redAccent,
                       size: 32,
                     ))
           ],

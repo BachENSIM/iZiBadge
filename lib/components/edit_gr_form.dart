@@ -70,7 +70,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         .never, //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
                     filled: true, // Needed for adding a fill color
-                    fillColor: CustomColors.backgroundLight,
+                    // fillColor: CustomColors.backgroundLight,
                     isDense: false, // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
@@ -97,7 +97,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         setState(() {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
-                            mess = "Default Group " + (taille++).toString();
+                            mess = "Groupe " + (taille++).toString();
                           }
                           //_groupNameList.add(mess);
                           DatabaseTest.lstGrAdded.add(mess);
@@ -111,11 +111,11 @@ class _EditGroupFormState extends State<EditGroupForm> {
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(12.0),
                                   bottomRight: Radius.circular(12.0)))),
-                      child: const Text("AJOUTER",
+                      child: const Text("Ajouter",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: CustomColors.textSecondary,
+                            // color: CustomColors.textSecondary,
                           ))),
                 )
               ],
@@ -143,15 +143,16 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         height: 0,
                       ),
                       GFListTile(
-                        color: CustomColors.accentLight,
+                        // color: CustomColors.accentLight,
                         avatar: CircleAvatar(
                             radius: 20,
-                            backgroundColor: CustomColors.accentDark,
+                            // backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
-                                  fontSize: 15,
-                                  color: CustomColors.textSecondary),
+                                fontSize: 15,
+                                // color: CustomColors.textSecondary
+                              ),
                             )),
                         //titleText: _groupNameList[index],
                         titleText: DatabaseTest.lstGrAdded[index],
@@ -168,7 +169,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                                   _modify(context, index);
                                 });
                               },
-                              color: CustomColors.accentDark,
+                              // color: CustomColors.accentDark,
                             ),
                             if (!_one)
                               IconButton(
@@ -182,9 +183,9 @@ class _EditGroupFormState extends State<EditGroupForm> {
                                     }
                                   });
                                 },
-                                color: _one
-                                    ? Colors.grey
-                                    : CustomColors.accentDark,
+                                // color: _one
+                                //     ? Colors.grey
+                                //     : CustomColors.accentDark,
                               )
                           ],
                         ),
@@ -197,59 +198,60 @@ class _EditGroupFormState extends State<EditGroupForm> {
             const SizedBox(
               height: 15,
             ),
-            _isProcessing ?
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    CustomColors.accentLight,
-                  ),
-                ),
-              ),
-            )
-            :
-            Container(
-              width: double.maxFinite,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    CustomColors.accentDark,
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+            _isProcessing
+                ? const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(
+                          // valueColor: AlwaysStoppedAnimation<Color>(
+                          //   CustomColors.accentLight,
+                          // ),
+                          ),
                     ),
-                  ),
-                ),
-                onPressed: () async {
-                  setState(() {
-                    _isProcessing = false;
-                  });
-                  await DatabaseTest.updateGroup(docId: widget.documentId, lstGroupUpdate: DatabaseTest.lstGrAdded);
-                  setState(() {
-                    _isProcessing = true;
-                  });
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => DashboardScreen(),
+                  )
+                : Container(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        // backgroundColor: MaterialStateProperty.all(
+                        //   CustomColors.accentDark,
+                        // ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _isProcessing = false;
+                        });
+                        await DatabaseTest.updateGroup(
+                            docId: widget.documentId,
+                            lstGroupUpdate: DatabaseTest.lstGrAdded);
+                        setState(() {
+                          _isProcessing = true;
+                        });
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DashboardScreen(),
+                          ),
+                        );
+                      },
+                      child: const Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        child: Text(
+                          'Sauvegarder',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            // color: CustomColors.textSecondary,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: const Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                  child: Text(
-                    'VALIDER',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.textSecondary,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),
@@ -264,8 +266,9 @@ class _EditGroupFormState extends State<EditGroupForm> {
             /*title: const Text('Please Confirm'),*/
             content: const Text('Souhaitez-vous modifier le nom de ce group?'),
             shape: RoundedRectangleBorder(
-                side:
-                    const BorderSide(color: CustomColors.textPrimary, width: 1),
+                side: const BorderSide(
+                    // color: CustomColors.textPrimary,
+                    width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -289,7 +292,8 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           onPressed: () {
                             // Remove the box
                             setState(() {
-                              DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
+                              DatabaseTest.lstGrAdded[index] =
+                                  _groupEditCtl!.text;
                               // DatabaseTest.listNameGroup[index] =
                               // _groupNameList[index];
                               //print("list" +  DatabaseTest.lstGrAdded[index]);

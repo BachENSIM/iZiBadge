@@ -54,7 +54,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                           padding:
                               const EdgeInsets.only(top: 16.0, bottom: 16.0),
                           child: Text(
-                            'Download',
+                            'Télécharger',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
