@@ -17,14 +17,14 @@ class _GroupFormState extends State<GroupForm> {
   TextEditingController?
       _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
   //un controller par default => afficher un groupe par default
-  String initialText = "Default Group 1";
+  String initialText = "Groupe 1";
   TextEditingController? _groupInitCtl;
 
   bool _zero =
       true; //verifier l'indice de la liste => si = 0 => c'est le default
 
   //pour sauvegarder dans la BDD
-  final List<String> _groupNameList = ["Default Group 1"];
+  final List<String> _groupNameList = ["Groupe 1"];
   late int taille;
 
   @override
@@ -95,7 +95,7 @@ class _GroupFormState extends State<GroupForm> {
                         setState(() {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
-                            mess = "Default Group " + (taille++).toString();
+                            mess = "Groupe " + (taille++).toString();
                             _groupNameList.add(mess);
                           } else {
                             _groupNameList.add(_groupNameCtl.text);

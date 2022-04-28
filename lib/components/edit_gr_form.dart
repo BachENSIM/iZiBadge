@@ -22,7 +22,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
   //un autre controller pour modifier le nom d'un groupe
   TextEditingController? _groupEditCtl;
   //un controller par default => afficher un groupe par default
-  String initialText = "Default Group 1";
+  String initialText = "Groupe 1";
   TextEditingController? _groupInitCtl;
   //verifier l'indice de la liste => si = 0 => c'est le default
   bool _one = false;

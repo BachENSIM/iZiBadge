@@ -11,14 +11,14 @@ class CustomColors {
   //static final Color googleBackground = Color(0xFF4285F4);
 
   //New global color theme
-  // static const Color backgroundLight = Colors.white;
-  // static final Color backgroundColor = Color.fromARGB(255, 0, 92, 134);
-  // static final Color backgroundColorDark = Color(0xFF487D97);
-  // static final Color backgroundAppbar = Color(0xFF023047);
-  // static final Color accentLight = Color(0xFFFFB703);
-  // static final Color accentDark = Color(0xFFFB8500);
-  // static const Color textPrimary = Colors.black;
-  // static const Color textSecondary = Colors.white;
+  /*static const Color backgroundLight = Colors.white;
+  static final Color backgroundColor = Color.fromARGB(255, 0, 92, 134);
+  static final Color backgroundColorDark = Color(0xFF487D97);
+  static final Color backgroundAppbar = Color(0xFF023047);
+  static final Color accentLight = Color(0xFFFFB703);
+  static final Color accentDark = Color(0xFFFB8500);
+  static const Color textPrimary = Colors.black;
+  static const Color textSecondary = Colors.white;*/
 
   //Global color theme from materialpalette.com
   static Color darkPrimaryColor = Color(0xFF303F9F);

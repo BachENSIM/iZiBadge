@@ -82,11 +82,11 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                       child: GFDropdown(
                                         padding: const EdgeInsets.all(10),
                                         borderRadius: BorderRadius.circular(5),
-                                        border: const BorderSide(
+                                       /* border: const BorderSide(
                                             color: CustomColors.textPrimary,
                                             width: 1),
                                         dropdownButtonColor:
-                                            CustomColors.textSecondary,
+                                            CustomColors.textSecondary,*/
                                         value: _dropdownGroup,
                                         onChanged: (newValue) {
                                           setState(() {
@@ -112,11 +112,11 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                       child: GFDropdown(
                                         padding: const EdgeInsets.all(15),
                                         borderRadius: BorderRadius.circular(5),
-                                        border: const BorderSide(
+                                       /* border: const BorderSide(
                                             color: CustomColors.textPrimary,
                                             width: 1),
                                         dropdownButtonColor:
-                                            CustomColors.textSecondary,
+                                            CustomColors.textSecondary,*/
                                         value: _dropdownRole,
                                         onChanged: (newValue) {
                                           setState(() {
@@ -179,7 +179,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                               _modify(context, index);
                                             });
                                           },
-                                          color: CustomColors.accentDark,
+                                          /*color: CustomColors.accentDark,*/
                                           titleText: "Email: " +
                                               DatabaseTest.lstUserAdded[index],
                                           subTitleText: "Groupe: " +
@@ -199,7 +199,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                                     .removeAt(index);
                                               });
                                             },
-                                            color: CustomColors.textPrimary,
+                                            /*color: CustomColors.textPrimary,*/
                                           )),
                                     ]));
                                   },
@@ -219,9 +219,9 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
+                          /*valueColor: AlwaysStoppedAnimation<Color>(
                             CustomColors.accentLight,
-                          ),
+                          ),*/
                         ),
                       ),
                     )
@@ -229,9 +229,9 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       width: double.maxFinite,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
+                         /* backgroundColor: MaterialStateProperty.all(
                             CustomColors.accentDark,
-                          ),
+                          ),*/
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -273,7 +273,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: CustomColors.textSecondary,
+                             /* color: CustomColors.textSecondary,*/
                               letterSpacing: 2,
                             ),
                           ),
@@ -293,7 +293,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
             /*title: const Text('Please Confirm'),*/
             content: const Text('Editez vos informations?'),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: CustomColors.textPrimary, width: 1),
+                // side: BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -325,9 +325,9 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
                             borderRadius: BorderRadius.circular(5),
-                            border: const BorderSide(
+                            /*border: const BorderSide(
                                 color: CustomColors.textPrimary, width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,
+                            dropdownButtonColor: CustomColors.textSecondary,*/
                             value: _dropdownGroup,
                             onChanged: (newValue) {
                               setState(() {
@@ -352,9 +352,10 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
                             borderRadius: BorderRadius.circular(5),
-                            border: const BorderSide(
+                          /* border:
+                           BorderSide(
                                 color: CustomColors.textPrimary, width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,
+                            dropdownButtonColor: CustomColors.textSecondary,*/
                             value: _dropdownRole,
                             onChanged: (newValue) {
                               setState(() {

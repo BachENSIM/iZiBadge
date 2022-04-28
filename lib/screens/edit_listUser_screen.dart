@@ -19,7 +19,7 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
+        //backgroundColor: CustomColors.backgroundDark,
         title: const Text("Modification la liste"),
         //AppBarTitle()
         centerTitle: true,
@@ -31,7 +31,7 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: CustomColors.textSecondary,
+                  //color: CustomColors.secondaryText,
                 )),
             style: ElevatedButton.styleFrom(
                 elevation: 0, primary: Colors.transparent)),
