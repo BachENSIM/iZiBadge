@@ -4,7 +4,6 @@ import 'package:izibagde/components/group_form.dart';
 import 'package:izibagde/screens/add_listUser_screen.dart';
 
 class GroupScreen extends StatefulWidget {
-
   @override
   _GroupScreenState createState() => _GroupScreenState();
 }
@@ -15,8 +14,8 @@ class _GroupScreenState extends State<GroupScreen> {
     return Scaffold(
       appBar: AppBar(
         //elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
-        title: Text("Ajout de group"),
+        // backgroundColor: CustomColors.backgroundDark,
+        title: const Text("Ajout de groupe"),
         //AppBarTitle()
         centerTitle: true,
         leadingWidth: 100,
@@ -27,16 +26,18 @@ class _GroupScreenState extends State<GroupScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: CustomColors.textSecondary,
+                  //color: CustomColors.textSecondary,
                 )),
             style: ElevatedButton.styleFrom(
-                elevation: 0, primary: Colors.transparent)),
+              elevation: 0,
+              // primary: Colors.transparent
+            )),
         actions: [
           ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  CustomColors.backgroundDark,
-                )),
+            // style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(
+            //   CustomColors.backgroundColorDark,
+            // )),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -47,11 +48,11 @@ class _GroupScreenState extends State<GroupScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: const <Widget>[
-                Text("Next",
+                Text("Suivant",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: CustomColors.textSecondary,
+                      //color: CustomColors.textSecondary,
                     )),
                 Icon(Icons.arrow_right_sharp)
               ],
@@ -59,12 +60,12 @@ class _GroupScreenState extends State<GroupScreen> {
           )
         ],
       ),
-      body:SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: GroupForm(),
-          ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: GroupForm(),
         ),
+      ),
     );
   }
 }

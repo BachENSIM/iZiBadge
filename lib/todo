@@ -18,4 +18,5 @@
 11. remplacer le bouton "valider" par l'animation qui tourne en rounde au milieu pour voir le procédure => done
 12. S'il n'y a pas d'events => afficher aucun trouvé => done
 13. optimiser le code dans "item_list_test" (regrouper code)=> done
-14. commencer à faire la page de modification de groupe => charger la liste avant de venir sur la page ??? (garder au moins 1 groupe)=> done
+14. commencer à faire la page de modification de groupe => charger la liste avant de venir sur la page ??? (garder au moins 1 groupe)
+15. Changer icône ajout de groupe (on dirait que c'est un ajout d'invité)

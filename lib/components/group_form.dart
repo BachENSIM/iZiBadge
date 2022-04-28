@@ -14,23 +14,23 @@ class GroupForm extends StatefulWidget {
 class _GroupFormState extends State<GroupForm> {
   final _groupNameCtl =
       TextEditingController(); // un autre controller pour saisir => creer des groupe differents
-  TextEditingController?  _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
+  TextEditingController?
+      _groupEditCtl; //un autre controller pour modifier le nom d'un groupe
   //un controller par default => afficher un groupe par default
   String initialText = "Default Group 1";
   TextEditingController? _groupInitCtl;
 
-  bool _zero = true; //verifier l'indice de la liste => si = 0 => c'est le default
+  bool _zero =
+      true; //verifier l'indice de la liste => si = 0 => c'est le default
 
   //pour sauvegarder dans la BDD
-  final List<String> _groupNameList = [
-    "Default Group 1"
-  ];
-  late int taille ;
+  final List<String> _groupNameList = ["Default Group 1"];
+  late int taille;
 
   @override
   void initState() {
     super.initState();
-    taille = _groupNameList.length+1;
+    taille = _groupNameList.length + 1;
     _groupInitCtl = TextEditingController(text: initialText);
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
@@ -59,7 +59,7 @@ class _GroupFormState extends State<GroupForm> {
               children: <Widget>[
                 Expanded(
                     child: TextField(
-                    keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.text,
                   autofocus: true,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
@@ -67,7 +67,7 @@ class _GroupFormState extends State<GroupForm> {
                         .never, //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
                     filled: true, // Needed for adding a fill color
-                    fillColor: CustomColors.backgroundLight,
+                    //fillColor: CustomColors.backgroundLight,
                     isDense: false, // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
@@ -95,10 +95,9 @@ class _GroupFormState extends State<GroupForm> {
                         setState(() {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
-                            mess = "Default Group " +  (taille++).toString();
+                            mess = "Default Group " + (taille++).toString();
                             _groupNameList.add(mess);
-                          }
-                          else {
+                          } else {
                             _groupNameList.add(_groupNameCtl.text);
                           }
                           DatabaseTest.listNameGroup.add(mess);
@@ -112,11 +111,11 @@ class _GroupFormState extends State<GroupForm> {
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(12.0),
                                   bottomRight: Radius.circular(12.0)))),
-                      child: const Text("ADD",
+                      child: const Text("Ajouter",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: CustomColors.textSecondary,
+                            //color: CustomColors.textSecondary,
                           ))),
                 )
               ],
@@ -185,14 +184,16 @@ class _GroupFormState extends State<GroupForm> {
                             borderRadius: BorderRadius.circular(15)),
                       ),*/
                       GFListTile(
-                        color: CustomColors.accentLight,
+                        color: CustomColors.lightPrimaryColor,
                         avatar: CircleAvatar(
                             radius: 20,
-                            backgroundColor: CustomColors.accentDark,
+                            //backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
-                                  fontSize: 15, color: CustomColors.textSecondary),
+                                fontSize: 15,
+                                //color: CustomColors.textSecondary
+                              ),
                             )),
                         titleText: _groupNameList[index],
                         icon: Row(
@@ -207,21 +208,23 @@ class _GroupFormState extends State<GroupForm> {
                                   _modify(context, index);
                                 });
                               },
-                              color: CustomColors.accentDark,
+                              //color: CustomColors.accentDark,
                             ),
                             if (index != 0)
                               IconButton(
                                 icon: Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
                                   setState(() {
-                                    if (index != 0){
+                                    if (index != 0) {
                                       _groupNameList.removeAt(index);
-                                      DatabaseTest.listNameGroup.removeAt(index);
+                                      DatabaseTest.listNameGroup
+                                          .removeAt(index);
                                     }
-
                                   });
                                 },
-                                color: _zero ? Colors.grey : CustomColors.accentDark,
+                                //color: _zero
+                                //     ? Colors.grey
+                                //     : CustomColors.accentDark,
                               )
                           ],
                         ),
@@ -243,9 +246,11 @@ class _GroupFormState extends State<GroupForm> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             /*title: const Text('Please Confirm'),*/
-            content: const Text('You want to rename?'),
+            content: const Text('Renommer'),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(color: CustomColors.textPrimary, width: 1),
+                side: const BorderSide(
+                    // color: CustomColors.textPrimary,
+                    width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -281,13 +286,13 @@ class _GroupFormState extends State<GroupForm> {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Edit')),
+                          child: const Text('OK')),
                       TextButton(
                           onPressed: () {
                             // Close the dialog
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Cancel'))
+                          child: const Text('Annuler'))
                     ],
                   ),
                 ],

@@ -5,7 +5,6 @@ class QRCodeScreen extends StatefulWidget {
   late final String documentId;
   QRCodeScreen({required this.documentId});
 
-
   @override
   _QRCodeScreenState createState() => _QRCodeScreenState();
 }
@@ -26,7 +25,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
             label: const Text("Back"),
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                primary: Colors.transparent,
+                // primary: Colors.transparent,
                 textStyle: const TextStyle(
                     fontSize: 16, fontWeight: FontWeight.bold))),
       ),

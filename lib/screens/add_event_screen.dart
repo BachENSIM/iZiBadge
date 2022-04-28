@@ -20,11 +20,11 @@ class AddScreen extends StatelessWidget {
         //_startFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.backgroundLight,
+        //backgroundColor: CustomColors.backgroundLight,
         appBar: AppBar(
           //elevation: 0,
-          backgroundColor: CustomColors.backgroundDark,
-          title: Text("Add an event"),
+          //backgroundColor: CustomColors.backgroundColorDark,
+          title: const Text("Evénement"),
           //AppBarTitle()
           centerTitle: true,
           leadingWidth: 100,
@@ -35,16 +35,18 @@ class AddScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: CustomColors.textSecondary,
+                    //color: CustomColors.textSecondary,
                   )),
               style: ElevatedButton.styleFrom(
-                  elevation: 0, primary: Colors.transparent)),
+                elevation: 0,
+                // primary: Colors.transparent
+              )),
           actions: [
             ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                CustomColors.backgroundDark,
-              )),
+              // style: ButtonStyle(
+              //     backgroundColor: MaterialStateProperty.all(
+              //   CustomColors.backgroundColorDark,
+              // )),
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -55,17 +57,16 @@ class AddScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const <Widget>[
-                  Text("Next",
+                  Text("Suivant",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
-                        color: CustomColors.textSecondary,
+                        //color: CustomColors.textSecondary,
                       )),
                   Icon(Icons.arrow_right_sharp)
                 ],
               ),
             )
-
           ],
         ),
         //scrollView

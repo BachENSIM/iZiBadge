@@ -37,7 +37,7 @@ class _ItemListTestState extends State<ItemListTest> {
       //stream: DatabaseTest.readRoles(_isOrganisateur,_isInviteur,DatabaseTest.isScan),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         } else if (snapshot.data?.size == 0) {
           return SingleChildScrollView(
               child: Column(
@@ -70,7 +70,7 @@ class _ItemListTestState extends State<ItemListTest> {
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
                     separatorBuilder: (context, index) =>
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
@@ -124,15 +124,21 @@ class _ItemListTestState extends State<ItemListTest> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
-                                color: CustomColors.backgroundLight,
-                                padding: EdgeInsets.only(
+                                //color: Theme.of(context).primaryColorDark,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(context).indicatorColor,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding: const EdgeInsets.only(
                                     left: 30, top: 10, bottom: 10),
                                 child: Center(
                                   child: Text(
                                     currHeader.toString() +
                                         " / " +
                                         dateStart.year.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 26),
                                   ),
@@ -155,7 +161,7 @@ class _ItemListTestState extends State<ItemListTest> {
         return Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(
-              CustomColors.accentLight,
+              CustomColors.accentColor,
             ),
           ),
         );
@@ -188,7 +194,7 @@ class _ItemListTestState extends State<ItemListTest> {
     }
 
     if (!isDel)
-      return "Time: " + startDate;
+      return startDate;
     else
       return "(Annulé par l'organisateur)";
   }
@@ -198,8 +204,8 @@ class _ItemListTestState extends State<ItemListTest> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            title: const Text('Please Confirm'),
-            content: const Text('Are you sure to remove this item?'),
+            title: const Text('Supprimer'),
+            content: const Text("Voulez-vous supprimer cet événement ?"),
             actions: [
               // The "Yes" button
               TextButton(
@@ -212,13 +218,13 @@ class _ItemListTestState extends State<ItemListTest> {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Yes')),
+                  child: const Text('Oui')),
               TextButton(
                   onPressed: () {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text('No'))
+                  child: const Text('Annuler'))
             ],
           );
         });
@@ -228,7 +234,7 @@ class _ItemListTestState extends State<ItemListTest> {
   Widget buildMenu(BuildContext context) {
     return Container(
       height: 40,
-      color: CustomColors.backgroundDark,
+      // color: CustomColors.backgroundDark,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -236,11 +242,11 @@ class _ItemListTestState extends State<ItemListTest> {
           PopupMenuButton(
               icon: const Icon(
                 Icons.menu,
-                color: CustomColors.textSecondary,
+                // color: CustomColors.secondaryText,
                 size: 32.0,
               ),
-              offset: Offset(-40, 0),
-              color: CustomColors.backgroundLight,
+              offset: const Offset(-40, 0),
+              // color: CustomColors.lightPrimaryColor,
               elevation: 20,
               enabled: true,
               onCanceled: () {},
@@ -352,34 +358,40 @@ class _ItemListTestState extends State<ItemListTest> {
         color:
             //CustomColors.firebaseGrey.withOpacity(0.1),
             !isDel
-                ? CustomColors.textPrimary.withOpacity(0.1)
-                : CustomColors.backgroundLight,
+                ? CustomColors.primaryColor
+                : Theme.of(context).disabledColor,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: ExpansionTile(
+        iconColor: CustomColors.textIcons,
+        collapsedIconColor: CustomColors.textIcons,
         /*shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),*/
         children: <Widget>[
           ListTile(
             isThreeLine: true,
-            title: Text("Address: " + address + "\nDescription: " + desc),
+            title: Text(
+              "Adresse: " + address + "\nDescription: " + desc,
+              style: TextStyle(color: CustomColors.textIcons),
+            ),
             subtitle: Text(
               setUp(dateStart, isDel),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: CustomColors.accentLight, fontSize: 14),
+              style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (_organisateur)
                   PopupMenuButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.edit,
+                        color: CustomColors.textIcons,
                       ),
-                      offset: Offset(200, 40),
-                      color: CustomColors.backgroundLight,
+                      offset: const Offset(200, 40),
+                      // color: CustomColors.textIcons,
                       elevation: 20,
                       enabled: true,
                       onCanceled: () {
@@ -428,7 +440,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                                         .toString());
                                                 //un astuce => mettre .5s de pause pour charger la BDD
                                                 sleep(const Duration(
-                                                    milliseconds: 750));
+                                                    milliseconds: 250));
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
@@ -472,8 +484,11 @@ class _ItemListTestState extends State<ItemListTest> {
                       onPressed: () {
                         _delete(context, docID, isDel);
                       },
-                      icon: Icon(Icons.delete)),
-                if ((_organisateur || _scanneur) && !isDel)
+                      icon: Icon(
+                        Icons.delete,
+                        color: CustomColors.textIcons,
+                      )),
+                if (_organisateur || _scanneur)
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
@@ -484,7 +499,10 @@ class _ItemListTestState extends State<ItemListTest> {
                           ),
                         );
                       },
-                      icon: Icon(Icons.photo_camera)),
+                      icon: Icon(
+                        Icons.photo_camera,
+                        color: CustomColors.textIcons,
+                      )),
                 IconButton(
                     onPressed: () {
                       print("Event id to qrcode: " + docID);
@@ -496,7 +514,10 @@ class _ItemListTestState extends State<ItemListTest> {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.qr_code_scanner_outlined)),
+                    icon: Icon(
+                      Icons.qr_code_scanner_outlined,
+                      color: CustomColors.textIcons,
+                    )),
               ],
             ),
           )
@@ -505,9 +526,9 @@ class _ItemListTestState extends State<ItemListTest> {
           name,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             //color: Color(0xFFB38305),
-            color: CustomColors.textSecondary,
+            color: CustomColors.textIcons,
             fontSize: 20,
           ),
         ),

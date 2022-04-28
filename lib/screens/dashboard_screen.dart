@@ -29,15 +29,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     DatabaseTest.fetchNBRole();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.backgroundDark,
+      //backgroundColor: CustomColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: CustomColors.backgroundDark,
+        //backgroundColor: CustomColors.backgroundAppbar,
         //title: AppBarTitle(),
         title: customWidget,
         actions: [
@@ -47,22 +46,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   if (customIcon.icon == Icons.search_rounded) {
                     customIcon = const Icon(Icons.close);
                     customWidget = ListTile(
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.search_rounded,
-                        color: CustomColors.textSecondary,
+                        color: CustomColors.textIcons,
                         size: 28,
                       ),
                       title: TextFormField(
+                        cursorColor: CustomColors.textIcons,
                         autofocus: true,
                         keyboardType: TextInputType.text,
                         controller: _searchCtl,
-                        decoration: const InputDecoration(
-                          hintText: 'Search by name of event',
+                        decoration: InputDecoration(
+                          hintText: 'Recherche par nom',
+                          hintStyle: TextStyle(
+                            color: CustomColors.textIcons.withOpacity(0.7),
+                          ),
                           contentPadding: EdgeInsets.all(8),
                           isDense: true,
                         ),
-                        style: const TextStyle(
-                          color: CustomColors.textSecondary,
+                        style: TextStyle(
+                          color: CustomColors.textIcons,
                         ),
                         onChanged: (value) {
                           setState(() {
@@ -94,10 +97,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           );
         },
-        backgroundColor: CustomColors.accentLight,
-        child: const Icon(
+        backgroundColor: CustomColors.accentColor,
+        child: Icon(
           Icons.add,
-          color: CustomColors.textSecondary,
+          // color: CustomColors.textIcons,
           size: 32,
         ),
       ),
