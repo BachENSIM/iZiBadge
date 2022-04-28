@@ -37,11 +37,11 @@ class MyApp extends StatelessWidget {
               onSecondary: CustomColors.textIcons, //White
               onError: CustomColors.textIcons, //White
               error: Colors.red,
+              surface: CustomColors.textIcons, //Time selector
+              onSurface: CustomColors.primaryText, //Time selector
               brightness: Brightness.light,
               background: CustomColors.darkPrimaryColor, //Probably not used
-              surface: Colors.purpleAccent, //Probably not used
               onBackground: CustomColors.textIcons, //Probably not used
-              onSurface: CustomColors.textIcons, //Probably not used
             )
             // primarySwatch: Colors.indigo,
 

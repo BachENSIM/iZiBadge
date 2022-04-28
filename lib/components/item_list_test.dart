@@ -36,7 +36,7 @@ class _ItemListTestState extends State<ItemListTest> {
       //stream: DatabaseTest.readRoles(_isOrganisateur,_isInviteur,DatabaseTest.isScan),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Something went wrong');
+          return const Text('Something went wrong');
         } else if (snapshot.data?.size == 0) {
           return SingleChildScrollView(
               child: Column(
@@ -69,7 +69,7 @@ class _ItemListTestState extends State<ItemListTest> {
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
                     separatorBuilder: (context, index) =>
-                        SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
@@ -130,14 +130,14 @@ class _ItemListTestState extends State<ItemListTest> {
                                       width: 2,
                                     ),
                                     borderRadius: BorderRadius.circular(8.0)),
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     left: 30, top: 10, bottom: 10),
                                 child: Center(
                                   child: Text(
                                     currHeader.toString() +
                                         " / " +
                                         dateStart.year.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 26),
                                   ),
@@ -159,10 +159,10 @@ class _ItemListTestState extends State<ItemListTest> {
 
         return Center(
           child: CircularProgressIndicator(
-              // valueColor: AlwaysStoppedAnimation<Color>(
-              //   CustomColors.accentLight,
-              // ),
-              ),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              CustomColors.accentColor,
+            ),
+          ),
         );
       },
     );
@@ -193,7 +193,7 @@ class _ItemListTestState extends State<ItemListTest> {
     }
 
     if (!isDel)
-      return "Date: " + startDate;
+      return startDate;
     else
       return "(Annulé par l'organisateur)";
   }
@@ -237,12 +237,12 @@ class _ItemListTestState extends State<ItemListTest> {
         children: <Widget>[
           //pour le filtre par le role
           PopupMenuButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.menu,
                 // color: CustomColors.secondaryText,
                 size: 32.0,
               ),
-              offset: Offset(-40, 0),
+              offset: const Offset(-40, 0),
               // color: CustomColors.lightPrimaryColor,
               elevation: 20,
               enabled: true,
@@ -360,33 +360,37 @@ class _ItemListTestState extends State<ItemListTest> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: ExpansionTile(
+        iconColor: CustomColors.textIcons,
+        collapsedIconColor: CustomColors.textIcons,
         /*shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),*/
         children: <Widget>[
           ListTile(
             isThreeLine: true,
-            title: Text("Adresse: " + address + "\nDescription: " + desc),
+            title: Text(
+              "Adresse: " + address + "\nDescription: " + desc,
+              style: TextStyle(color: CustomColors.textIcons),
+            ),
             subtitle: Text(
               //"Desc: " + description + "\nAdresse: " + address,
               //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
               setUp(dateStart, isDel),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  // color: CustomColors.secondaryText,
-                  fontSize: 14),
+              style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 if (_organisateur)
                   PopupMenuButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.edit,
+                        color: CustomColors.textIcons,
                       ),
-                      offset: Offset(200, 40),
-                      // color: CustomColors.backgroundLight,
+                      offset: const Offset(200, 40),
+                      // color: CustomColors.textIcons,
                       elevation: 20,
                       enabled: true,
                       onCanceled: () {
@@ -466,7 +470,10 @@ class _ItemListTestState extends State<ItemListTest> {
                       onPressed: () {
                         _delete(context, docID);
                       },
-                      icon: const Icon(Icons.delete)),
+                      icon: Icon(
+                        Icons.delete,
+                        color: CustomColors.textIcons,
+                      )),
                 if (_organisateur || _scanneur)
                   IconButton(
                       onPressed: () {
@@ -478,7 +485,10 @@ class _ItemListTestState extends State<ItemListTest> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.photo_camera)),
+                      icon: Icon(
+                        Icons.photo_camera,
+                        color: CustomColors.textIcons,
+                      )),
                 IconButton(
                     onPressed: () {
                       print("Event id to qrcode: " + docID);
@@ -490,7 +500,10 @@ class _ItemListTestState extends State<ItemListTest> {
                         ),
                       );
                     },
-                    icon: const Icon(Icons.qr_code_scanner_outlined)),
+                    icon: Icon(
+                      Icons.qr_code_scanner_outlined,
+                      color: CustomColors.textIcons,
+                    )),
               ],
             ),
           )

@@ -146,7 +146,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         //     backgroundColor: MaterialStateProperty.all(
                         //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
                               //color: CustomColors.accentLight,
@@ -166,7 +166,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         //     backgroundColor: MaterialStateProperty.all(
                         //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.timer_rounded,
                               //color: CustomColors.accentLight,
@@ -200,7 +200,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         //     backgroundColor: MaterialStateProperty.all(
                         //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
                               //color: CustomColors.accentLight,
@@ -220,7 +220,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         //     backgroundColor: MaterialStateProperty.all(
                         //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.timer_rounded,
                               //color: CustomColors.accentLight,
