@@ -36,17 +36,18 @@ class _ListUserScreenState extends State<ListUserScreen> {
     // TODO: implement initState
     super.initState();
     taille = _groupListUser.length + 1;
-    if(DatabaseTest.lstPersonScanned.isNotEmpty) DatabaseTest.lstPersonScanned.clear();
+    if (DatabaseTest.lstPersonScanned.isNotEmpty)
+      DatabaseTest.lstPersonScanned.clear();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: CustomColors.backgroundDark,
+          //backgroundColor: CustomColors.backgroundColorDark,
           centerTitle: true,
           title: const Text(
-            "Ajout de la liste d'user",
+            "Ajout d'invités",
           ),
           leadingWidth: 100,
           leading: ElevatedButton.icon(
@@ -55,7 +56,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
               label: const Text("Back"),
               style: ElevatedButton.styleFrom(
                   elevation: 0,
-                  primary: Colors.transparent,
+                  // primary: Colors.transparent,
                   textStyle: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold))),
         ),
@@ -83,12 +84,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                   keyboardType: TextInputType.emailAddress,
                                   controller: _guestCtl,
                                   validator: (value) => value!.isEmpty
-                                      ? 'Email cannot be blank'
+                                      ? "L'email ne peut pas être vide"
                                       : null,
                                   decoration: const InputDecoration(
-                                    hintText: 'Ex: tom@gmail.com',
+                                    hintText: 'Ex: email@gmail.com',
                                     contentPadding: EdgeInsets.all(8),
-                                    isDense: true,
+                                    isDense: false,
                                   ),
                                 ),
                                 Container(
@@ -109,9 +110,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: CustomColors.textPrimary,
+                                                //color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: CustomColors.textSecondary,
+                                            // dropdownButtonColor:
+                                            //     CustomColors.textSecondary,
                                             value: _dropdownGroup,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -140,9 +142,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                             border: const BorderSide(
-                                                color: CustomColors.textPrimary,
+                                                //color: CustomColors.textPrimary,
                                                 width: 1),
-                                            dropdownButtonColor: CustomColors.textSecondary,
+                                            // dropdownButtonColor:
+                                            //     CustomColors.textSecondary,
                                             value: _dropdownRole,
                                             onChanged: (newValue) {
                                               setState(() {
@@ -169,10 +172,11 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       setState(() {
                                         String mess = _guestCtl.text;
                                         if (_guestCtl.text.isEmpty) {
-                                          mess = "example" +  (taille++).toString() +"@gmail.com";
+                                          mess = "example" +
+                                              (taille++).toString() +
+                                              "@gmail.com";
                                           _groupListUser.add(mess);
-                                        }
-                                        else {
+                                        } else {
                                           _groupListUser.add(_guestCtl.text);
                                         }
 
@@ -202,13 +206,16 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         return Container(
                                             child: Column(children: <Widget>[
                                           GFListTile(
-                                              onTap:() {
+                                              onTap: () {
                                                 setState(() {
-                                                  _editGuestCtl = TextEditingController(text:  _groupListUser[index]);
+                                                  _editGuestCtl =
+                                                      TextEditingController(
+                                                          text: _groupListUser[
+                                                              index]);
                                                   _modify(context, index);
                                                 });
                                               },
-                                              color: CustomColors.accentDark,
+                                              //color: CustomColors.accentDark,
                                               titleText: "Email: " +
                                                   _groupListUser[index],
                                               subTitleText: "Groupe²: " +
@@ -231,7 +238,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     print(index);
                                                   });
                                                 },
-                                                color: CustomColors.textPrimary,
+                                                //color: CustomColors.textPrimary,
                                               )),
                                         ]));
                                       },
@@ -246,72 +253,72 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           )
                         ],
                       ))),
-                  _isProcessing ?
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              CustomColors.accentLight,
+                  _isProcessing
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(
+                                // valueColor: AlwaysStoppedAnimation<Color>(
+                                //   CustomColors.accentLight,
+                                // ),
+                                ),
+                          ),
+                        )
+                      : Container(
+                          width: double.maxFinite,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              // backgroundColor: MaterialStateProperty.all(
+                              //   CustomColors.accentDark,
+                              // ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                _isProcessing = true;
+                              });
+                              await DatabaseTest.addItem(
+                                title: DatabaseTest.nameSave.toString(),
+                                description: DatabaseTest.descSave.toString(),
+                                address: DatabaseTest.addrSave.toString(),
+                                start:
+                                    DateTime.parse(DateTime.now().toString()),
+                                end: DateTime.parse(DateTime.now().toString()),
+                                role: "Organisateur",
+                              );
+                              await DatabaseTest.addInviteList(
+                                  listEmail: _groupListUser,
+                                  listGroup: _groupDropdownGroup,
+                                  listRole: _groupDropdownRole);
+
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => DashboardScreen(),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16.0, bottom: 16.0),
+                              child: Text(
+                                'VALIDER',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  //color: CustomColors.textSecondary,
+                                  letterSpacing: 2,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    :
-                    Container(
-                    width: double.maxFinite,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                          CustomColors.accentDark,
-                        ),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          _isProcessing = true;
-                        });
-                        await DatabaseTest.addItem(
-                          title: DatabaseTest.nameSave.toString(),
-                          description: DatabaseTest.descSave.toString(),
-                          address: DatabaseTest.addrSave.toString(),
-                          start: DateTime.parse(DateTime.now().toString()),
-                          end: DateTime.parse(DateTime.now().toString()),
-                          role: "Organisateur",
-                        );
-                        await DatabaseTest.addInviteList(
-                            listEmail: _groupListUser,
-                            listGroup: _groupDropdownGroup,
-                            listRole: _groupDropdownRole
-                        );
-
-                        setState(() {
-                          _isProcessing = false;
-                        });
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DashboardScreen(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                        child: Text(
-                          'VALIDER',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: CustomColors.textSecondary,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                        )
                 ],
               ))),
         ));
@@ -325,7 +332,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
             /*title: const Text('Please Confirm'),*/
             content: const Text('Editer vos informations?'),
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: CustomColors.textPrimary, width: 1),
+                side: BorderSide(
+                    // color: CustomColors.textPrimary,
+                    width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
               Column(
@@ -344,10 +353,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //Pour le groupe
                       Container(
@@ -357,25 +364,22 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
-                            borderRadius:
-                            BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: CustomColors.textPrimary,
-                                width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,
+                                //color: CustomColors.textPrimary, width: 1
+                                ),
+                            // dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownGroup,
                             onChanged: (newValue) {
                               setState(() {
-                                _dropdownGroup =
-                                newValue as String?;
+                                _dropdownGroup = newValue as String?;
                               });
                             },
                             items: DatabaseTest.listNameGroup
-                                .map(
-                                    (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ))
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -388,26 +392,23 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
-                            borderRadius:
-                            BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                color: CustomColors.textPrimary,
-                                width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,
+                                //color: CustomColors.textPrimary, width: 1
+                                ),
+                            // dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownRole,
                             onChanged: (newValue) {
                               setState(() {
-                                _dropdownRole =
-                                newValue as String?;
+                                _dropdownRole = newValue as String?;
                                 print(_dropdownRole);
                               });
                             },
                             items: _roleDropDown
-                                .map(
-                                    (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ))
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
                                 .toList(),
                           ),
                         ),
@@ -438,7 +439,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           child: const Text('Anuler'))
                     ],
                   ),
-
                 ],
               )
               // The "Yes" button

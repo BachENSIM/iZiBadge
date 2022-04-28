@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/model/database.dart';
 
 class AutoScreen extends StatefulWidget {
@@ -56,8 +55,6 @@ class _AutoScreenState extends State<AutoScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kindacode.com'),
@@ -81,19 +78,14 @@ class _AutoScreenState extends State<AutoScreen> {
               setState(() {
                 //_email =  _email! + value;
                 _lstEmail.add(valueEdit);
-
               });
-
             },
           ),
           ElevatedButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               child: Wrap(
                 children: const <Widget>[Text('Add')],
-              )
-          ),
+              )),
           const SizedBox(
             height: 30,
           ),

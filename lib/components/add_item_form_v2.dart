@@ -1,12 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/custom_form_field.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/model/validator.dart';
 import 'package:izibagde/screens/add_group_screen.dart';
-
-
 
 class AddItemForm extends StatefulWidget {
   //const AddItemForm({Key? key}) : super(key: key);
@@ -61,7 +58,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Titre',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -78,13 +75,13 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Titre',
-                  hint: "Saisir le titre d'un événement",
+                  hint: "Saisir le titre de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
                   'Description',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -102,13 +99,13 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Description',
-                  hint: 'Saisir la description pour cet événement',
+                  hint: "Saisir la description de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
                   'Adresse',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -126,13 +123,13 @@ class _AddItemFormState extends State<AddItemForm> {
                     value: value,
                   ),
                   label: 'Adresse',
-                  hint: "Saisir l'adresse",
+                  hint: "Saisir l'adresse de l'événement",
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Date pour commencer',
+                  'Date et heure de début',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -145,14 +142,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectDateStart(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -165,14 +162,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectTimeStart(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -184,9 +181,9 @@ class _AddItemFormState extends State<AddItemForm> {
                 ),
                 const SizedBox(height: 24.0),
                 const Text(
-                  'Date pour terminer',
+                  'Date et heure de fin',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -199,14 +196,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectDateEnd(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -219,14 +216,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectTimeEnd(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
-                          children: <Widget>[
+                          children: const <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -243,18 +240,18 @@ class _AddItemFormState extends State<AddItemForm> {
               ? Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      CustomColors.accentLight,
-                    ),
-                  ),
+                      // valueColor: AlwaysStoppedAnimation<Color>(
+                      //   CustomColors.accentLight,
+                      // ),
+                      ),
                 )
               : Container(
                   width: double.maxFinite,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        CustomColors.accentLight,
-                      ),
+                      // backgroundColor: MaterialStateProperty.all(
+                      //   CustomColors.accentLight,
+                      // ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -273,9 +270,17 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.nameSave = _titleCtl.text;
                         DatabaseTest.addrSave = _addrCtl.text;
                         DatabaseTest.descSave = _descCtl.text;
-                        DatabaseTest.startSave = DateTime.parse(DateTime.now().toString());
-                        DatabaseTest.endSave = DateTime.parse(DateTime.now().toString());
-                        print( "T:[" + DatabaseTest.nameSave! + "]  A:[" +   DatabaseTest.addrSave! + "]  D:[" + DatabaseTest.descSave! + "]");
+                        DatabaseTest.startSave =
+                            DateTime.parse(DateTime.now().toString());
+                        DatabaseTest.endSave =
+                            DateTime.parse(DateTime.now().toString());
+                        print("T:[" +
+                            DatabaseTest.nameSave! +
+                            "]  A:[" +
+                            DatabaseTest.addrSave! +
+                            "]  D:[" +
+                            DatabaseTest.descSave! +
+                            "]");
 
                         /*await Database.addItem(
                           title: _titleCtl.text,
@@ -304,11 +309,11 @@ class _AddItemFormState extends State<AddItemForm> {
                     child: const Padding(
                       padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                       child: Text(
-                        'Next',
+                        'Suivant',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: CustomColors.textPrimary,
+                          //color: CustomColors.textPrimary,
                           letterSpacing: 2,
                         ),
                       ),

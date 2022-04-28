@@ -3,6 +3,7 @@ import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/screens/login_screen.dart';
 import 'package:izibagde/services/authentication.dart';
 import 'package:provider/provider.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -11,8 +12,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<Authentication>(context);
@@ -26,11 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: <Widget>[
           CircleAvatar(
             radius: 70,
-            backgroundColor: CustomColors.textPrimary,
-            child: Image.asset(
-                "asset/image/internet-security.png",
-                width: size.width
-            ),
+            //backgroundColor: CustomColors.textPrimary,
+            child: Image.asset("asset/image/internet-security.png",
+                width: size.width),
           ),
           Padding(
             padding: const EdgeInsets.all((20.0)),
@@ -43,19 +40,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Text(
                     'User name',
                     style:
-                      TextStyle(
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.bold
-                      ),
+                        TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
                   Text(
                     "iziBagde",
-                    style:
-                      TextStyle(
-                        fontSize: 12.0,
-                        color: CustomColors.textPrimary
-                      ),
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      //color: CustomColors.textPrimary
+                    ),
                   ),
                   const Divider(
                     thickness: 1,
@@ -63,18 +56,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Text(
                     'User name',
                     style:
-                    TextStyle(
-                        fontSize: 19.0,
-                        fontWeight: FontWeight.bold
-                    ),
+                        TextStyle(fontSize: 19.0, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
                   const Text(
                     "iziBagde",
-                    style:
-                    TextStyle(
-                        fontSize: 12.0,
-                        color: CustomColors.textPrimary
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      //color: CustomColors.textPrimary
                     ),
                   ),
                   // Container(
@@ -102,45 +91,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                     child: RaisedButton(
                       onPressed: () async {
-                       await auth.logout();
-                       Navigator.pushAndRemoveUntil(
-                           context,
-                           MaterialPageRoute(
-                               builder: (context) => const LoginScreen()), (route) => false);
+                        await auth.logout();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                            (route) => false);
                       },
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
-                      textColor: CustomColors.textSecondary,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(80.0)),
+                      // textColor: CustomColors.textSecondary,
                       padding: const EdgeInsets.all(0),
                       child: Container(
                         alignment: Alignment.center,
                         height: 50.0,
                         width: size.width * 0.5,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(80.0),
-                            gradient: LinearGradient(
-                                colors: [
-                                  //Color.fromARGB(255, 255, 136, 34),
-                                  //Color.fromARGB(255, 255, 177, 41)
-                                  CustomColors.backgroundLight,
-                                  CustomColors.backgroundDark
-                                ]
-                            )
+                          borderRadius: BorderRadius.circular(80.0),
+                          // gradient: LinearGradient(colors: [
+                          //   //Color.fromARGB(255, 255, 136, 34),
+                          //   //Color.fromARGB(255, 255, 177, 41)
+                          //   CustomColors.backgroundLight,
+                          //   CustomColors.backgroundColorDark
+                          // ])
                         ),
                         padding: const EdgeInsets.all(0),
                         child: const Text(
                           "LOGOUT",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
                   ),
-
                 ],
               ),
-            ) ,
+            ),
           )
         ],
       ),

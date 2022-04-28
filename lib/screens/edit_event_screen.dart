@@ -40,11 +40,11 @@ class _EditScreenState extends State<EditScreen> {
         _addrFocusNode.unfocus();
       },
       child: Scaffold(
-        backgroundColor: CustomColors.backgroundDark,
+        //backgroundColor: CustomColors.backgroundColorDark,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.backgroundDark,
-          title: Text("Edit An Event"),
+          //backgroundColor: CustomColors.backgroundColorDark,
+          title: const Text("Modfier l'événement"),
           actions: [
             _isDel
                 ? Padding(
@@ -54,9 +54,9 @@ class _EditScreenState extends State<EditScreen> {
                       right: 16.0,
                     ),
                     child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        CustomColors.accentDark,
-                      ),
+                      // valueColor: AlwaysStoppedAnimation<Color>(
+                      //   CustomColors.accentDark,
+                      // ),
                       strokeWidth: 3,
                     ),
                   )
@@ -73,7 +73,7 @@ class _EditScreenState extends State<EditScreen> {
                     },
                     icon: Icon(
                       Icons.delete,
-                      color: Colors.redAccent,
+                      // color: Colors.redAccent,
                       size: 32,
                     ))
           ],

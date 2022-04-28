@@ -25,7 +25,6 @@ late String? startTime;
 late String? endDate;
 late String? endTime;
 
-
 class _AddItemFormState extends State<AddItemForm> {
   final _addItemFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
@@ -34,7 +33,6 @@ class _AddItemFormState extends State<AddItemForm> {
   TimeOfDay selectedTimeStart = TimeOfDay.now();
   DateTime selectedDateEnd = DateTime.now();
   TimeOfDay selectedTimeEnd = TimeOfDay.now();
-
 
   final TextEditingController _titleCtl = TextEditingController();
   final TextEditingController _descCtl = TextEditingController();
@@ -59,7 +57,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Titre',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -82,7 +80,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Description',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -106,7 +104,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Adresse',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -130,7 +128,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Date pour commencer',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -143,14 +141,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectDateStart(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
                           children: <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -163,14 +161,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectTimeStart(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
                           children: <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -184,7 +182,7 @@ class _AddItemFormState extends State<AddItemForm> {
                 const Text(
                   'Date pour terminer',
                   style: TextStyle(
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 22.0,
                     letterSpacing: 1,
                     fontWeight: FontWeight.bold,
@@ -197,14 +195,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectDateEnd(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
                           children: <Widget>[
                             Icon(
                               Icons.calendar_today_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -217,14 +215,14 @@ class _AddItemFormState extends State<AddItemForm> {
                         onPressed: () {
                           _selectTimeEnd(context);
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(CustomColors.textSecondary)),
+                        // style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.all(
+                        //         CustomColors.textSecondary)),
                         child: Wrap(
                           children: <Widget>[
                             Icon(
                               Icons.timer_rounded,
-                              color: CustomColors.accentLight,
+                              //color: CustomColors.accentLight,
                               size: 32.0,
                             ),
                           ],
@@ -234,7 +232,6 @@ class _AddItemFormState extends State<AddItemForm> {
                   ],
                 ),
                 const SizedBox(height: 24.0),
-
               ],
             ),
           ),
@@ -242,18 +239,18 @@ class _AddItemFormState extends State<AddItemForm> {
               ? Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      CustomColors.accentLight,
-                    ),
-                  ),
+                      // valueColor: AlwaysStoppedAnimation<Color>(
+                      //   CustomColors.accentLight,
+                      // ),
+                      ),
                 )
               : Container(
                   width: double.maxFinite,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        CustomColors.accentLight,
-                      ),
+                      // backgroundColor: MaterialStateProperty.all(
+                      //   CustomColors.accentLight,
+                      // ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -279,7 +276,6 @@ class _AddItemFormState extends State<AddItemForm> {
                           //limit: DateTime.fromMicrosecondsSinceEpoch(DateTime.parse(limitDate! + "T" + limitTime!).microsecondsSinceEpoch),
                           start: DateTime.parse(startDate! + " " + startTime!),
                           end: DateTime.parse(endDate! + " " + endTime!),
-
                         );
 
                         setState(() {
@@ -296,7 +292,7 @@ class _AddItemFormState extends State<AddItemForm> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: CustomColors.textPrimary,
+                          //color: CustomColors.textPrimary,
                           letterSpacing: 2,
                         ),
                       ),
@@ -457,5 +453,4 @@ class _AddItemFormState extends State<AddItemForm> {
       });
     }
   }
-
 }

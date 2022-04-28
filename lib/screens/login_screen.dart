@@ -9,7 +9,6 @@ import 'package:izibagde/services/authentication.dart';
 import 'package:izibagde/components/background.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -37,8 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
           false; // Prevents focus if tap on eye
     });
   }
-
-
 
   //Step 4
   @override
@@ -186,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "LOGIN",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.textPrimary,
+                    //color: CustomColors.textPrimary,
                     fontSize: 36),
                 textAlign: TextAlign.left,
               ),
@@ -220,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .never, //Hides label on focus or if filled
                   labelText: "Email",
                   filled: true, // Needed for adding a fill color
-                  fillColor: CustomColors.backgroundLight,
+                  //fillColor: CustomColors.backgroundLight,
                   isDense: true, // Reduces height a bit
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none, // No border
@@ -262,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .never, //Hides label on focus or if filled
                   labelText: "Password",
                   filled: true, // Needed for adding a fill color
-                  fillColor: CustomColors.backgroundLight,
+                  //fillColor: CustomColors.backgroundLight,
                   isDense: true, // Reduces height a bit
                   border: OutlineInputBorder(
                     borderSide: BorderSide.none, // No border
@@ -291,7 +288,10 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: Text(
                 "Forgot your password?",
-                style: TextStyle(fontSize: 12, color: CustomColors.backgroundLight),
+                style: TextStyle(
+                  fontSize: 12,
+                  //color: CustomColors.backgroundLight
+                ),
               ),
             ),
 
@@ -305,40 +305,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   //final isValid = _formKey.currentState!.validate();
                   //Step 8
                   //if (_formKey.currentState!.validate() ) {
-                    await auth
-                        .handleSignInEmail(_emailCtl.text, _passCtl.text)
-                        .then((value) {
-                      print( "after login"+ _emailCtl.text);
-                      print("after login"+_passCtl.text);
-                      DatabaseTest.userUid = _emailCtl.text;
-                      Navigator.of(context).push(MaterialPageRoute(
+                  await auth
+                      .handleSignInEmail(_emailCtl.text, _passCtl.text)
+                      .then((value) {
+                    print("after login" + _emailCtl.text);
+                    print("after login" + _passCtl.text);
+                    DatabaseTest.userUid = _emailCtl.text;
+                    Navigator.of(context).push(MaterialPageRoute(
                         //builder: (context) =>  ListViewEvent()));
-                          builder: (context) =>  DashboardScreen()));
-                      //builder: (context) => EventList()));
-                    }).catchError((e) => print(e));
-                    /*setState(() {
+                        builder: (context) => DashboardScreen()));
+                    //builder: (context) => EventList()));
+                  }).catchError((e) => print(e));
+                  /*setState(() {
                       DatabaseTest.fetchDataID();
                     });*/
-                 // }
+                  // }
                   //else {
-                    //Text("Login or password is wrong!!!");
+                  //Text("Login or password is wrong!!!");
                   //}
-
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(80.0)),
-                textColor: CustomColors.textSecondary,
+                // textColor: CustomColors.textSecondary,
                 padding: const EdgeInsets.all(0),
                 child: Container(
                   alignment: Alignment.center,
                   height: 50.0,
                   width: size.width * 0.5,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(80.0),
-                      gradient: LinearGradient(colors: [
-                        CustomColors.backgroundDark,
-                        CustomColors.backgroundLight
-                      ])),
+                    borderRadius: BorderRadius.circular(80.0),
+                    // gradient: LinearGradient(colors: [
+                    //   CustomColors.backgroundColorDark,
+                    //   CustomColors.backgroundLight
+                    // ])
+                  ),
                   padding: const EdgeInsets.all(0),
                   child: const Text(
                     "LOGIN",
@@ -363,13 +363,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text(
                   "Don't Have an Account? Sign up",
                   style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.backgroundLight,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    //color: CustomColors.backgroundLight,
+                  ),
                 ),
               ),
-            ),
-            /*FutureBuilder(
+              /*FutureBuilder(
               future: Authentication.initializeFirebase(context: context),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
@@ -384,7 +384,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               },
             ),*/
-            )],
+            )
+          ],
         ),
       ),
     );
