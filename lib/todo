@@ -1,14 +1,21 @@
 1. supprimer BDD et refaire/mettre le bon nom pour la structure(80%)/ mettre l'app en francaise et coder en anglais(0%) => done(95%)
-2. Reussir à ajouter groupe dans BDD => done (90%)
-3. 3 types de modifications: events/groupe/user
-4. editer groupe/user/role quand toucher => done
+2. Reussir à ajouter groupe dans BDD(même une collection sur la BDD) => done (90%)
 5. changer la couleur pour l'app => 80%
 6. supprimer button en bas et garder en haut (button next)
-7. name par defaut si vide ? (pour group)=> done
-8. quand supprimer un groupe/un email => faut revérifirer l'ordre dans la liste stockée => (done)
 9. probleme de camera/snackbar/compter cb personne sur personne totale => faut compter "statutEntree" dans la BDD
 10. vérifier quand supprimer un events => faut changer l'etat sur autre compte
+15. Le probleme de modification la liste d'invitaion => commenet mettre à jour la liste?
+15.1 => supprimer l'ancienne et rajouter une nouvelle => mettre à jour pour tous les comptes (ça a l'air facile) (faut comparer les contenus entre 2 listes pour changer l'attribute sur un events)
+15.2 => comparer la taille de 2 liste => s'il y a des changements => les corriger (plus compliqué)
+
+
+
+------------done---------------
+3. 3 types de modifications: events/groupe/user => done
+4. editer groupe/user/role quand toucher => done
+7. name par defaut si vide ? (pour group)=> done
+8. quand supprimer un groupe/un email => faut revérifirer l'ordre dans la liste stockée => (done)
 11. remplacer le bouton "valider" par l'animation qui tourne en rounde au milieu pour voir le procédure => done
 12. S'il n'y a pas d'events => afficher aucun trouvé => done
 13. optimiser le code dans "item_list_test" (regrouper code)=> done
-14. commencer à faire la page de modification de groupe => charger la liste avant de venir sur la page ??? (garder au moins 1 groupe)
+14. commencer à faire la page de modification de groupe => charger la liste avant de venir sur la page ??? (garder au moins 1 groupe)=> done

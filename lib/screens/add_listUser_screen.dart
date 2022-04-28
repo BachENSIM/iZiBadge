@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -180,6 +182,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         _groupDropdownGroup
                                             .add(_dropdownGroup!);
                                         _groupDropdownRole.add(_dropdownRole!);
+
                                         _guestCtl.clear();
                                       });
                                     },
@@ -211,7 +214,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               color: CustomColors.accentDark,
                                               titleText: "Email: " +
                                                   _groupListUser[index],
-                                              subTitleText: "Groupe²: " +
+                                              subTitleText: "Groupe: " +
                                                   _groupDropdownGroup[index] +
                                                   " - Role: " +
                                                   _groupDropdownRole[index],
@@ -220,12 +223,14 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     Icon(Icons.cancel_outlined),
                                                 onPressed: () {
                                                   setState(() {
+
                                                     _groupListUser
                                                         .removeAt(index);
                                                     _groupDropdownGroup
                                                         .removeAt(index);
                                                     _groupDropdownRole
                                                         .removeAt(index);
+
                                                     DatabaseTest.listInvite =
                                                         _groupListUser;
                                                     print(index);
@@ -298,8 +303,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                         child: Text(
                           'VALIDER',
                           style: TextStyle(

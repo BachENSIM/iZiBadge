@@ -10,6 +10,7 @@ import 'package:izibagde/model/database.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/edit_event_screen.dart';
 import 'package:izibagde/screens/edit_group_screen.dart';
+import 'package:izibagde/screens/edit_listUser_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
 import 'package:izibagde/screens/scanner_screen.dart';
 
@@ -192,7 +193,7 @@ class _ItemListTestState extends State<ItemListTest> {
       return "(Annulé par l'organisateur)";
   }
 
-  void _delete(BuildContext context, String id) {
+  void _delete(BuildContext context, String id, bool isDel) {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -204,7 +205,9 @@ class _ItemListTestState extends State<ItemListTest> {
               TextButton(
                   onPressed: () async {
                     // Remove the box
-                    await DatabaseTest.deleteItem(docId: id);
+                    isDel
+                        ? await DatabaseTest.deleteItemCanceled(docId: id)
+                        : await DatabaseTest.deleteItem(docId: id);
 
                     // Close the dialog
                     Navigator.of(context).pop();
@@ -362,8 +365,6 @@ class _ItemListTestState extends State<ItemListTest> {
             isThreeLine: true,
             title: Text("Address: " + address + "\nDescription: " + desc),
             subtitle: Text(
-              //"Desc: " + description + "\nAdresse: " + address,
-              //"Date: " + dateStart.year.toString() + " - " + dateStart.month.toString() +" - "+ dateStart.day.toString(),
               setUp(dateStart, isDel),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -422,15 +423,17 @@ class _ItemListTestState extends State<ItemListTest> {
                                               onPressed: () {
                                                 DatabaseTest.fetchGroupAdded(
                                                     docID);
-                                                print("editedi " + DatabaseTest.lstGrAdded.toString());
+                                                print("editedi " +
+                                                    DatabaseTest.lstGrAdded
+                                                        .toString());
                                                 //un astuce => mettre .5s de pause pour charger la BDD
-                                                sleep(const Duration(milliseconds: 250));
+                                                sleep(const Duration(
+                                                    milliseconds: 750));
                                                 Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         EditGroupScreen(
                                                       documentId: docID,
-
                                                     ),
                                                   ),
                                                 );
@@ -443,7 +446,20 @@ class _ItemListTestState extends State<ItemListTest> {
                                       StatefulBuilder(
                                         builder: (_context, _setState) {
                                           return IconButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                DatabaseTest.fetchListUsers(
+                                                    docID);
+                                                sleep(const Duration(
+                                                    milliseconds: 500));
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditListUserScreen(
+                                                      documentId: docID,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                               icon: const Icon(
                                                 Icons.attach_email,
                                               ));
@@ -451,13 +467,13 @@ class _ItemListTestState extends State<ItemListTest> {
                                       ),
                                     ]))
                           ]),
-                if (_organisateur)
+                if (_organisateur || isDel)
                   IconButton(
                       onPressed: () {
-                        _delete(context, docID);
+                        _delete(context, docID, isDel);
                       },
                       icon: Icon(Icons.delete)),
-                if (_organisateur || _scanneur)
+                if ((_organisateur || _scanneur) && !isDel)
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
