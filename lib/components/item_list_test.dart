@@ -65,7 +65,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: 475,
+                  height: 675,
                   child: ListView.separated(
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
@@ -236,14 +236,15 @@ class _ItemListTestState extends State<ItemListTest> {
       height: 40,
       // color: CustomColors.backgroundDark,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          Text(DatabaseTest.userUid),
           //pour le filtre par le role
           PopupMenuButton(
               icon: const Icon(
-                Icons.menu,
+                Icons.filter_list_rounded,
                 // color: CustomColors.secondaryText,
-                size: 32.0,
+                size: 36.0,
               ),
               offset: const Offset(-40, 0),
               // color: CustomColors.lightPrimaryColor,
@@ -488,7 +489,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         Icons.delete,
                         color: CustomColors.textIcons,
                       )),
-                if (_organisateur || _scanneur)
+                if ( (_scanneur || _organisateur) && !isDel )
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
@@ -503,6 +504,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         Icons.photo_camera,
                         color: CustomColors.textIcons,
                       )),
+                if (!isDel)
                 IconButton(
                     onPressed: () {
                       print("Event id to qrcode: " + docID);

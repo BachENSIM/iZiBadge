@@ -25,7 +25,7 @@ class DatabaseTest {
   static String? addrSave; //Adresses
   static String? nameSave; //titre
   static String? descSave; //description
-  static DateTime? startSave; //date commencé
+  static DateTime? startSave; //date début
   static DateTime? endSave; //date fin
   /*---------------------------------------*/
   static String searchSave = ""; //pour la barre de recherche
@@ -328,7 +328,10 @@ class DatabaseTest {
         .catchError((e) => print(e));
 
     //Step 2: Save the list into database
+    List<String> listOfID = [];
+    List<String> listOfRoleScan = [];
     for (int i = 0; i < listEmail.length; i++) {
+      //Save en tant qu'organisateur/
       DocumentReference documentReferencer = _mainCollection
           .doc(userUid)
           .collection(eventRelated)
@@ -351,6 +354,10 @@ class DatabaseTest {
               "] avec id: " +
               documentReferencer.id))
           .catchError((e) => print(e));
+
+      //syncItemsOfInvitation(email: listEmail[i], role: listRole[i], emailUid: userUid, docID: docIdAdd!, group: listGroup[i]);
+
+
       //Step 3: in the same time, create an event with each of email in the list
       syncItems(
           email: listEmail[i],
@@ -360,20 +367,54 @@ class DatabaseTest {
           start: startSave!,
           end: endSave!,
           role: listRole[i]);
-      //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode
-      await _mainCollection
-          .doc(listEmail[i])
-          .collection(eventRelated)
-          .doc(docIdAdd)
-          .collection(participants)
-          .doc(documentReferencer.id)
-          .set(data)
-          .whenComplete(() => print("Add this event into email : " +
-              listEmail[i] +
-              " with id: " +
-              documentReferencer.id))
-          .catchError((e) => print(e));
+
+      //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode (just for clients not scanners)
+      if(listRole[i].compareTo("Scanneur") != 0 ) {
+        await _mainCollection
+            .doc(listEmail[i])
+            .collection(eventRelated)
+            .doc(docIdAdd)
+            .collection(participants)
+            .doc(documentReferencer.id)
+            .set(data)
+            .whenComplete(() => print("Add this event into email : " +
+            listEmail[i] +
+            " with id: " +
+            documentReferencer.id))
+            .catchError((e) => print(e));
+      }
+      else {
+        listOfRoleScan.add(listEmail[i]);//combien de scanneur
+      }
+      //avoir une autre list pour sauvegarder les ID pour qu'on puisse mettre à jour les scanneurs
+      listOfID.add(documentReferencer.id);
+
     }
+    //Step 5: Le scanneur va synchroniser la liste pour qu'il puisse avoir BDD
+    for( int i = 0; i < listOfRoleScan.length; i++) {
+      for( int i = 0; i < listOfID.length; i++) {
+        Map<String, dynamic> data = <String, dynamic>{
+          "role": listRole[i],
+          "statutEntree": false,
+          "timestamp": DateTime.now(),
+          "email": listEmail[i],
+          "group": listGroup[i]
+        };
+        await _mainCollection
+            .doc(listEmail[i])
+            .collection(eventRelated)
+            .doc(docIdAdd)
+            .collection(participants)
+            .doc(documentReferencer.id)
+            .set(data)
+            .whenComplete(() => print("Done"))
+            .catchError((e) => print(e));
+      }
+    }
+
+
+
+
   }
 
   /*---------------------------------------*/
@@ -386,6 +427,36 @@ class DatabaseTest {
         .collection("participation")
         .where("email", isEqualTo: userUid);
     return notesItemCollection.snapshots();
+  }
+
+  /*---------------------------------------*/
+  static Future<void> syncItemsOfInvitation({
+    required String email,
+    required String emailUid,
+    required String role,
+    required String group,
+    required String docID,
+
+  }) async {
+    DocumentReference documentReferencer = _mainCollection
+        .doc(emailUid)
+        .collection(eventRelated)
+        .doc(docID)
+        .collection(participants)
+        .doc();
+
+    Map<String, dynamic> data = <String, dynamic>{
+      "role": role,
+      "statutEntree": false,
+      "timestamp": DateTime.now(),
+      "email": email,
+      "group": group
+    };
+
+    await documentReferencer
+        .set(data)
+        .whenComplete(() => print("Add ${documentReferencer.id}"))
+        .catchError((e) => print(e));
   }
 
   /*---------------------------------------*/
@@ -481,7 +552,7 @@ class DatabaseTest {
 
   /*---------------------------------------*/
   //check status de QRCode
-  static bool status = false;
+  static Future<bool> status = Future<bool>.value(false);
   static late int nbPersonTotal = 0; //nb total de personne dans un events
   static late int countPersonEnter = 0; //compter cb de persons qui rentre
   static int countPersonScanned = 0; //compter cb de fois qu'il rentre
@@ -490,7 +561,7 @@ class DatabaseTest {
   static HashMap lstPersonScanned = HashMap<String, int>();
 
   //fonction pour verifier le status du client
-  static void fetchDataCheck(
+  static Future<bool> fetchDataCheck(
       String idParticipation, String contentQRCode) async {
     //lstPersonEnter = HashMap<String,bool>();
     //lstPersonScanned = HashMap<String,int>();
@@ -506,7 +577,8 @@ class DatabaseTest {
     //countPersonEnter = 0;
     for (int i = 0; i < dataID.docs.length; i++) {
       if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
-        status = true;
+        print("data true" );
+        status = Future<bool>.value(true);
         emailClient = dataID.docs[i].data()['email'];
         //countPersonScanned++;
         if (!lstPersonScanned.containsKey(contentQRCode)) {
@@ -529,9 +601,11 @@ class DatabaseTest {
               (value) => value++); //mettre à jour une valeur dans la liste
         }
       } else {
-        status = false;
+        print(" ${contentQRCode} data false ${i} ${dataID.docs[i].id}");
+        status = Future<bool>.value(false);
       }
     }
+    return status;
   }
 
   /*---------------------------------------*/

@@ -7,7 +7,13 @@
 15. Le probleme de modification la liste d'invitaion => commenet mettre à jour la liste?
 15.1 => supprimer l'ancienne et rajouter une nouvelle => mettre à jour pour tous les comptes (ça a l'air facile) (faut comparer les contenus entre 2 listes pour changer l'attribute sur un events)
 15.2 => comparer la taille de 2 liste => s'il y a des changements => les corriger (plus compliqué)
-
+16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text
+17. des differences créneaux pour chaque groupe
+18. un endroit ou je sais sur quel compte que je me connecte (50% => pour l'instant le mettre sur le header)
+19. notifier l'utilisateur quand changer qq chose
+20. historique de BDD avant changements (snapshot)
+21. pour le role "Scanneur" => il faut mettre aussi la liste d'invitaion dans la BDD
+(organisateur cree la liste et synchronise aux autres comptes => check role = Scanneur => cree une pareil liste )
 
 
 ------------done---------------
@@ -20,3 +26,4 @@
 13. optimiser le code dans "item_list_test" (regrouper code)=> done
 14. commencer à faire la page de modification de groupe => charger la liste avant de venir sur la page ??? (garder au moins 1 groupe)
 15. Changer icône ajout de groupe (on dirait que c'est un ajout d'invité)
+18. garder juste le button supprimer si un events est annulé (done)

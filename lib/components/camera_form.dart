@@ -17,7 +17,7 @@ class CameraForm extends StatefulWidget {
 class _CameraFormState extends State<CameraForm> {
   Barcode? result;
   QRViewController? controller;
-  bool verify = false;
+  late bool verify;
   bool flash = false;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
@@ -58,7 +58,7 @@ class _CameraFormState extends State<CameraForm> {
                                 "/" +
                                 DatabaseTest.nbPersonTotal.toString(),
                             style: TextStyle(
-                              //color: Colors.white,
+                              color: Colors.white,
                               fontSize: 16,
                             ),
                           ))),
@@ -140,59 +140,64 @@ class _CameraFormState extends State<CameraForm> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() async {
-        await controller.pauseCamera();
-        result = scanData;
-        DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-        print("Status: " +
-            DatabaseTest.status.toString() +
-            "\nemail:" +
-            DatabaseTest.emailClient);
-        verify = DatabaseTest.status;
-        if (verify) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Icon(Icons.check_circle_outline,
-                      color: Colors.green, size: 40),
-                  Text("Numbre d'entrés: " +
-                      DatabaseTest.lstPersonScanned[result])
-                ],
-              ),
-              duration: Duration(seconds: 365),
-              padding: const EdgeInsets.all(15.0),
-              action: SnackBarAction(
-                label: "Validé",
-                onPressed: () async {
-                  await controller.resumeCamera();
-                },
-              ),
+
+    controller.scannedDataStream.listen((scanData) async {
+      await controller.pauseCamera();
+      result = scanData ;
+      print(result!.code);
+
+      //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
+      verify =  await DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString().split('//').last);
+      print("Status: " +
+          verify.toString() +
+          "\nemail:" +
+          await DatabaseTest.emailClient);
+      //verify = DatabaseTest.status;
+
+      if (verify) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Icon(Icons.check_circle_outline,
+                    color: Colors.green, size: 40),
+                /*Text("Numbre d'entrés: " +
+                    DatabaseTest.lstPersonScanned[result])*/
+              ],
             ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                  Text('Invalidé.....Veuillez rescanner')
-                ],
-              ),
-              duration: Duration(seconds: 365),
-              padding: const EdgeInsets.all(15.0),
-              action: SnackBarAction(
-                label: "Rescannez",
-                onPressed: () async {
-                  await controller.resumeCamera();
-                },
-              ),
+            duration: Duration(seconds: 365),
+            padding: const EdgeInsets.all(15.0),
+            action: SnackBarAction(
+              label: "Validé",
+              onPressed: () async {
+                await controller.resumeCamera();
+              },
             ),
-          );
-        }
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
+                Text('Invalidé.....Veuillez rescanner')
+              ],
+            ),
+            duration: Duration(seconds: 365),
+            padding: const EdgeInsets.all(15.0),
+            action: SnackBarAction(
+              label: "Rescannez",
+              onPressed: () async {
+                await controller.resumeCamera();
+              },
+            ),
+          ),
+        );
+      }
+      setState(()  {
       });
     });
   }
