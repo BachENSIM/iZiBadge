@@ -52,11 +52,7 @@ class _CameraFormState extends State<CameraForm> {
                           width: 250,
                           height: 50,
                           child: Text(
-                            "Nombre de persons entrées: \n" +
-                                DatabaseTest.lstPersonScanned.length
-                                    .toString() +
-                                "/" +
-                                DatabaseTest.nbPersonTotal.toString(),
+                            "Nombre de persons entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -144,26 +140,25 @@ class _CameraFormState extends State<CameraForm> {
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
       result = scanData ;
-      print(result!.code);
+      debugPrint(result!.code);
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
       verify =  await DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString().split('//').last);
-      print("Status: " +
+      debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
-          await DatabaseTest.emailClient);
+          DatabaseTest.emailClient + " nb d'entrée: " + DatabaseTest.countPersonScanned.toString());
       //verify = DatabaseTest.status;
 
       if (verify) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Icon(Icons.check_circle_outline,
                     color: Colors.green, size: 40),
-                /*Text("Numbre d'entrés: " +
-                    DatabaseTest.lstPersonScanned[result])*/
+                Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
             duration: Duration(seconds: 365),
@@ -180,8 +175,8 @@ class _CameraFormState extends State<CameraForm> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
                 Text('Invalidé.....Veuillez rescanner')
               ],

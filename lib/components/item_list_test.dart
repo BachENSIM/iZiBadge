@@ -193,10 +193,11 @@ class _ItemListTestState extends State<ItemListTest> {
           selectedDateStart.day.toString();
     }
 
-    if (!isDel)
+    if (!isDel) {
       return startDate;
-    else
+    } else {
       return "(Annulé par l'organisateur)";
+    }
   }
 
   void _delete(BuildContext context, String id, bool isDel) {
@@ -504,7 +505,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         Icons.photo_camera,
                         color: CustomColors.textIcons,
                       )),
-                if (!isDel)
+                if (!isDel && !_organisateur)
                 IconButton(
                     onPressed: () {
                       print("Event id to qrcode: " + docID);

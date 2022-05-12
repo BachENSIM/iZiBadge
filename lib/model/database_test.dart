@@ -122,23 +122,26 @@ class DatabaseTest {
   //pour récupérer tous les events dans la BDD mais trier par "role"
   static Stream<QuerySnapshot> readRoles(
       bool _isOrganisateur, bool _isInviteur, bool _isScanneur) {
-    /*  print("or : " +
-        isOrgan.toString() +
-        " invi : " +
-        isInvite.toString()+ " name : " + searchSave);*/
     Query<Map<String, dynamic>> notesItemCollection =
         _mainCollection.doc(userUid).collection("items");
     //.orderBy("dateDebut", descending: true);
     //Filtrer par Organisateur
-    if (_isOrganisateur && !_isInviteur) {
+    if (_isOrganisateur && !_isInviteur  && !_isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Organisateur")
           .orderBy("dateDebut", descending: false)
           .snapshots();
     }
     //Filtrer par Invité
-    else if (!_isOrganisateur && _isInviteur) {
+    else if (!_isOrganisateur && _isInviteur && !_isScanneur) {
       return notesItemCollection
+          .where("role", isEqualTo: "Invité")
+          .orderBy("dateDebut", descending: false)
+          .snapshots();
+    }
+    else if (!_isOrganisateur && !_isInviteur && _isScanneur) {
+      return notesItemCollection
+          .where("role", isEqualTo: "Scanneur")
           .where("role", isEqualTo: "Invité")
           .orderBy("dateDebut", descending: false)
           .snapshots();
@@ -369,7 +372,7 @@ class DatabaseTest {
           role: listRole[i]);
 
       //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode (just for clients not scanners)
-      if(listRole[i].compareTo("Scanneur") != 0 ) {
+      if(listRole[i].compareTo("Invité") == 0 ) {
         await _mainCollection
             .doc(listEmail[i])
             .collection(eventRelated)
@@ -391,7 +394,7 @@ class DatabaseTest {
 
     }
     //Step 5: Le scanneur va synchroniser la liste pour qu'il puisse avoir BDD
-    for( int i = 0; i < listOfRoleScan.length; i++) {
+    for( int j = 0; j < listOfRoleScan.length; j++) {
       for( int i = 0; i < listOfID.length; i++) {
         Map<String, dynamic> data = <String, dynamic>{
           "role": listRole[i],
@@ -400,14 +403,15 @@ class DatabaseTest {
           "email": listEmail[i],
           "group": listGroup[i]
         };
+
         await _mainCollection
-            .doc(listEmail[i])
+            .doc(listOfRoleScan[j])
             .collection(eventRelated)
             .doc(docIdAdd)
             .collection(participants)
             .doc(documentReferencer.id)
             .set(data)
-            .whenComplete(() => print("Done"))
+            .whenComplete(() => print("$listOfRoleScan[j] update $listEmail[i]"))
             .catchError((e) => print(e));
       }
     }
@@ -554,7 +558,7 @@ class DatabaseTest {
   //check status de QRCode
   static Future<bool> status = Future<bool>.value(false);
   static late int nbPersonTotal = 0; //nb total de personne dans un events
-  static late int countPersonEnter = 0; //compter cb de persons qui rentre
+  static late int countPersonEnter = 1; //compter cb de persons qui rentre
   static int countPersonScanned = 0; //compter cb de fois qu'il rentre
   static String emailClient = "";
   //static late HashMap lstPersonEnter ;
@@ -573,11 +577,11 @@ class DatabaseTest {
         .doc(idParticipation)
         .collection(participants)
         .get();
-    nbPersonTotal = dataID.docs.length;
-    //countPersonEnter = 0;
+    nbPersonTotal = dataID.docs.length-1;
+    countPersonEnter = 0;
     for (int i = 0; i < dataID.docs.length; i++) {
       if (contentQRCode.compareTo(dataID.docs[i].id) == 0) {
-        print("data true" );
+        debugPrint(" $contentQRCode data true $i ${dataID.docs[i].id}");
         status = Future<bool>.value(true);
         emailClient = dataID.docs[i].data()['email'];
         //countPersonScanned++;
@@ -589,20 +593,23 @@ class DatabaseTest {
               .doc(userUid)
               .collection(eventRelated)
               .doc(idParticipation)
-              .update({"statutEntree": status})
-              .whenComplete(() => print("Updated email: " +
-                  emailClient +
-                  "with status: " +
-                  status.toString()))
+              .update({"statutEntree": true})
+              .whenComplete(() => print("Updated email: $emailClient with status: true"))
               .catchError((e) => print(e));
           //countPersonEnter++;
         } else {
+          countPersonEnter = ++lstPersonScanned[contentQRCode];
+          //mettre à jour une valeur dans la liste
           lstPersonScanned.update(contentQRCode,
-              (value) => value++); //mettre à jour une valeur dans la liste
+              (value) => countPersonEnter);
+
+          debugPrint("$countPersonEnter");
         }
+
+        break;
       } else {
-        print(" ${contentQRCode} data false ${i} ${dataID.docs[i].id}");
-        status = Future<bool>.value(false);
+        debugPrint(" $contentQRCode data false $i ${dataID.docs[i].id}");
+        //status = Future<bool>.value(false);
       }
     }
     return status;
