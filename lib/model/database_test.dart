@@ -114,7 +114,7 @@ class DatabaseTest {
   static Stream<QuerySnapshot> readItems() {
     Query<Map<String, dynamic>> notesItemCollection = _mainCollection
         .doc(userUid)
-        .collection("items")
+        .collection(eventRelated)
         .orderBy("dateDebut", descending: true);
     //_mainCollection.doc("test@gmail.com").collection(eventRelated);
 
@@ -126,7 +126,7 @@ class DatabaseTest {
   static Stream<QuerySnapshot> readRoles(
       bool _isOrganisateur, bool _isInviteur, bool _isScanneur) {
     Query<Map<String, dynamic>> notesItemCollection =
-        _mainCollection.doc(userUid).collection("items");
+        _mainCollection.doc(userUid).collection(eventRelated);
     //.orderBy("dateDebut", descending: true);
     //Filtrer par Organisateur
     if (_isOrganisateur && !_isInviteur && !_isScanneur) {
@@ -144,7 +144,6 @@ class DatabaseTest {
     } else if (!_isOrganisateur && !_isInviteur && _isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Scanneur")
-          .where("role", isEqualTo: "Invité")
           .orderBy("dateDebut", descending: false)
           .snapshots();
     }
@@ -152,7 +151,7 @@ class DatabaseTest {
     else if (searchSave.isNotEmpty) {
       return notesItemCollection
           .where("titre",
-              /*isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
+             /* isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
               //Same as below
               isGreaterThanOrEqualTo: searchSave,
               isLessThan: searchSave.substring(0, searchSave.length - 1) +
@@ -170,7 +169,6 @@ class DatabaseTest {
           isGreaterThanOrEqualTo: searchSave,
           isLessThan: searchSave + 'z')
           .orderBy("titre", descending: true)*/
-          .orderBy("dateDebut", descending: false)
           .snapshots();
     }
   }

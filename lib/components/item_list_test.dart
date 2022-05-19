@@ -75,7 +75,6 @@ class _ItemListTestState extends State<ItemListTest> {
                     itemBuilder: (context, index) {
                       //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
                       //Dart doesn’t know which type of object it is getting.
-
                       var noteInfo = snapshot.data!.docs[index].data()!
                           as Map<String, dynamic>;
                       var _noteInfo = (index == 0

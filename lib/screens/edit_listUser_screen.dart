@@ -23,11 +23,11 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
         title: const Text("Modification la liste"),
         //AppBarTitle()
         centerTitle: true,
-        leadingWidth: 150,
+        leadingWidth: 100,
         leading: ElevatedButton.icon(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_left_sharp),
-            label: const Text("Back",
+            icon: const Icon(Icons.clear),
+            label: const Text("",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,

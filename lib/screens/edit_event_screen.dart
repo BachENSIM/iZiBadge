@@ -65,7 +65,7 @@ class _EditScreenState extends State<EditScreen> {
                       setState(() {
                         _isDel = true;
                       });
-                      await Database.deleteItem(docId: widget.documentId);
+                      //await Database.deleteItem(docId: widget.documentId);
                       setState(() {
                         _isDel = true;
                       });

@@ -31,29 +31,30 @@ class _TableUserFormState extends State<TableUserForm> {
 
   @override
   Widget build(BuildContext context) {
-    return DataTable(
+    return Flexible(
+        child: DataTable(
       sortAscending: isAscending,
       sortColumnIndex: sortColumnIndex,
       columns: getColumns(columns),
       rows: getRows(lstCombine),
-      columnSpacing: 56,
       //headingRowColor: MaterialStateColor.resolveWith((states) => Colors.lightBlueAccent),
-      headingTextStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black,fontSize: 18),
-      horizontalMargin: 40,
-
-    );
+      headingTextStyle: const TextStyle(
+          fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
+      //horizontalMargin: 40,
+    ));
   }
 
   List<DataColumn> getColumns(List<String> columns) => columns
-      .map((String column) => DataColumn(label: Center(child: Text(column),), onSort: onSort))
+      .map((String column) => DataColumn(
+          label: Center(
+            child: Text(column),
+          ),
+          onSort: onSort))
       .toList();
 
   List<DataRow> getRows(List<String> combines) {
     return combines.map((String combineItem) {
-      final cells = [
-        combineItem.split("-").first,
-        combineItem.split("-").last
-      ];
+      final cells = [combineItem.split("-").first, combineItem.split("-").last];
       return DataRow(cells: getCells(cells));
     }).toList();
   }
