@@ -49,15 +49,15 @@ class _CameraFormState extends State<CameraForm> {
                       right: 0.0,
                       top: 0.0,
                       child: Container(
-                          width: 250,
-                          height: 50,
+                          // width: 250,
+                          // height: 50,
                           child: Text(
-                            "Nombre de persons entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ))),
+                        "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ))),
                   SizedBox(
                     width: 90,
                   ),
@@ -66,13 +66,13 @@ class _CameraFormState extends State<CameraForm> {
                       right: 0.0,
                       top: 0.0,
                       child: Container(
-                          width: 50,
-                          height: 50,
+                          // width: 50,
+                          // height: 50,
                           child: IconButton(
                               icon: flash
                                   ? Icon(
                                       Icons.flash_on,
-                                      //color: Colors.white,
+                                      color: Colors.white,
                                     )
                                   : Icon(Icons.flash_off, color: Colors.white),
                               onPressed: () async {
@@ -139,15 +139,18 @@ class _CameraFormState extends State<CameraForm> {
 
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
-      result = scanData ;
+      result = scanData;
       debugPrint(result!.code);
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      verify =  await DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString().split('//').last);
+      verify = await DatabaseTest.fetchDataCheck(
+          widget.documentId, result!.code.toString().split('//').last);
       debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
-          DatabaseTest.emailClient + " nb d'entrée: " + DatabaseTest.countPersonScanned.toString());
+          DatabaseTest.emailClient +
+          " nb d'entrée: " +
+          DatabaseTest.countPersonScanned.toString());
       //verify = DatabaseTest.status;
 
       if (verify) {
@@ -156,8 +159,7 @@ class _CameraFormState extends State<CameraForm> {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(Icons.check_circle_outline,
-                    color: Colors.green, size: 40),
+                Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
                 Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
@@ -192,8 +194,7 @@ class _CameraFormState extends State<CameraForm> {
           ),
         );
       }
-      setState(()  {
-      });
+      setState(() {});
     });
   }
 
