@@ -50,174 +50,170 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: <Widget>[
-                            TextFormField(
-                              maxLines: 1,
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _guestCtl,
-                              validator: (value) => value!.isEmpty
-                                  ? 'Email cannot be blank'
-                                  : null,
-                              decoration: const InputDecoration(
-                                hintText: 'Ex: tom@gmail.com',
-                                contentPadding: EdgeInsets.all(8),
-                                isDense: true,
-                              ),
+                      ListView(
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          TextFormField(
+                            maxLines: 1,
+                            keyboardType: TextInputType.emailAddress,
+                            controller: _guestCtl,
+                            validator: (value) => value!.isEmpty
+                                ? 'Email cannot be blank'
+                                : null,
+                            decoration: const InputDecoration(
+                              hintText: 'Ex: tom@gmail.com',
+                              contentPadding: EdgeInsets.all(8),
+                              isDense: true,
                             ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                //crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  //Pour le groupe
-                                  Container(
-                                    height: 50,
-                                    //width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.all(5),
-                                    child: DropdownButtonHideUnderline(
-                                      child: GFDropdown(
-                                        padding: const EdgeInsets.all(10),
-                                        borderRadius: BorderRadius.circular(5),
-                                       /* border: const BorderSide(
-                                            color: CustomColors.textPrimary,
-                                            width: 1),
-                                        dropdownButtonColor:
-                                            CustomColors.textSecondary,*/
-                                        value: _dropdownGroup,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            _dropdownGroup =
-                                                newValue as String?;
-                                          });
-                                        },
-                                        items: DatabaseTest.lstGroupAdded
-                                            .map((value) => DropdownMenuItem(
-                                                  value: value,
-                                                  child: Text(value),
-                                                ))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ),
-                                  //Pour le role
-                                  Container(
-                                    height: 50,
-                                    //width: MediaQuery.of(context).size.width,
-                                    margin: EdgeInsets.all(5),
-                                    child: DropdownButtonHideUnderline(
-                                      child: GFDropdown(
-                                        padding: const EdgeInsets.all(15),
-                                        borderRadius: BorderRadius.circular(5),
-                                       /* border: const BorderSide(
-                                            color: CustomColors.textPrimary,
-                                            width: 1),
-                                        dropdownButtonColor:
-                                            CustomColors.textSecondary,*/
-                                        value: _dropdownRole,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            _dropdownRole = newValue as String?;
-                                            print(_dropdownRole);
-                                          });
-                                        },
-                                        items: _roleDropDown
-                                            .map((value) => DropdownMenuItem(
-                                                  value: value,
-                                                  child: Text(value),
-                                                ))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    String mess = _guestCtl.text;
-                                    if (_guestCtl.text.isEmpty) {
-                                      mess = "example${taille++}@gmail.com";
-                                    }
-                                    DatabaseTest.lstUserAdded.add(mess);
-                                    DatabaseTest.lstGroupAdded
-                                        .add(_dropdownGroup!);
-                                    DatabaseTest.lstRoleAdded
-                                        .add(_dropdownRole!);
-                                    _guestCtl.clear();
-                                  });
-                                },
-                                child: Wrap(
-                                  children: const <Widget>[Text('AJOUTER')],
-                                )),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            //afficher la liste d'invitation afin de consulter avant de sauvegarder dans la BDD
-                            ListView(shrinkWrap: true, children: <Widget>[
-                              const SizedBox(height: 15),
+                          ),
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            //crossAxisAlignment: CrossAxisAlignment.,
+                            children: <Widget>[
+                              //Pour le groupe
                               Container(
-                                height: 300.0,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: DatabaseTest.lstUserAdded.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Container(
-                                        child: Column(children: <Widget>[
-                                      GFListTile(
-                                          onTap: () {
-                                            setState(() {
-                                              _editGuestCtl =
-                                                  TextEditingController(
-                                                      text: DatabaseTest
-                                                          .lstUserAdded[index]);
-                                              _modify(context, index);
-                                            });
-                                          },
-                                          /*color: CustomColors.accentDark,*/
-                                          titleText: "Email: " +
-                                              DatabaseTest.lstUserAdded[index],
-                                          subTitleText: "Groupe: " +
-                                              DatabaseTest
-                                                  .lstGroupAdded[index] +
-                                              " - Role: " +
-                                              DatabaseTest.lstRoleAdded[index],
-                                          icon: IconButton(
-                                            icon: Icon(Icons.cancel_outlined),
-                                            onPressed: () {
-                                              setState(() {
-                                                DatabaseTest.lstUserAdded
-                                                    .removeAt(index);
-                                                DatabaseTest.lstGroupAdded
-                                                    .removeAt(index);
-                                                DatabaseTest.lstRoleAdded
-                                                    .removeAt(index);
-                                              });
-                                            },
-                                            /*color: CustomColors.textPrimary,*/
-                                          )),
-                                    ]));
-                                  },
+                                height: 50,
+                                //width: MediaQuery.of(context).size.width,
+                                //margin: EdgeInsets.all(5),
+                                child: DropdownButtonHideUnderline(
+                                  child: GFDropdown(
+                                    //padding: const EdgeInsets.all(10),
+                                    borderRadius: BorderRadius.circular(5),
+                                   /* border: const BorderSide(
+                                        color: CustomColors.textPrimary,
+                                        width: 1),
+                                    dropdownButtonColor:
+                                        CustomColors.textSecondary,*/
+                                    value: _dropdownGroup,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _dropdownGroup =
+                                            newValue as String?;
+                                      });
+                                    },
+                                    items: DatabaseTest.lstGrAdded
+                                        .map((value) => DropdownMenuItem(
+                                              value: value,
+                                              child: Text(value),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                              //Pour le role
+                              Container(
+                                height: 50,
+                                //width: MediaQuery.of(context).size.width,
+                                margin: EdgeInsets.all(5),
+                                child: DropdownButtonHideUnderline(
+                                  child: GFDropdown(
+                                    padding: const EdgeInsets.all(15),
+                                    borderRadius: BorderRadius.circular(5),
+                                   /* border: const BorderSide(
+                                        color: CustomColors.textPrimary,
+                                        width: 1),
+                                    dropdownButtonColor:
+                                        CustomColors.textSecondary,*/
+                                    value: _dropdownRole,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _dropdownRole = newValue as String?;
+                                        debugPrint(_dropdownRole);
+                                      });
+                                    },
+                                    items: _roleDropDown
+                                        .map((value) => DropdownMenuItem(
+                                              value: value,
+                                              child: Text(value),
+                                            ))
+                                        .toList(),
+                                  ),
                                 ),
                               )
-                            ]),
-                            const SizedBox(
-                              height: 25,
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  String mess = _guestCtl.text;
+                                  if (_guestCtl.text.isEmpty) {
+                                    mess = "example${taille++}@gmail.com";
+                                  }
+                                  DatabaseTest.lstUserAdded.add(mess);
+                                  DatabaseTest.lstGroupAdded
+                                      .add(_dropdownGroup!);
+                                  DatabaseTest.lstRoleAdded
+                                      .add(_dropdownRole!);
+                                  _guestCtl.clear();
+                                });
+                              },
+                              child: Wrap(
+                                children: const <Widget>[Text('AJOUTER')],
+                              )),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          //afficher la liste d'invitation afin de consulter avant de sauvegarder dans la BDD
+                          ListView(shrinkWrap: true, children: <Widget>[
+                            const SizedBox(height: 15),
+                            Container(
+                              height: 300.0,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: DatabaseTest.lstUserAdded.length,
+                                itemBuilder:
+                                    (BuildContext context, int index) {
+                                  return Container(
+                                      child: Column(children: <Widget>[
+                                    GFListTile(
+                                        onTap: () {
+                                          setState(() {
+                                            _editGuestCtl =
+                                                TextEditingController(
+                                                    text: DatabaseTest
+                                                        .lstUserAdded[index]);
+                                            _modify(context, index);
+                                          });
+                                        },
+                                        /*color: CustomColors.accentDark,*/
+                                        titleText: "Email: " +
+                                            DatabaseTest.lstUserAdded[index],
+                                        subTitleText: "Groupe: " +
+                                            DatabaseTest
+                                                .lstGroupAdded[index] +
+                                            " - Role: " +
+                                            DatabaseTest.lstRoleAdded[index],
+                                        icon: IconButton(
+                                          icon: Icon(Icons.cancel_outlined),
+                                          onPressed: () {
+                                            setState(() {
+                                              DatabaseTest.lstUserAdded
+                                                  .removeAt(index);
+                                              DatabaseTest.lstGroupAdded
+                                                  .removeAt(index);
+                                              DatabaseTest.lstRoleAdded
+                                                  .removeAt(index);
+                                            });
+                                          },
+                                          /*color: CustomColors.textPrimary,*/
+                                        )),
+                                  ]));
+                                },
+                              ),
+                            )
+                          ]),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                        ],
                       )
                     ],
                   ))),
               _isProcessing
-                  ? Center(
+                  ? const Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(16.0),
                         child: CircularProgressIndicator(
                           /*valueColor: AlwaysStoppedAnimation<Color>(
                             CustomColors.accentLight,
@@ -307,7 +303,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       keyboardType: TextInputType.text,
                       controller: _editGuestCtl,
                       decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
+                        contentPadding: EdgeInsets.all(28),
                         isDense: true,
                       ),
                     ),

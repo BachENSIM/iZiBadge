@@ -60,15 +60,16 @@ class _GroupFormState extends State<GroupForm> {
                 Expanded(
                     child: TextField(
                   keyboardType: TextInputType.text,
-                  autofocus: true,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior
-                        .never, //Hides label on focus or if filled
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
-                    filled: true, // Needed for adding a fill color
+                    filled: true,
+                    // Needed for adding a fill color
                     //fillColor: CustomColors.backgroundLight,
-                    isDense: false, // Reduces height a bit
+                    isDense: false,
+                    // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
                       borderRadius: BorderRadius.only(

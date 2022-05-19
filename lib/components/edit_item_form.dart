@@ -1,8 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/custom_form_field.dart';
-import 'package:izibagde/model/database.dart';
+import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/model/validator.dart';
 
 class EditItemForm extends StatefulWidget {
@@ -365,7 +364,7 @@ class _EditItemFormState extends State<EditItemForm> {
                             _isProcessing = true;
                           });
 
-                          await Database.updateItem(
+                          await DatabaseTest.updateItem(
                             docId: widget.documentId,
                             title: _titleCtl.text,
                             description: _descCtl.text,
