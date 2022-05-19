@@ -135,8 +135,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                     left: 30, top: 10, bottom: 10),
                                 child: Center(
                                   child: Text(
-                                    currHeader.toString() +
-                                        " / " +
+                                    nameOfMonth(--currHeader) +
+                                        " " +
                                         dateStart.year.toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -145,12 +145,12 @@ class _ItemListTestState extends State<ItemListTest> {
                                 )),
                             const SizedBox(height: 10),
                             buildListe(context, isDel, address, desc, docID,
-                                dateStart, name)
+                                dateStart, name, index)
                           ],
                         );
                       } else {
                         return buildListe(context, isDel, address, desc, docID,
-                            dateStart, name);
+                            dateStart, name, index);
                       }
                     },
                   ))
@@ -192,7 +192,7 @@ class _ItemListTestState extends State<ItemListTest> {
           "-" +
           selectedDateStart.day.toString();
     }
-
+    startDate = "Date: "+ startDate;
     if (!isDel) {
       return startDate;
     } else {
@@ -215,7 +215,6 @@ class _ItemListTestState extends State<ItemListTest> {
                     isDel
                         ? await DatabaseTest.deleteItemCanceled(docId: id)
                         : await DatabaseTest.deleteItem(docId: id);
-
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
@@ -231,15 +230,33 @@ class _ItemListTestState extends State<ItemListTest> {
         });
   }
 
+  String nameOfMonth(int position) {
+    List<String> months = [
+      'Janvier',
+      'Février',
+      'Mars',
+      'Avril',
+      'Mai',
+      'Juin',
+      'Juillet',
+      'Août',
+      'Septembre',
+      'Octobre',
+      'Novembre',
+      'Decembre'
+    ];
+    return months[position];
+  }
+
   //widget pour le menu (filtrer les 3 roles)
   Widget buildMenu(BuildContext context) {
     return Container(
       height: 40,
       // color: CustomColors.backgroundDark,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(DatabaseTest.userUid),
+          Text("User: ${DatabaseTest.userUid}"),
           //pour le filtre par le role
           PopupMenuButton(
               icon: const Icon(
@@ -353,8 +370,15 @@ class _ItemListTestState extends State<ItemListTest> {
   }
 
   //widget pour le contenu de la liste
-  Widget buildListe(BuildContext context, bool isDel, String address,
-      String desc, String docID, DateTime dateStart, String name) {
+  Widget buildListe(
+      BuildContext context,
+      bool isDel,
+      String address,
+      String desc,
+      String docID,
+      DateTime dateStart,
+      String name,
+      int position) {
     return Ink(
       decoration: BoxDecoration(
         color:
@@ -372,9 +396,16 @@ class _ItemListTestState extends State<ItemListTest> {
                             ),*/
         children: <Widget>[
           ListTile(
+            onTap: () {
+              !isDel
+                  ? _showSimpleModalDialog(
+                      context, name, desc, address, dateStart)
+                  : null;
+            },
             isThreeLine: true,
             title: Text(
-              "Adresse: " + address + "\nDescription: " + desc,
+              //"Adresse: " + address + "\nDescription: " + desc,
+              "Adresse: " + address,
               style: TextStyle(color: CustomColors.textIcons),
             ),
             subtitle: Text(
@@ -460,8 +491,10 @@ class _ItemListTestState extends State<ItemListTest> {
                                       StatefulBuilder(
                                         builder: (_context, _setState) {
                                           return IconButton(
-                                              onPressed: () {
-                                                DatabaseTest.fetchListUsers(
+                                              onPressed: () async {
+                                                await DatabaseTest.fetchListUsers(
+                                                    docID);
+                                                await DatabaseTest.fetchGroupAdded(
                                                     docID);
                                                 sleep(const Duration(
                                                     milliseconds: 500));
@@ -490,7 +523,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         Icons.delete,
                         color: CustomColors.textIcons,
                       )),
-                if ( (_scanneur || _organisateur) && !isDel )
+                if ((_scanneur || _organisateur) && !isDel)
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
@@ -506,21 +539,31 @@ class _ItemListTestState extends State<ItemListTest> {
                         color: CustomColors.textIcons,
                       )),
                 if (!isDel && !_organisateur)
-                IconButton(
-                    onPressed: () {
-                      print("Event id to qrcode: " + docID);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => QRCodeScreen(
-                            documentId: docID,
+                  IconButton(
+                      onPressed: () {
+                        print("Event id to qrcode: " + docID);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => QRCodeScreen(
+                              documentId: docID,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.qr_code_scanner_outlined,
-                      color: CustomColors.textIcons,
-                    )),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.qr_code_scanner_outlined,
+                        color: CustomColors.textIcons,
+                      )),
+                if (!isDel && !_isInviteur)
+                  IconButton(
+                      onPressed: () async {
+                        await DatabaseTest.fetchItemClicked(
+                            docId: docID, index: position);
+                      },
+                      icon: Icon(
+                        Icons.save_rounded,
+                        color: CustomColors.textIcons,
+                      )),
               ],
             ),
           )
@@ -537,5 +580,62 @@ class _ItemListTestState extends State<ItemListTest> {
         ),
       ),
     );
+  }
+
+  _showSimpleModalDialog(context, String title, String description,
+      String address, DateTime dateStart) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: Container(
+              constraints: BoxConstraints(maxHeight: 400,maxWidth: 300),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Titre: $title",
+                      style: TextStyle(
+                        fontSize: 16,
+                        wordSpacing: 5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      thickness: 1.5,
+                    ),
+                    Text(
+                      "Adresse: $address",
+                    ),
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(
+                          text: "Description: $description",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: Colors.black,
+                              wordSpacing: 1)),
+                    ),
+                    Divider(
+                      color: Colors.black,
+                    ),
+                    Text(
+                      "L'heure: le ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

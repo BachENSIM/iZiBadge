@@ -27,7 +27,7 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
         leading: ElevatedButton.icon(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_left_sharp),
-            label: const Text("Retourner",
+            label: const Text("Back",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,

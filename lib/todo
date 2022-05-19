@@ -12,8 +12,11 @@
 18. un endroit ou je sais sur quel compte que je me connecte (50% => pour l'instant le mettre sur le header)
 19. notifier l'utilisateur quand changer qq chose
 20. historique de BDD avant changements (snapshot)
-21. pour le role "Scanneur" => il faut mettre aussi la liste d'invitaion dans la BDD
+21. pour le role "Scanneur" => il faut mettre aussi la liste d'invitaion dans la BDD (done)
 (organisateur cree la liste et synchronise aux autres comptes => check role = Scanneur => cree une pareil liste )
+23. Creer un bouton pour sauvegarder les données en local (done)
+24. Changer le title sur le header (done)
+25. Table de liste d'invitation (done)
 
 
 

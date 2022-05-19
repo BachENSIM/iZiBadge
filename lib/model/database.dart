@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('evenements');
@@ -54,11 +55,11 @@ class Database {
     //_mainCollection.doc("test@gmail.com").collection('items').doc(docId);
 
     Map<String, dynamic> data = <String, dynamic>{
-      "tittre": title,
+      "titre": title,
       "description": description,
       "adresse": address,
     };
-
+    debugPrint("$title $description $address");
     await documentReferencer
         .update(data)
         .whenComplete(() => print("Event of this account updated in the database"))
