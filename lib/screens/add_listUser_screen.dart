@@ -191,7 +191,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       });
                                     },
                                     child: Wrap(
-                                      children: const <Widget>[Text('AJOUTER')],
+                                      children: const <Widget>[Text('INVITER')],
                                     )),
                                 const SizedBox(
                                   height: 10,
@@ -230,7 +230,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     Icon(Icons.cancel_outlined),
                                                 onPressed: () {
                                                   setState(() {
-
                                                     _groupListUser
                                                         .removeAt(index);
                                                     _groupDropdownGroup
@@ -243,7 +242,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     print(index);
                                                   });
                                                 },
-                                                //color: CustomColors.textPrimary,
+                                                color: index.isEven ?  CustomColors.accentColor :
+                                                CustomColors.darkPrimaryColor ,
                                               )),
                                         ]));
                                       },

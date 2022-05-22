@@ -191,7 +191,7 @@ class _ItemListTestState extends State<ItemListTest> {
           "-" +
           selectedDateStart.day.toString();
     }
-    startDate = "Date: "+ startDate;
+    startDate = "Date: " + startDate;
     if (!isDel) {
       return startDate;
     } else {
@@ -255,7 +255,21 @@ class _ItemListTestState extends State<ItemListTest> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text("User: ${DatabaseTest.userUid}"),
+          //Text("User: ${DatabaseTest.userUid}"),
+          Container(
+            width: 200,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  child: Icon(Icons.person_outline_outlined,size: 18,),
+                  backgroundColor: Colors.blue,
+                  radius: 18,
+                ),
+                SizedBox(width: 5,),
+                Text("${DatabaseTest.userUid}")
+              ],
+            ),
+          ),
           //pour le filtre par le role
           PopupMenuButton(
               icon: const Icon(
@@ -491,10 +505,10 @@ class _ItemListTestState extends State<ItemListTest> {
                                         builder: (_context, _setState) {
                                           return IconButton(
                                               onPressed: () async {
-                                                await DatabaseTest.fetchListUsers(
-                                                    docID);
-                                                await DatabaseTest.fetchGroupAdded(
-                                                    docID);
+                                                await DatabaseTest
+                                                    .fetchListUsers(docID);
+                                                await DatabaseTest
+                                                    .fetchGroupAdded(docID);
                                                 sleep(const Duration(
                                                     milliseconds: 500));
                                                 Navigator.of(context).push(
@@ -590,7 +604,7 @@ class _ItemListTestState extends State<ItemListTest> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
-              constraints: BoxConstraints(maxHeight: 400,maxWidth: 300),
+              constraints: BoxConstraints(maxHeight: 400, maxWidth: 300),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(

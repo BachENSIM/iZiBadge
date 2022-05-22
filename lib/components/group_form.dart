@@ -20,12 +20,29 @@ class _GroupFormState extends State<GroupForm> {
   String initialText = "Groupe 1";
   TextEditingController? _groupInitCtl;
 
-  bool _zero =
-      true; //verifier l'indice de la liste => si = 0 => c'est le default
+  //verifier l'indice de la liste => si = 0 => c'est le default(ne pas del)
+  bool _zero = true;
 
   //pour sauvegarder dans la BDD
   final List<String> _groupNameList = ["Groupe 1"];
   late int taille;
+
+  //pour afficher la date et l'heure afin de limiter par rapport aux groupes
+  late String? dateShare;
+  late String? timeShare;
+
+  DateTime slcDStart = DatabaseTest.startSave!;
+  DateTime slcDEnd = DatabaseTest.endSave!;
+  TimeOfDay slcTStart = DatabaseTest.timeStartSave!;
+  TimeOfDay slcTEnd = DatabaseTest.timeEndSave!;
+
+  late String dtStart = displayDate(DatabaseTest.startSave!);
+  late String dtEnd = displayDate(DatabaseTest.endSave!);
+  late String todStart = displayTime(DatabaseTest.timeStartSave!);
+  late String todEnd = displayTime(DatabaseTest.timeEndSave!);
+
+  late final List<String> _lstDTStart = ["$dtStart/${todStart}"];
+  late final List<String> _lstDTEnd = ["$dtEnd/${todEnd}"];
 
   @override
   void initState() {
@@ -90,7 +107,6 @@ class _GroupFormState extends State<GroupForm> {
                 )),
                 SizedBox(
                   height: 59,
-                  /*width: 75,*/
                   child: ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -103,7 +119,10 @@ class _GroupFormState extends State<GroupForm> {
                           }
                           DatabaseTest.listNameGroup.add(mess);
                           _groupNameCtl.clear();
+                          _lstDTStart.add("$dtStart/${todStart}");
+                          _lstDTEnd.add("$dtEnd/${todEnd}");
                           print(DatabaseTest.listNameGroup.toString());
+
                         });
                       },
                       //style:  ElevatedButton.styleFrom(side: ),
@@ -122,70 +141,23 @@ class _GroupFormState extends State<GroupForm> {
               ],
             ),
             const SizedBox(
-              height: 15,
+              height: 5,
             ),
+            /*dateTime(DatabaseTest.startSave!,"Début",DatabaseTest.timeStartSave!),
+            dateTime(DatabaseTest.endSave!,"Fin",DatabaseTest.timeEndSave!),  */
+            dateTime(slcDStart, "Début", slcTStart, true),
+            dateTime(slcDEnd, "Fin", slcTEnd, false),
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: 600.0,
+                height: 450.0,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: _groupNameList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    if (index != 0)
-                      _zero = false;
-                    else
-                      _zero = true;
-                    return Container(
-                        child: Column(children: <Widget>[
-                      const SizedBox(
-                        height: 0,
-                      ),
-                      /*ListTile(
-                        leading: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.brown[400],
-                          child: Text(
-                            index.toString(),
-                            style: const TextStyle(
-                                fontSize: 15, color: CustomColors.secondaryText),
-                          ),
-                        ),
-                        title: Text(_groupNameList[index]),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.edit_rounded),
-                              onPressed: () {
-                                _groupEditCtl = TextEditingController(
-                                    text: _groupNameList[index]);
-                                setState(() {
-                                  _modify(context, index);
-                                });
-                              },
-                              color: Colors.redAccent,
-                            ),
-                            if (index != 0)
-                              IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
-                                onPressed: () {
-                                  setState(() {
-                                    if (index != 0)
-                                      _groupNameList.removeAt(index);
-                                  });
-                                },
-                                color: _zero ? Colors.grey : Colors.redAccent,
-                              )
-                          ],
-                        ),
-                        //iconColor: _zero ? Colors.grey : Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.black, width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                      ),*/
+                    (_groupNameList.length != 1) ? _zero = false : _zero = true;
+                    return Column(children: <Widget>[
                       GFListTile(
-                        color: CustomColors.lightPrimaryColor,
                         avatar: CircleAvatar(
                             radius: 20,
                             //backgroundColor: CustomColors.accentDark,
@@ -197,11 +169,16 @@ class _GroupFormState extends State<GroupForm> {
                               ),
                             )),
                         titleText: _groupNameList[index],
+                        //subTitleText: subTitle(_lstDTStart, index, _lstDTEnd),
+                        subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
+                        color: index.isEven
+                            ? CustomColors.lightPrimaryColor
+                            : CustomColors.darkPrimaryColor,
                         icon: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.edit_rounded),
+                              icon: Icon(Icons.edit_rounded,size: 18,),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
                                     text: _groupNameList[index]);
@@ -211,12 +188,12 @@ class _GroupFormState extends State<GroupForm> {
                               },
                               //color: CustomColors.accentDark,
                             ),
-                            if (index != 0)
+                            if (!_zero)
                               IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
+                                icon: Icon(Icons.delete_forever_sharp,size: 18,),
                                 onPressed: () {
                                   setState(() {
-                                    if (index != 0) {
+                                    if (!_zero) {
                                       _groupNameList.removeAt(index);
                                       DatabaseTest.listNameGroup
                                           .removeAt(index);
@@ -230,7 +207,7 @@ class _GroupFormState extends State<GroupForm> {
                           ],
                         ),
                       ),
-                    ]));
+                    ]);
                   },
                 ),
               )
@@ -239,6 +216,170 @@ class _GroupFormState extends State<GroupForm> {
         ),
       ),
     );
+  }
+
+  Widget dateTime(
+      DateTime dateInit, String container, TimeOfDay timeInit, bool status) {
+    return Row(
+      children: [
+        Container(width: 50, child: Text(container)),
+        TextButton(
+            onPressed: () {
+              _selectDate(context, dateInit, status);
+            },
+            child: Container(
+                width: 125,
+                alignment: Alignment.center,
+                child: Text(displayDate(dateInit)))),
+        const SizedBox(width: 10.0),
+        TextButton(
+            onPressed: () {
+              _selectTime(context, timeInit, status);
+            },
+            child: Container(
+                alignment: Alignment.center,
+                child: Text(displayTime(timeInit))))
+      ],
+    );
+  }
+
+  String displayDate(DateTime dateInit) {
+    String message = "";
+    String day = "";
+    List<String> dayOfWeek = [
+      'lun.',
+      'mar.',
+      'mer.',
+      'jeu.',
+      'ven.',
+      'sam.',
+      'dim.'
+    ];
+    List<String> months = [
+      'janvier',
+      'février',
+      'mars',
+      'avril',
+      'mai',
+      'juin',
+      'juillet',
+      'août',
+      'septembre',
+      'octobre',
+      'novembre',
+      'decembre'
+    ];
+
+    if (dateInit.day < 10) {
+      day = "0${dateInit.day}";
+    } else {
+      day = "${dateInit.day}";
+    }
+    message =
+        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]}, ${dateInit.year}";
+    return message;
+  }
+
+  Widget subTitle(List<String> lstStart, int position, List<String> lstEnd) {
+    String start = lstStart[position].split("/").first +
+        " - " +
+        lstStart[position].split("/").last;
+    String end = lstEnd[position].split("/").first +
+        " - " +
+        lstEnd[position].split("/").last;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: <Widget>[
+            Icon(
+              Icons.calendar_today,
+              color: Colors.green,
+              size: 12,
+            ),
+            Text(start,style: TextStyle(fontSize: 12),)
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Icon(
+              Icons.calendar_today,
+              color: Colors.red,
+              size: 12,
+            ),
+            Text(end,style: TextStyle(fontSize: 12),)
+          ],
+        )
+      ],
+    );
+  }
+
+  String displayTime(TimeOfDay timeInit) {
+    String message = "";
+    String mins = "";
+    String hours = "";
+    (timeInit.minute < 10)
+        ? mins = "0${timeInit.minute}"
+        : mins = "${timeInit.minute}";
+    (timeInit.hour < 10)
+        ? hours = "0${timeInit.hour}"
+        : hours = "${timeInit.hour}";
+    message = "$hours:$mins";
+    return message;
+  }
+
+  _selectDate(BuildContext context, DateTime dateTimeInit, bool status) async {
+    final DateTime? selected = await showDatePicker(
+      locale: const Locale('fr', ''),
+      context: context,
+      initialDate: dateTimeInit,
+      firstDate: DatabaseTest.startSave!,
+      lastDate: DatabaseTest.endSave!,
+    );
+    if (selected != null && selected != dateTimeInit) {
+      setState(() {
+        dateTimeInit = selected;
+        status ? slcDStart = selected :  slcDEnd= selected;
+        status
+            ? dtStart = displayDate(dateTimeInit)
+            : dtEnd = displayDate(dateTimeInit);
+        debugPrint(displayDate(dateTimeInit));
+        debugPrint(dateTimeInit.toString());
+        debugPrint(status ? slcDStart.toString():slcDEnd.toString() );
+      });
+    }
+  }
+
+  _selectTime(BuildContext context, TimeOfDay todInit, bool status) async {
+    final TimeOfDay? timeOfDay = await showTimePicker(
+        context: context,
+        initialTime: todInit,
+        initialEntryMode: TimePickerEntryMode.dial,
+        builder: (context, child) {
+          if (MediaQuery.of(context).alwaysUse24HourFormat) {
+            //return child!;
+            return Localizations.override(
+              context: context,
+              locale: const Locale('fr', 'FR'),
+              child: child,
+            );
+          } else {
+            return Localizations.override(
+              context: context,
+              locale: const Locale('fr', 'FR'),
+              child: child,
+            );
+          }
+        });
+    if (timeOfDay != null && timeOfDay != todInit) {
+      setState(() {
+        todInit = timeOfDay;
+        status ? slcTStart = timeOfDay :  slcTEnd= timeOfDay;
+        status ?
+          todStart = displayTime(todInit) :
+          todEnd =  displayTime(todInit);
+      });
+    }
   }
 
   void _modify(BuildContext context, int index) {

@@ -19,11 +19,14 @@ class EditGroupForm extends StatefulWidget {
 class _EditGroupFormState extends State<EditGroupForm> {
   // un autre controller pour saisir => creer des groupe differents
   final _groupNameCtl = TextEditingController();
+
   //un autre controller pour modifier le nom d'un groupe
   TextEditingController? _groupEditCtl;
+
   //un controller par default => afficher un groupe par default
   String initialText = "Groupe 2";
   TextEditingController? _groupInitCtl;
+
   //verifier l'indice de la liste => si = 0 => c'est le default
   bool _one = false;
   bool _isProcessing = false;
@@ -66,12 +69,14 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   autofocus: false,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior
-                        .never, //Hides label on focus or if filled
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
-                    filled: true, // Needed for adding a fill color
+                    filled: true,
+                    // Needed for adding a fill color
                     // fillColor: CustomColors.backgroundLight,
-                    isDense: false, // Reduces height a bit
+                    isDense: false,
+                    // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
                       borderRadius: BorderRadius.only(
@@ -133,64 +138,61 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   itemCount: DatabaseTest.lstGrAdded.length,
                   itemBuilder: (BuildContext context, int index) {
                     //if (_groupNameList.length == 1)
-                    if (DatabaseTest.lstGrAdded.length == 1)
-                      _one = true;
-                    else
-                      _one = false;
-                    return Container(
-                        child: Column(children: <Widget>[
-                      const SizedBox(
-                        height: 0,
-                      ),
+                    (DatabaseTest.lstGrAdded.length == 1)
+                        ? _one = true
+                        : _one = false;
+                    return Column(children: <Widget>[
                       GFListTile(
-                        // color: CustomColors.accentLight,
-                        avatar: CircleAvatar(
-                            radius: 20,
-                            // backgroundColor: CustomColors.accentDark,
-                            child: Text(
-                              (index + 1).toString(),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                // color: CustomColors.textSecondary
-                              ),
-                            )),
-                        //titleText: _groupNameList[index],
-                        titleText: DatabaseTest.lstGrAdded[index],
-                        icon: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.edit_rounded),
-                              onPressed: () {
-                                _groupEditCtl = TextEditingController(
-                                    //text: _groupNameList[index]);
-                                    text: DatabaseTest.lstGrAdded[index]);
-                                setState(() {
-                                  _modify(context, index);
-                                });
-                              },
-                              // color: CustomColors.accentDark,
-                            ),
-                            if (!_one)
-                              IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
-                                onPressed: () {
-                                  setState(() {
-                                    if (!_one) {
-                                      //_groupNameList.removeAt(index);
-                                      DatabaseTest.lstGrAdded.removeAt(index);
-                                      //DatabaseTest.listNameGroup.removeAt(index);
-                                    }
-                                  });
-                                },
-                                // color: _one
-                                //     ? Colors.grey
-                                //     : CustomColors.accentDark,
-                              )
-                          ],
+                    color: index.isEven
+                        ? CustomColors.lightPrimaryColor
+                        : CustomColors.darkPrimaryColor,
+                    avatar: CircleAvatar(
+                        radius: 20,
+                        // backgroundColor: CustomColors.accentDark,
+                        child: Text(
+                          (index + 1).toString(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            // color: CustomColors.textSecondary
+                          ),
+                        )),
+                    //titleText: _groupNameList[index],
+                    titleText: DatabaseTest.lstGrAdded[index],
+                    icon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.edit_rounded),
+                          onPressed: () {
+                            _groupEditCtl = TextEditingController(
+                                //text: _groupNameList[index]);
+                                text: DatabaseTest.lstGrAdded[index]);
+                            setState(() {
+                              _modify(context, index);
+                            });
+                          },
+                          // color: CustomColors.accentDark,
                         ),
+                        if (!_one)
+                          IconButton(
+                            icon: Icon(Icons.delete_forever_sharp),
+                            onPressed: () {
+                              setState(() {
+                                if (!_one) {
+                                  //_groupNameList.removeAt(index);
+                                  DatabaseTest.lstGrAdded.removeAt(index);
+                                  //DatabaseTest.listNameGroup.removeAt(index);
+                                }
+                              });
+                            },
+                            // color: _one
+                            //     ? Colors.grey
+                            //     : CustomColors.accentDark,
+                          )
+                      ],
+                    ),
                       ),
-                    ]));
+                    ]);
                   },
                 ),
               )

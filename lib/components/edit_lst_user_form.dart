@@ -194,7 +194,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                 itemCount: DatabaseTest.lstUserAdded.length,
                                 itemBuilder:
                                     (BuildContext context, int index) {
-                                  bool even = (index % 2) == 0;
                                   /*return Column(children: <Widget>[
                                     GFListTile(
                                     onTap: () {
@@ -241,7 +240,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                           _modify(context, index);
                                         });
                                       },
-                                      color: even ?
+                                      color: index.isEven ?
                                       CustomColors.accentColor :
                                       CustomColors.darkPrimaryColor,
                                       titleText:

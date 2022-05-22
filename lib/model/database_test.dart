@@ -27,7 +27,9 @@ class DatabaseTest {
   static String? nameSave; //titre
   static String? descSave; //description
   static DateTime? startSave; //date début
-  static DateTime? endSave; //date fin
+  static DateTime? endSave;//date fin
+  static TimeOfDay? timeStartSave;//heure début
+  static TimeOfDay? timeEndSave;//heure fin
   /*---------------------------------------*/
   static String searchSave = ""; //pour la barre de recherche
   //pour savoir si cet events est supprimé ou pas
