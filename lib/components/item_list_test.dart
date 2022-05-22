@@ -47,7 +47,7 @@ class _ItemListTestState extends State<ItemListTest> {
               buildMenu(context),
               const SizedBox(height: 20),
               const Center(
-                child: Text('Aucun événement trouvé....',
+                child: Text('Aucun événement trouvé...',
                     style: TextStyle(
                       fontSize: 24,
                     )),
@@ -217,7 +217,7 @@ class _ItemListTestState extends State<ItemListTest> {
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Oui')),
+                  child: const Text('Supprimer')),
               TextButton(
                   onPressed: () {
                     // Close the dialog
@@ -242,7 +242,7 @@ class _ItemListTestState extends State<ItemListTest> {
       'Septembre',
       'Octobre',
       'Novembre',
-      'Decembre'
+      'Décembre',
     ];
     return months[position];
   }
@@ -416,10 +416,20 @@ class _ItemListTestState extends State<ItemListTest> {
                   : null;
             },
             isThreeLine: true,
-            title: Text(
-              //"Adresse: " + address + "\nDescription: " + desc,
-              "Adresse: " + address,
-              style: TextStyle(color: CustomColors.textIcons),
+            title: Container(
+              // width: ,
+              child: Row(children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  color: CustomColors.textIcons,
+                ),
+                Text(
+                  //"Adresse: " + address + "\nDescription: " + desc,
+                  // "Adresse: " + address,
+                  address,
+                  style: TextStyle(color: CustomColors.textIcons),
+                )
+              ]),
             ),
             subtitle: Text(
               setUp(dateStart, isDel),
