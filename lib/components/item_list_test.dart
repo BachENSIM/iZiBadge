@@ -37,7 +37,7 @@ class _ItemListTestState extends State<ItemListTest> {
       //stream: DatabaseTest.readRoles(_isOrganisateur,_isInviteur,DatabaseTest.isScan),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return const Text('Aucun événement trouvé...');
         } else if (snapshot.data?.size == 0) {
           return SingleChildScrollView(
               child: Column(
@@ -261,11 +261,17 @@ class _ItemListTestState extends State<ItemListTest> {
             child: Row(
               children: [
                 CircleAvatar(
-                  child: Icon(Icons.person_outline_outlined,size: 18,),
-                  backgroundColor: Colors.blue,
+                  child: Icon(
+                    Icons.person_outline_outlined,
+                    size: 18,
+                  ),
+                  backgroundColor: CustomColors.primaryColor,
+                  foregroundColor: CustomColors.textIcons,
                   radius: 18,
                 ),
-                SizedBox(width: 5,),
+                SizedBox(
+                  width: 5,
+                ),
                 Text("${DatabaseTest.userUid}")
               ],
             ),
