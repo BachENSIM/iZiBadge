@@ -37,7 +37,7 @@ class _ItemListTestState extends State<ItemListTest> {
       //stream: DatabaseTest.readRoles(_isOrganisateur,_isInviteur,DatabaseTest.isScan),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Something went wrong');
+          return const Text('Aucun événement trouvé...');
         } else if (snapshot.data?.size == 0) {
           return SingleChildScrollView(
               child: Column(
