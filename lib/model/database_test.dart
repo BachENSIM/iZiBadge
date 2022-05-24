@@ -19,7 +19,9 @@ class DatabaseTest {
   static String participantsGr =
       "groupe"; //nom de la collection qui sauvegarde les groupes dans un event
   static String listOfGroup =
-      "listeGroupe"; //nom du document de la collection "groupe"
+      "listeGroupe"; //nom du document concernant Groupe de la collection "groupe"
+  static String listOfHours =
+      "listeHeure"; //nom du document concernant Heure de la collection "groupe"
   /*---------------------------------------*/
   //des variables pour les sauvegarder dans la BDD (les mettre en variable pour les déplacer étape par étape)
   static String? docIdAdd; //renvoyer ID d'un event spécifique
@@ -46,8 +48,10 @@ class DatabaseTest {
   static List<String>? listInvite; // pas besoin pour l'instant
   static List<String> listRole = []; // pas besoin pour l'instant
   /*---------------------------------------*/
-  //pour save d'un nom de chaque groupe
+  //pour save d'un nom de chaque groupe - heure début & fin
   static List<String> listNameGroup = [];
+  static List<DateTime> listHoursStart = [];
+  static List<DateTime> listHoursEnd = [];
 
   /*static Map<String, dynamic> map =  _mainCollection.doc(userUid).collection(eventRelated).doc().collection(participants) as Map<String, dynamic>;
   static List<String> listRole = map['email'];*/

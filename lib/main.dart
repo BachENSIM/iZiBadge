@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
             // provide an additional app_en_US.arb file for
             // region-specific translations.
             Locale('en', ''),
-            Locale('fr', 'FX'),
+            Locale('fr', 'FR'),
           ],
           title: "Page connection",
           theme: ThemeData(

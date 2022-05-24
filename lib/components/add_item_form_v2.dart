@@ -202,11 +202,19 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.timeStartSave = selectedTimeStart;
                         DatabaseTest.timeEndSave = selectedTimeEnd;
 
-                        debugPrint(
-                            "Change page" + selectedDateStart.toString());
+                        String start = "${selectedDateStart.toUtc().toString().split(" ").first} ${selectedTimeStart.format(context)}:00";
+                        String end = "${selectedDateEnd.toUtc().toString().split(" ").first} ${selectedTimeEnd.format(context)}:00";
+                        debugPrint("start " + start);
+                        debugPrint("end " + end);
+                        //debugPrint(slcTStart.format(context));
+                        DatabaseTest.listHoursStart.add(DateTime.parse(start));
+                        DatabaseTest.listHoursEnd.add(DateTime.parse(end));
+
+                        /*debugPrint(
+                            "Change page " + selectedDateStart.toString());
                         debugPrint(selectedDateEnd.toString());
                         debugPrint(selectedTimeStart.format(context));
-                        debugPrint(selectedTimeEnd.format(context));
+                        debugPrint(selectedTimeEnd.format(context));*/
 
                         /*await Database.addItem(
                           title: _titleCtl.text,
@@ -345,19 +353,19 @@ class _AddItemFormState extends State<AddItemForm> {
       setState(() {
         dateTimeInit = selected;
         if (start) {
-          selectedDateEnd = dateTimeInit;
-          selectedDateStart = dateTimeInit;
-          endDate = displayDate(dateTimeInit);
-          /* if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
-            selectedDateStart = selected;
+          selectedDateStart = selected;
+          if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+            selectedDateEnd = dateTimeInit;
             endDate = displayDate(selectedDateEnd);
             debugPrint("Start: $selectedDateStart");
             debugPrint("End: $selectedDateEnd");
           }
-          else */
 
-        } else
+
+
+        } else {
           selectedDateEnd = dateTimeInit;
+        }
         start
             ? startDate = displayDate(dateTimeInit)
             : endDate = displayDate(dateTimeInit);
