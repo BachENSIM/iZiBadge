@@ -185,7 +185,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           ListView(shrinkWrap: true, children: <Widget>[
                             const SizedBox(height: 15),
                             Container(
-                              height: 375.0,
+                              height:MediaQuery.of(context).size.height,
                               /*decoration: BoxDecoration(
                                   border: Border.all(color: Colors.blueAccent)
                               ),*/

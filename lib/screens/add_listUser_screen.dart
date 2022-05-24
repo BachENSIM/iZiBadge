@@ -200,7 +200,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 ListView(shrinkWrap: true, children: <Widget>[
                                   SizedBox(height: 15),
                                   Container(
-                                    height: 300.0,
+                                    height: MediaQuery.of(context).size.height,
                                     child: ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _groupListUser.length,

@@ -11,6 +11,7 @@ class EditScreen extends StatefulWidget {
   late final String currAddr;
   late final DateTime currStartDate;
   late final String documentId;
+
   //construction
   EditScreen({
     required this.currTitle,
@@ -42,10 +43,22 @@ class _EditScreenState extends State<EditScreen> {
       child: Scaffold(
         //backgroundColor: CustomColors.backgroundColorDark,
         appBar: AppBar(
-          elevation: 0,
-          //backgroundColor: CustomColors.backgroundColorDark,
-          title: const Text("Modfier l'événement"),
-          actions: [
+            elevation: 0,
+            //backgroundColor: CustomColors.backgroundColorDark,
+            title: const Text("Modfier l'événement"),
+            leadingWidth: 100,
+            leading: ElevatedButton.icon(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.clear),
+                label: const Text("",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      // color: CustomColors.textSecondary,
+                    )),
+                style: ElevatedButton.styleFrom(
+                    elevation: 0, primary: Colors.transparent))
+            /* actions: [
             _isDel
                 ? Padding(
                     padding: const EdgeInsets.only(
@@ -76,8 +89,8 @@ class _EditScreenState extends State<EditScreen> {
                       // color: Colors.redAccent,
                       size: 32,
                     ))
-          ],
-        ),
+          ],*/
+            ),
         /*body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(

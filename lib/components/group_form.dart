@@ -160,7 +160,7 @@ class _GroupFormState extends State<GroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: 450.0,
+                height: MediaQuery.of(context).size.height,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: _groupNameList.length,

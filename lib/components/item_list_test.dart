@@ -611,7 +611,7 @@ class _ItemListTestState extends State<ItemListTest> {
                             docId: docID, index: position);
                       },
                       icon: Icon(
-                        Icons.save_rounded,
+                        Icons.save_alt_rounded,
                         color: CustomColors.textIcons,
                       )),
               ],
