@@ -41,8 +41,8 @@ class _GroupFormState extends State<GroupForm> {
   late String todStart = displayTime(DatabaseTest.timeStartSave!);
   late String todEnd = displayTime(DatabaseTest.timeEndSave!);
 
-  late final List<String> _lstDTStart = ["$dtStart/${todStart}"];
-  late final List<String> _lstDTEnd = ["$dtEnd/${todEnd}"];
+  late final List<String> _lstDTStart = ["$dtStart/$todStart"];
+  late final List<String> _lstDTEnd = ["$dtEnd/$todEnd"];
 
   @override
   void initState() {
@@ -52,6 +52,7 @@ class _GroupFormState extends State<GroupForm> {
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
+
   }
 
   @override
@@ -119,9 +120,18 @@ class _GroupFormState extends State<GroupForm> {
                           }
                           DatabaseTest.listNameGroup.add(mess);
                           _groupNameCtl.clear();
-                          _lstDTStart.add("$dtStart/${todStart}");
-                          _lstDTEnd.add("$dtEnd/${todEnd}");
-                          print(DatabaseTest.listNameGroup.toString());
+                          _lstDTStart.add("$dtStart/$todStart");
+                          _lstDTEnd.add("$dtEnd/$todEnd");
+                          String start = "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
+                          String end = "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
+                          debugPrint("start" + slcDStart.toUtc().toString().split(" ").first);
+                          debugPrint("end" + slcDEnd.toUtc().toString().split(" ").first);
+                          //debugPrint(slcTStart.format(context));
+                          DatabaseTest.listHoursStart.add(DateTime.parse(start));
+                          DatabaseTest.listHoursEnd.add(DateTime.parse(end));
+                          debugPrint(DatabaseTest.listNameGroup.toString());
+                          debugPrint(DatabaseTest.listHoursStart.toString());
+                          debugPrint(DatabaseTest.listHoursEnd.toString());
 
                         });
                       },
@@ -170,7 +180,8 @@ class _GroupFormState extends State<GroupForm> {
                             )),
                         titleText: _groupNameList[index],
                         //subTitleText: subTitle(_lstDTStart, index, _lstDTEnd),
-                        subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
+                        //subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
+                        subTitle: subTitle(DatabaseTest.listHoursStart, index, DatabaseTest.listHoursEnd),
                         color: index.isEven
                             ? CustomColors.lightPrimaryColor
                             : CustomColors.darkPrimaryColor,
@@ -195,6 +206,8 @@ class _GroupFormState extends State<GroupForm> {
                                   setState(() {
                                     if (!_zero) {
                                       _groupNameList.removeAt(index);
+                                      _lstDTStart.removeAt(index);
+                                      _lstDTEnd.removeAt(index);
                                       DatabaseTest.listNameGroup
                                           .removeAt(index);
                                     }
@@ -280,7 +293,7 @@ class _GroupFormState extends State<GroupForm> {
     return message;
   }
 
-  Widget subTitle(List<String> lstStart, int position, List<String> lstEnd) {
+  /*Widget subTitle(List<String> lstStart, int position, List<String> lstEnd) {
     String start = lstStart[position].split("/").first +
         " - " +
         lstStart[position].split("/").last;
@@ -292,7 +305,41 @@ class _GroupFormState extends State<GroupForm> {
       children: [
         Row(
           children: <Widget>[
-            Icon(
+            const Icon(
+              Icons.calendar_today,
+              color: Colors.green,
+              size: 10,
+            ),
+            Text(start,style: TextStyle(fontSize: 12),)
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            const Icon(
+              Icons.calendar_today,
+              color: Colors.red,
+              size: 10,
+            ),
+            Text(end,style: TextStyle(fontSize: 12),)
+          ],
+        )
+      ],
+    );
+  }*/
+
+  Widget subTitle(List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
+    String start = lstStart[position].toLocal().toString().split(" ").first +
+        " - " +
+        lstStart[position].toLocal().toString().split(" ").last;
+    String end = lstEnd[position].toLocal().toString().split(" ").first +
+        " - " +
+        lstEnd[position].toLocal().toString().split(" ").last;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: <Widget>[
+            const Icon(
               Icons.calendar_today,
               color: Colors.green,
               size: 12,
@@ -302,7 +349,7 @@ class _GroupFormState extends State<GroupForm> {
         ),
         Row(
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.calendar_today,
               color: Colors.red,
               size: 12,
@@ -344,7 +391,7 @@ class _GroupFormState extends State<GroupForm> {
             ? dtStart = displayDate(dateTimeInit)
             : dtEnd = displayDate(dateTimeInit);
         debugPrint(displayDate(dateTimeInit));
-        debugPrint(dateTimeInit.toString());
+        debugPrint("az" + dateTimeInit.toLocal().toString());
         debugPrint(status ? slcDStart.toString():slcDEnd.toString() );
       });
     }

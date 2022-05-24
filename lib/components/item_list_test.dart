@@ -111,6 +111,8 @@ class _ItemListTestState extends State<ItemListTest> {
                       DateTime _dateStart = index == 0
                           ? (noteInfo['dateDebut'] as Timestamp).toDate()
                           : (_noteInfo['dateDebut'] as Timestamp).toDate();
+                      DateTime dateEnd =
+                          (noteInfo['dateEnd'] as Timestamp).toDate();
                       //String role = noteInfo['role'];
                       int currHeader = dateStart.month;
                       int header =
@@ -145,12 +147,12 @@ class _ItemListTestState extends State<ItemListTest> {
                                 )),
                             const SizedBox(height: 10),
                             buildListe(context, isDel, address, desc, docID,
-                                dateStart, name, index)
+                                dateStart, name, index, dateEnd)
                           ],
                         );
                       } else {
                         return buildListe(context, isDel, address, desc, docID,
-                            dateStart, name, index);
+                            dateStart, name, index, dateEnd);
                       }
                     },
                   ))
@@ -192,7 +194,7 @@ class _ItemListTestState extends State<ItemListTest> {
           "-" +
           selectedDateStart.day.toString();
     }
-    startDate = "Date: " + startDate;
+    //startDate = "Date: " + startDate;
     if (!isDel) {
       return startDate;
     } else {
@@ -261,13 +263,12 @@ class _ItemListTestState extends State<ItemListTest> {
             width: 200,
             child: Row(
               children: [
-                CircleAvatar(
-                  child: const Icon(
+                const CircleAvatar(
+                  child: Icon(
                     Icons.person_outline_outlined,
                     size: 18,
                   ),
-                  backgroundColor: CustomColors.primaryColor,
-                  foregroundColor: CustomColors.textIcons,
+                  backgroundColor: Colors.blue,
                   radius: 18,
                 ),
                 const SizedBox(
@@ -398,7 +399,8 @@ class _ItemListTestState extends State<ItemListTest> {
       String docID,
       DateTime dateStart,
       String name,
-      int position) {
+      int position,
+      DateTime dateEnd) {
     return Ink(
       decoration: BoxDecoration(
         color:
@@ -419,27 +421,50 @@ class _ItemListTestState extends State<ItemListTest> {
             onTap: () {
               !isDel
                   ? _showSimpleModalDialog(
-                      context, name, desc, address, dateStart)
+                      context, name, desc, address, dateStart, dateEnd)
                   : null;
             },
+            dense: true,
             isThreeLine: true,
             title: Row(children: [
               Icon(
                 Icons.location_on_outlined,
                 color: CustomColors.textIcons,
+                size: 18,
               ),
-              Text(
+              SizedBox(width: 5),
+              Flexible(
+                  child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      strutStyle: StrutStyle(fontSize: 10.0),
+                      text: TextSpan(
+                        text: address,
+                        style: TextStyle(color: CustomColors.textIcons),
+                      )))
+              /*Text(
                 //"Adresse: " + address + "\nDescription: " + desc,
                 // "Adresse: " + address,
                 address,
                 style: TextStyle(color: CustomColors.textIcons),
-              )
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              )*/
             ]),
-            subtitle: Text(
-              setUp(dateStart, isDel),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
+            subtitle: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.timer_outlined,
+                  color: CustomColors.textIcons,
+                  size: 18,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  setUp(dateStart, isDel),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
+                )
+              ],
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -610,7 +635,7 @@ class _ItemListTestState extends State<ItemListTest> {
   }
 
   _showSimpleModalDialog(context, String title, String description,
-      String address, DateTime dateStart) {
+      String address, DateTime dateStart, DateTime dateEnd) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -656,7 +681,11 @@ class _ItemListTestState extends State<ItemListTest> {
                       color: Colors.black,
                     ),
                     Text(
-                      "L'heure: le ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
+                      "L'heure commencé: le ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "L'heure terminé: le ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
                     ),
                   ],
                 ),
