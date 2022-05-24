@@ -65,7 +65,6 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  //height: 675,
                   height: MediaQuery.of(context).size.height,
                   child: ListView.separated(
                     shrinkWrap: true,
@@ -113,7 +112,7 @@ class _ItemListTestState extends State<ItemListTest> {
                           ? (noteInfo['dateDebut'] as Timestamp).toDate()
                           : (_noteInfo['dateDebut'] as Timestamp).toDate();
                       DateTime dateEnd =
-                      (noteInfo['dateEnd'] as Timestamp).toDate();
+                          (noteInfo['dateEnd'] as Timestamp).toDate();
                       //String role = noteInfo['role'];
                       int currHeader = dateStart.month;
                       int header =
@@ -141,18 +140,19 @@ class _ItemListTestState extends State<ItemListTest> {
                                         " " +
                                         dateStart.year.toString(),
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26,
+                                    ),
                                   ),
                                 )),
                             const SizedBox(height: 10),
                             buildListe(context, isDel, address, desc, docID,
-                                dateStart, name, index,dateEnd)
+                                dateStart, name, index, dateEnd)
                           ],
                         );
                       } else {
                         return buildListe(context, isDel, address, desc, docID,
-                            dateStart, name, index,dateEnd);
+                            dateStart, name, index, dateEnd);
                       }
                     },
                   ))
@@ -252,14 +252,14 @@ class _ItemListTestState extends State<ItemListTest> {
 
   //widget pour le menu (filtrer les 3 roles)
   Widget buildMenu(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40,
       // color: CustomColors.backgroundDark,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           //Text("User: ${DatabaseTest.userUid}"),
-          Container(
+          SizedBox(
             width: 200,
             child: Row(
               children: [
@@ -274,7 +274,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 const SizedBox(
                   width: 5,
                 ),
-                Text("${DatabaseTest.userUid}")
+                Text(DatabaseTest.userUid)
               ],
             ),
           ),
@@ -399,7 +399,8 @@ class _ItemListTestState extends State<ItemListTest> {
       String docID,
       DateTime dateStart,
       String name,
-      int position, DateTime dateEnd) {
+      int position,
+      DateTime dateEnd) {
     return Ink(
       decoration: BoxDecoration(
         color:
@@ -420,7 +421,7 @@ class _ItemListTestState extends State<ItemListTest> {
             onTap: () {
               !isDel
                   ? _showSimpleModalDialog(
-                      context, name, desc, address, dateStart,dateEnd)
+                      context, name, desc, address, dateStart, dateEnd)
                   : null;
             },
             dense: true,
@@ -431,7 +432,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 color: CustomColors.textIcons,
                 size: 18,
               ),
-              SizedBox(width:5),
+              SizedBox(width: 5),
               Flexible(
                   child: RichText(
                       overflow: TextOverflow.ellipsis,
@@ -449,21 +450,22 @@ class _ItemListTestState extends State<ItemListTest> {
                 maxLines: 2,
               )*/
             ]),
-            subtitle:Row(children: <Widget>[
-              Icon(
-                Icons.timer_outlined,
-                color: CustomColors.textIcons,
-                size: 18,
-              ),
-              SizedBox(width:5),
-              Text(
-                setUp(dateStart, isDel),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
-              )
-            ],)
-            ,
+            subtitle: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.timer_outlined,
+                  color: CustomColors.textIcons,
+                  size: 18,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  setUp(dateStart, isDel),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: CustomColors.textIcons, fontSize: 14),
+                )
+              ],
+            ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -641,7 +643,7 @@ class _ItemListTestState extends State<ItemListTest> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
-              constraints: BoxConstraints(maxHeight: 400, maxWidth: 300),
+              constraints: const BoxConstraints(maxHeight: 400, maxWidth: 300),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -649,39 +651,39 @@ class _ItemListTestState extends State<ItemListTest> {
                   children: [
                     Text(
                       "Titre: $title",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         wordSpacing: 5,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                       thickness: 1.5,
                     ),
                     Text(
                       "Adresse: $address",
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                     ),
                     RichText(
                       textAlign: TextAlign.justify,
                       text: TextSpan(
                           text: "Description: $description",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
                               color: Colors.black,
                               wordSpacing: 1)),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                     ),
                     Text(
                       "L'heure commencé: le ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
                     ),
-                    SizedBox(height:5),
+                    SizedBox(height: 5),
                     Text(
                       "L'heure terminé: le ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
                     ),

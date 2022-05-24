@@ -57,9 +57,8 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             maxLines: 1,
                             keyboardType: TextInputType.emailAddress,
                             controller: _guestCtl,
-                            validator: (value) => value!.isEmpty
-                                ? 'Email cannot be blank'
-                                : null,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Email cannot be blank' : null,
                             decoration: const InputDecoration(
                               hintText: 'Ex: tom@gmail.com',
                               contentPadding: EdgeInsets.all(8),
@@ -67,8 +66,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             ),
                           ),
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             //crossAxisAlignment: CrossAxisAlignment.,
                             children: <Widget>[
                               //Pour le groupe
@@ -80,7 +78,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                   child: GFDropdown(
                                     //padding: const EdgeInsets.all(10),
                                     borderRadius: BorderRadius.circular(5),
-                                   /* border: const BorderSide(
+                                    /* border: const BorderSide(
                                         color: CustomColors.textPrimary,
                                         width: 1),
                                     dropdownButtonColor:
@@ -88,8 +86,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                     value: _dropdownGroup,
                                     onChanged: (newValue) {
                                       setState(() {
-                                        _dropdownGroup =
-                                            newValue as String?;
+                                        _dropdownGroup = newValue as String?;
                                       });
                                     },
                                     items: DatabaseTest.lstGrAdded
@@ -105,12 +102,12 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               Container(
                                 height: 50,
                                 //width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
                                 child: DropdownButtonHideUnderline(
                                   child: GFDropdown(
                                     padding: const EdgeInsets.all(15),
                                     borderRadius: BorderRadius.circular(5),
-                                   /* border: const BorderSide(
+                                    /* border: const BorderSide(
                                         color: CustomColors.textPrimary,
                                         width: 1),
                                     dropdownButtonColor:
@@ -133,14 +130,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               ),
                               Container(
                                   alignment: Alignment.center,
-                                  child:
-                                  ElevatedButton(
-
+                                  child: ElevatedButton(
                                       onPressed: () {
                                         setState(() {
                                           String mess = _guestCtl.text;
                                           if (_guestCtl.text.isEmpty) {
-                                            mess = "example${taille++}@gmail.com";
+                                            mess =
+                                                "example${taille++}@gmail.com";
                                           }
                                           DatabaseTest.lstUserAdded.add(mess);
                                           DatabaseTest.lstGroupAdded
@@ -151,11 +147,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                         });
                                       },
                                       child: Wrap(
-                                        children: const <Widget>[Text('INVITER')],
+                                        children: const <Widget>[
+                                          Text('Inviter')
+                                        ],
                                       ))),
                             ],
                           ),
-                         /* Container(
+                          /* Container(
                             //width: ,
                             alignment: Alignment.center,
                             child:
@@ -192,8 +190,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: DatabaseTest.lstUserAdded.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) {
+                                itemBuilder: (BuildContext context, int index) {
                                   /*return Column(children: <Widget>[
                                     GFListTile(
                                     onTap: () {
@@ -227,31 +224,30 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                               .removeAt(index);
                                         });
                                       },
-                                      *//*color: CustomColors.textPrimary,*//*
+                                      */ /*color: CustomColors.textPrimary,*/ /*
                                     )),
                                   ]);*/
                                   return GFListTile(
                                       onTap: () {
                                         setState(() {
-                                          _editGuestCtl =
-                                              TextEditingController(
-                                                  text: DatabaseTest
-                                                      .lstUserAdded[index]);
+                                          _editGuestCtl = TextEditingController(
+                                              text: DatabaseTest
+                                                  .lstUserAdded[index]);
                                           _modify(context, index);
                                         });
                                       },
-                                      color: index.isEven ?
-                                      CustomColors.accentColor :
-                                      CustomColors.darkPrimaryColor,
+                                      color: index.isEven
+                                          ? CustomColors.lightPrimaryColor
+                                          : CustomColors.lightPrimaryColor
+                                              .withOpacity(0.6),
                                       titleText:
                                           DatabaseTest.lstUserAdded[index],
                                       subTitleText: "Groupe: " +
-                                          DatabaseTest
-                                              .lstGroupAdded[index] +
+                                          DatabaseTest.lstGroupAdded[index] +
                                           " - Role: " +
                                           DatabaseTest.lstRoleAdded[index],
                                       icon: IconButton(
-                                        icon: Icon(Icons.cancel_outlined),
+                                        icon: const Icon(Icons.cancel_outlined),
                                         onPressed: () {
                                           setState(() {
                                             DatabaseTest.lstUserAdded
@@ -280,10 +276,10 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       child: Padding(
                         padding: EdgeInsets.all(16.0),
                         child: CircularProgressIndicator(
-                          /*valueColor: AlwaysStoppedAnimation<Color>(
+                            /*valueColor: AlwaysStoppedAnimation<Color>(
                             CustomColors.accentLight,
                           ),*/
-                        ),
+                            ),
                       ),
                     )
                   : Container(
@@ -291,7 +287,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       //alignment: Alignment.center,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                         /* backgroundColor: MaterialStateProperty.all(
+                          /* backgroundColor: MaterialStateProperty.all(
                             CustomColors.accentDark,
                           ),*/
                           shape: MaterialStateProperty.all(
@@ -328,15 +324,14 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           );
                         },
                         child: const Padding(
-                          padding:
-                              const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                          padding: EdgeInsets.only(top: 16, bottom: 16),
                           child: Text(
-                            'ENREGISTRER',
+                            "SAUVEGARDER",
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
-                             /* color: CustomColors.textSecondary,*/
-                              letterSpacing: 2,
+                              /* color: CustomColors.textSecondary,*/
+                              // letterSpacing: 2,
                             ),
                           ),
                         ),
@@ -382,7 +377,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       Container(
                         height: 50,
                         //width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
@@ -390,12 +385,11 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             /*border: const BorderSide(
                                 color: CustomColors.textPrimary, width: 1),
                             dropdownButtonColor: CustomColors.textSecondary,*/
-                            value:   DatabaseTest
-                                .lstGroupAdded[index],
+                            value: DatabaseTest.lstGroupAdded[index],
                             onChanged: (newValue) {
                               setState(() {
-                                DatabaseTest
-                                    .lstGroupAdded[index] = newValue as String;
+                                DatabaseTest.lstGroupAdded[index] =
+                                    newValue as String;
                               });
                             },
                             items: DatabaseTest.lstGrAdded
@@ -411,12 +405,12 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       Container(
                         height: 50,
                         //width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
                         child: DropdownButtonHideUnderline(
                           child: GFDropdown(
                             padding: const EdgeInsets.all(15),
                             borderRadius: BorderRadius.circular(5),
-                          /* border:
+                            /* border:
                            BorderSide(
                                 color: CustomColors.textPrimary, width: 1),
                             dropdownButtonColor: CustomColors.textSecondary,*/

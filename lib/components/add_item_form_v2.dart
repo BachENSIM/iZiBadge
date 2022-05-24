@@ -380,20 +380,12 @@ class _AddItemFormState extends State<AddItemForm> {
       //initialTime:  todInit,
       initialEntryMode: TimePickerEntryMode.dial,
       builder: (context, child) {
-        if (MediaQuery.of(context).alwaysUse24HourFormat) {
-          //return child!;
-          return Localizations.override(
-            context: context,
-            locale: const Locale('fr', 'FR'),
-            child: child,
-          );
-        } else {
-          return Localizations.override(
-            context: context,
-            locale: const Locale('fr', 'FR'),
-            child: child,
-          );
-        }
+        //return child!;
+        return Localizations.override(
+          context: context,
+          locale: const Locale('fr', 'FR'),
+          child: child,
+        );
       },
     );
     if (timeOfDay != null && timeOfDay != todInit) {
@@ -410,7 +402,8 @@ class _AddItemFormState extends State<AddItemForm> {
         //pour l'heure fin
         else {
           selectedTimeEnd = todInit;
-          if (todInit.hour <= selectedTimeStart.hour && selectedDateStart.day == selectedDateEnd.day) {
+          if (todInit.hour <= selectedTimeStart.hour &&
+              selectedDateStart.day == selectedDateEnd.day) {
             selectedTimeStart =
                 TimeOfDay(hour: todInit.hour - 1, minute: todInit.minute);
             startTime = displayTime(selectedTimeStart);

@@ -28,10 +28,10 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
             icon: const Icon(Icons.clear),
             label: const Text("",
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  // color: CustomColors.textSecondary,
-                )),
+                    // fontSize: 16,
+                    // fontWeight: FontWeight.w700,
+                    // color: CustomColors.textSecondary,
+                    )),
             style: ElevatedButton.styleFrom(
                 elevation: 0, primary: Colors.transparent)),
       ),
