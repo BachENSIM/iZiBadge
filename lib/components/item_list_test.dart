@@ -65,7 +65,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: 675,
+                  height: MediaQuery.of(context).size.height,
                   child: ListView.separated(
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
@@ -138,8 +138,9 @@ class _ItemListTestState extends State<ItemListTest> {
                                         " " +
                                         dateStart.year.toString(),
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 26),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26,
+                                    ),
                                   ),
                                 )),
                             const SizedBox(height: 10),
@@ -249,19 +250,19 @@ class _ItemListTestState extends State<ItemListTest> {
 
   //widget pour le menu (filtrer les 3 roles)
   Widget buildMenu(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 40,
       // color: CustomColors.backgroundDark,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           //Text("User: ${DatabaseTest.userUid}"),
-          Container(
+          SizedBox(
             width: 200,
             child: Row(
               children: [
                 CircleAvatar(
-                  child: Icon(
+                  child: const Icon(
                     Icons.person_outline_outlined,
                     size: 18,
                   ),
@@ -269,10 +270,10 @@ class _ItemListTestState extends State<ItemListTest> {
                   foregroundColor: CustomColors.textIcons,
                   radius: 18,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
-                Text("${DatabaseTest.userUid}")
+                Text(DatabaseTest.userUid)
               ],
             ),
           ),
@@ -422,21 +423,18 @@ class _ItemListTestState extends State<ItemListTest> {
                   : null;
             },
             isThreeLine: true,
-            title: Container(
-              // width: ,
-              child: Row(children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: CustomColors.textIcons,
-                ),
-                Text(
-                  //"Adresse: " + address + "\nDescription: " + desc,
-                  // "Adresse: " + address,
-                  address,
-                  style: TextStyle(color: CustomColors.textIcons),
-                )
-              ]),
-            ),
+            title: Row(children: [
+              Icon(
+                Icons.location_on_outlined,
+                color: CustomColors.textIcons,
+              ),
+              Text(
+                //"Adresse: " + address + "\nDescription: " + desc,
+                // "Adresse: " + address,
+                address,
+                style: TextStyle(color: CustomColors.textIcons),
+              )
+            ]),
             subtitle: Text(
               setUp(dateStart, isDel),
               maxLines: 2,
@@ -620,7 +618,7 @@ class _ItemListTestState extends State<ItemListTest> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             child: Container(
-              constraints: BoxConstraints(maxHeight: 400, maxWidth: 300),
+              constraints: const BoxConstraints(maxHeight: 400, maxWidth: 300),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
@@ -628,33 +626,33 @@ class _ItemListTestState extends State<ItemListTest> {
                   children: [
                     Text(
                       "Titre: $title",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         wordSpacing: 5,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                       thickness: 1.5,
                     ),
                     Text(
                       "Adresse: $address",
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                     ),
                     RichText(
                       textAlign: TextAlign.justify,
                       text: TextSpan(
                           text: "Description: $description",
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
                               color: Colors.black,
                               wordSpacing: 1)),
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.black,
                     ),
                     Text(

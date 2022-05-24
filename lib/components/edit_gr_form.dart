@@ -143,54 +143,54 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         : _one = false;
                     return Column(children: <Widget>[
                       GFListTile(
-                    color: index.isEven
-                        ? CustomColors.lightPrimaryColor
-                        : CustomColors.darkPrimaryColor,
-                    avatar: CircleAvatar(
-                        radius: 20,
-                        // backgroundColor: CustomColors.accentDark,
-                        child: Text(
-                          (index + 1).toString(),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            // color: CustomColors.textSecondary
-                          ),
-                        )),
-                    //titleText: _groupNameList[index],
-                    titleText: DatabaseTest.lstGrAdded[index],
-                    icon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.edit_rounded),
-                          onPressed: () {
-                            _groupEditCtl = TextEditingController(
-                                //text: _groupNameList[index]);
-                                text: DatabaseTest.lstGrAdded[index]);
-                            setState(() {
-                              _modify(context, index);
-                            });
-                          },
-                          // color: CustomColors.accentDark,
+                        color: index.isEven
+                            ? CustomColors.lightPrimaryColor
+                            : CustomColors.lightPrimaryColor.withOpacity(0.6),
+                        avatar: CircleAvatar(
+                            radius: 20,
+                            // backgroundColor: CustomColors.accentDark,
+                            child: Text(
+                              (index + 1).toString(),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                // color: CustomColors.textSecondary
+                              ),
+                            )),
+                        //titleText: _groupNameList[index],
+                        titleText: DatabaseTest.lstGrAdded[index],
+                        icon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(Icons.edit_rounded),
+                              onPressed: () {
+                                _groupEditCtl = TextEditingController(
+                                    //text: _groupNameList[index]);
+                                    text: DatabaseTest.lstGrAdded[index]);
+                                setState(() {
+                                  _modify(context, index);
+                                });
+                              },
+                              // color: CustomColors.accentDark,
+                            ),
+                            if (!_one)
+                              IconButton(
+                                icon: Icon(Icons.delete_forever_sharp),
+                                onPressed: () {
+                                  setState(() {
+                                    if (!_one) {
+                                      //_groupNameList.removeAt(index);
+                                      DatabaseTest.lstGrAdded.removeAt(index);
+                                      //DatabaseTest.listNameGroup.removeAt(index);
+                                    }
+                                  });
+                                },
+                                // color: _one
+                                //     ? Colors.grey
+                                //     : CustomColors.accentDark,
+                              )
+                          ],
                         ),
-                        if (!_one)
-                          IconButton(
-                            icon: Icon(Icons.delete_forever_sharp),
-                            onPressed: () {
-                              setState(() {
-                                if (!_one) {
-                                  //_groupNameList.removeAt(index);
-                                  DatabaseTest.lstGrAdded.removeAt(index);
-                                  //DatabaseTest.listNameGroup.removeAt(index);
-                                }
-                              });
-                            },
-                            // color: _one
-                            //     ? Colors.grey
-                            //     : CustomColors.accentDark,
-                          )
-                      ],
-                    ),
                       ),
                     ]);
                   },
@@ -213,6 +213,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   )
                 : Container(
                     width: double.maxFinite,
+                    // alignment: Alignment.center,
                     child: ElevatedButton(
                       style: ButtonStyle(
                         // backgroundColor: MaterialStateProperty.all(
@@ -241,14 +242,14 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         );
                       },
                       child: const Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        padding: EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
-                          'Sauvegarder',
+                          'SAUVEGARDER',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             // color: CustomColors.textSecondary,
-                            letterSpacing: 2,
+                            // letterSpacing: 2,
                           ),
                         ),
                       ),

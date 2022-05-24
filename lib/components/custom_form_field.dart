@@ -53,35 +53,35 @@ class CustomFormField extends StatelessWidget {
         // labelStyle: TextStyle(color: CustomColors.accentLight),
         hintText: _hint,
         hintStyle: TextStyle(
-            //color: CustomColors.textPrimary.withOpacity(0.5),
+            // color: CustomColors.primaryText.withOpacity(0.5),
             ),
-        errorStyle: TextStyle(
+        errorStyle: const TextStyle(
           color: Colors.redAccent,
           fontWeight: FontWeight.bold,
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             //color: CustomColors.accentDark,
             width: 2,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
               //color: CustomColors.textPrimary.withOpacity(0.5),
               ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Colors.redAccent,
             width: 2,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Colors.redAccent,
             width: 2,
           ),

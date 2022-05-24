@@ -97,17 +97,17 @@ class _EditItemFormState extends State<EditItemForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 12.0), //invisible box
+                  // const SizedBox(height: 12.0), //invisible box
                   const Text(
                     'Titre',
                     style: TextStyle(
                       //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      letterSpacing: 1,
+                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   CustomFormField(
                     isLabelEnabled: false,
                     controller: _titleCtl,
@@ -120,17 +120,17 @@ class _EditItemFormState extends State<EditItemForm> {
                     label: 'Titre',
                     hint: "Saisir le titre de l'événement",
                   ),
-                  SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
                   const Text(
                     'Description',
                     style: TextStyle(
                       //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      letterSpacing: 1,
+                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   CustomFormField(
                     maxLines: 5,
                     isLabelEnabled: false,
@@ -144,17 +144,17 @@ class _EditItemFormState extends State<EditItemForm> {
                     label: 'Description',
                     hint: "Saisir la description de l'événement",
                   ),
-                  SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
                   const Text(
                     'Adresse',
                     style: TextStyle(
                       //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      letterSpacing: 1,
+                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   CustomFormField(
                     maxLines: 3,
                     isLabelEnabled: false,
@@ -380,14 +380,14 @@ class _EditItemFormState extends State<EditItemForm> {
                         }
                       },
                       child: const Padding(
-                        padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        padding: EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
-                          "Sauvegarder",
+                          "SAUVEGARDER",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             //color: CustomColors.textPrimary,
-                            letterSpacing: 2,
+                            // letterSpacing: 2,
                           ),
                         ),
                       ),
