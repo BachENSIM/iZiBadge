@@ -183,7 +183,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           ListView(shrinkWrap: true, children: <Widget>[
                             const SizedBox(height: 15),
                             Container(
-                              height:MediaQuery.of(context).size.height,
+                              height: MediaQuery.of(context).size.height,
                               /*decoration: BoxDecoration(
                                   border: Border.all(color: Colors.blueAccent)
                               ),*/
@@ -347,120 +347,114 @@ class _EditListUserFormState extends State<EditListUserForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            /*title: const Text('Please Confirm'),*/
-            content: const Text('Editez vos informations?'),
+            title: const Text("Modifier les informations de l'invité"),
+            content: Column(mainAxisSize: MainAxisSize.min, children: [
+              TextFormField(
+                maxLines: 1,
+                keyboardType: TextInputType.text,
+                controller: _editGuestCtl,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.all(8),
+                  isDense: true,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  //Pour le groupe
+                  Container(
+                    height: 50,
+                    //width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(top: 15),
+                    child: DropdownButtonHideUnderline(
+                      child: GFDropdown(
+                        padding: const EdgeInsets.all(15),
+                        borderRadius: BorderRadius.circular(5),
+                        border: BorderSide(
+                            color: CustomColors.primaryText, width: 1),
+                        // dropdownButtonColor: CustomColors.secondaryText,
+                        value: DatabaseTest.lstGroupAdded[index],
+                        onChanged: (newValue) {
+                          setState(() {
+                            DatabaseTest.lstGroupAdded[index] =
+                                newValue as String;
+                          });
+                        },
+                        items: DatabaseTest.lstGrAdded
+                            .map(
+                              (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  //Pour le role
+                  Container(
+                    height: 50,
+                    //width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(top: 15),
+                    child: DropdownButtonHideUnderline(
+                      child: GFDropdown(
+                        padding: const EdgeInsets.all(15),
+                        borderRadius: BorderRadius.circular(5),
+                        border: BorderSide(
+                            color: CustomColors.primaryText, width: 1),
+                        // dropdownButtonColor: CustomColors.secondaryText,
+                        value: _dropdownRole,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _dropdownRole = newValue as String?;
+                            print(_dropdownRole);
+                          });
+                        },
+                        items: _roleDropDown
+                            .map(
+                              (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ]),
             shape: RoundedRectangleBorder(
                 // side: BorderSide(color: CustomColors.textPrimary, width: 1),
                 borderRadius: BorderRadius.circular(15)),
             actions: [
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 250,
-                    child: TextFormField(
-                      enabled: false,
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      controller: _editGuestCtl,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(28),
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //Pour le groupe
-                      Container(
-                        height: 50,
-                        //width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.all(5),
-                        child: DropdownButtonHideUnderline(
-                          child: GFDropdown(
-                            padding: const EdgeInsets.all(15),
-                            borderRadius: BorderRadius.circular(5),
-                            /*border: const BorderSide(
-                                color: CustomColors.textPrimary, width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,*/
-                            value: DatabaseTest.lstGroupAdded[index],
-                            onChanged: (newValue) {
-                              setState(() {
-                                DatabaseTest.lstGroupAdded[index] =
-                                    newValue as String;
-                              });
-                            },
-                            items: DatabaseTest.lstGrAdded
-                                .map((value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ),
-                      //Pour le role
-                      Container(
-                        height: 50,
-                        //width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.all(5),
-                        child: DropdownButtonHideUnderline(
-                          child: GFDropdown(
-                            padding: const EdgeInsets.all(15),
-                            borderRadius: BorderRadius.circular(5),
-                            /* border:
-                           BorderSide(
-                                color: CustomColors.textPrimary, width: 1),
-                            dropdownButtonColor: CustomColors.textSecondary,*/
-                            value: _dropdownRole,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _dropdownRole = newValue as String?;
-                                print(_dropdownRole);
-                              });
-                            },
-                            items: _roleDropDown
-                                .map((value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              DatabaseTest.lstUserAdded[index] =
-                                  _editGuestCtl!.text;
-                              DatabaseTest.lstGroupAdded[index] =
-                                  _dropdownGroup!;
-                              DatabaseTest.lstRoleAdded[index] = _dropdownRole!;
-                            });
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annuler'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Remove the box
+                  setState(() {
+                    DatabaseTest.lstUserAdded[index] = _editGuestCtl!.text;
+                    DatabaseTest.lstGroupAdded[index] = _dropdownGroup!;
+                    DatabaseTest.lstRoleAdded[index] = _dropdownRole!;
+                  });
 
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Modifiez')),
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Annulez'))
-                    ],
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Modifier',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              )
-              // The "Yes" button
+                ),
+              ),
             ],
           );
         });

@@ -52,7 +52,6 @@ class _GroupFormState extends State<GroupForm> {
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
-
   }
 
   @override
@@ -122,17 +121,21 @@ class _GroupFormState extends State<GroupForm> {
                           _groupNameCtl.clear();
                           _lstDTStart.add("$dtStart/$todStart");
                           _lstDTEnd.add("$dtEnd/$todEnd");
-                          String start = "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
-                          String end = "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
-                          debugPrint("start" + slcDStart.toUtc().toString().split(" ").first);
-                          debugPrint("end" + slcDEnd.toUtc().toString().split(" ").first);
+                          String start =
+                              "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
+                          String end =
+                              "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
+                          debugPrint("start" +
+                              slcDStart.toUtc().toString().split(" ").first);
+                          debugPrint("end" +
+                              slcDEnd.toUtc().toString().split(" ").first);
                           //debugPrint(slcTStart.format(context));
-                          DatabaseTest.listHoursStart.add(DateTime.parse(start));
+                          DatabaseTest.listHoursStart
+                              .add(DateTime.parse(start));
                           DatabaseTest.listHoursEnd.add(DateTime.parse(end));
                           debugPrint(DatabaseTest.listNameGroup.toString());
                           debugPrint(DatabaseTest.listHoursStart.toString());
                           debugPrint(DatabaseTest.listHoursEnd.toString());
-
                         });
                       },
                       //style:  ElevatedButton.styleFrom(side: ),
@@ -181,7 +184,8 @@ class _GroupFormState extends State<GroupForm> {
                         titleText: _groupNameList[index],
                         //subTitleText: subTitle(_lstDTStart, index, _lstDTEnd),
                         //subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
-                        subTitle: subTitle(DatabaseTest.listHoursStart, index, DatabaseTest.listHoursEnd),
+                        subTitle: subTitle(DatabaseTest.listHoursStart, index,
+                            DatabaseTest.listHoursEnd),
                         color: index.isEven
                             ? CustomColors.lightPrimaryColor
                             : CustomColors.darkPrimaryColor,
@@ -189,7 +193,10 @@ class _GroupFormState extends State<GroupForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.edit_rounded,size: 18,),
+                              icon: Icon(
+                                Icons.edit_rounded,
+                                size: 18,
+                              ),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
                                     text: _groupNameList[index]);
@@ -201,7 +208,10 @@ class _GroupFormState extends State<GroupForm> {
                             ),
                             if (!_zero)
                               IconButton(
-                                icon: Icon(Icons.delete_forever_sharp,size: 18,),
+                                icon: Icon(
+                                  Icons.delete_forever_sharp,
+                                  size: 18,
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     if (!_zero) {
@@ -327,7 +337,8 @@ class _GroupFormState extends State<GroupForm> {
     );
   }*/
 
-  Widget subTitle(List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
+  Widget subTitle(
+      List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
     String start = lstStart[position].toLocal().toString().split(" ").first +
         " - " +
         lstStart[position].toLocal().toString().split(" ").last;
@@ -344,7 +355,10 @@ class _GroupFormState extends State<GroupForm> {
               color: Colors.green,
               size: 12,
             ),
-            Text(start,style: TextStyle(fontSize: 12),)
+            Text(
+              start,
+              style: TextStyle(fontSize: 12),
+            )
           ],
         ),
         Row(
@@ -354,7 +368,10 @@ class _GroupFormState extends State<GroupForm> {
               color: Colors.red,
               size: 12,
             ),
-            Text(end,style: TextStyle(fontSize: 12),)
+            Text(
+              end,
+              style: TextStyle(fontSize: 12),
+            )
           ],
         )
       ],
@@ -386,13 +403,13 @@ class _GroupFormState extends State<GroupForm> {
     if (selected != null && selected != dateTimeInit) {
       setState(() {
         dateTimeInit = selected;
-        status ? slcDStart = selected :  slcDEnd= selected;
+        status ? slcDStart = selected : slcDEnd = selected;
         status
             ? dtStart = displayDate(dateTimeInit)
             : dtEnd = displayDate(dateTimeInit);
         debugPrint(displayDate(dateTimeInit));
         debugPrint("az" + dateTimeInit.toLocal().toString());
-        debugPrint(status ? slcDStart.toString():slcDEnd.toString() );
+        debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
       });
     }
   }
@@ -421,10 +438,10 @@ class _GroupFormState extends State<GroupForm> {
     if (timeOfDay != null && timeOfDay != todInit) {
       setState(() {
         todInit = timeOfDay;
-        status ? slcTStart = timeOfDay :  slcTEnd= timeOfDay;
-        status ?
-          todStart = displayTime(todInit) :
-          todEnd =  displayTime(todInit);
+        status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
+        status
+            ? todStart = displayTime(todInit)
+            : todEnd = displayTime(todInit);
       });
     }
   }
@@ -434,59 +451,46 @@ class _GroupFormState extends State<GroupForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            /*title: const Text('Please Confirm'),*/
-            content: const Text('Renommer'),
+            title: const Text("Renommer"),
+            content: TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              controller: _groupEditCtl,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(8),
+                isDense: true,
+              ),
+            ),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    // color: CustomColors.textPrimary,
-                    width: 1),
-                borderRadius: BorderRadius.circular(15)),
+              borderRadius: BorderRadius.circular(15),
+            ),
             actions: [
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 250,
-                    child: TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      controller: _groupEditCtl,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              _groupNameList[index] = _groupEditCtl!.text;
-                              DatabaseTest.listNameGroup[index] =
-                                  _groupNameList[index];
-                              print("list" + _groupNameList[index]);
-                              print("data: " +
-                                  DatabaseTest.listNameGroup.toString());
-                              _groupEditCtl?.clear();
-                            });
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler")),
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _groupNameList[index] = _groupEditCtl!.text;
+                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
+                      print("list" + _groupNameList[index]);
+                      print("data: " + DatabaseTest.listNameGroup.toString());
+                      _groupEditCtl?.clear();
+                    });
 
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('OK')),
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Annuler'))
-                    ],
-                  ),
-                ],
-              )
-              // The "Yes" button
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Renommer",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
             ],
           );
         });

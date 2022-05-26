@@ -209,25 +209,35 @@ class _ItemListTestState extends State<ItemListTest> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: const Text('Supprimer'),
-            content: const Text("Voulez-vous supprimer cet événement ?"),
+            content: const Text("Supprimer cet événement ?"),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             actions: [
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annuler'),
+              ),
               // The "Yes" button
               TextButton(
-                  onPressed: () async {
-                    // Remove the box
-                    isDel
-                        ? await DatabaseTest.deleteItemCanceled(docId: id)
-                        : await DatabaseTest.deleteItem(docId: id);
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Supprimer')),
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Annuler'))
+                onPressed: () async {
+                  // Remove the box
+                  isDel
+                      ? await DatabaseTest.deleteItemCanceled(docId: id)
+                      : await DatabaseTest.deleteItem(docId: id);
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Supprimer',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           );
         });
@@ -644,8 +654,8 @@ class _ItemListTestState extends State<ItemListTest> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Container(
               constraints: const BoxConstraints(maxHeight: 510, maxWidth: 300),
               child: Padding(
