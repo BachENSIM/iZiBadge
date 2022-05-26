@@ -20,10 +20,10 @@ Une fois connecté, l'application vous présente la liste de tous les événemen
 vous êtes invité (ou organisateur/scanneur). En tapant sur un événement, vous aurez accès 
 à toutes les informations liées à celui-ci. Cela fait aussi apparaître 2 icônes.
 
-Le premier permet d'afficher le QR Code qui vous sera demandé à l'entrée.
+La première permet d'afficher le QR Code qui vous sera demandé à l'entrée.
 
-Le deuxième permet de sauvegarder en local dans votre téléphone toutes les informations 
-relatives à cet événement, et le QR Code. Ainsi, la prochaine fois que vous lancerez 
+La deuxième permet de sauvegarder en local dans votre téléphone le QR Code et toutes les informations 
+relatives à cet événement. Ainsi, la prochaine fois que vous lancerez 
 iZiBadge, si vous n'avez pas d'accès à Internet, vous aurez tout de même accès à ces données.
 
 C'est tout ce que vous devez savoir !
@@ -53,7 +53,7 @@ N'oubliez pas de les assigner à un groupe si vous en avez créé.
 
 ### Pour aller plus loin
 
-Pour déléguer la tâche de scanner les QR Codes à d'autres personnes, il faut inviter 
+Pour déléguer la tâche à d'autres personnes de scanner les QR Codes, il faut inviter 
 cette personne et lui indiquer le rôle de "Scanneur" au lieu d'"Invité".
 
 ## Documentation technique
@@ -67,7 +67,7 @@ ouvrir le projet dans n'importe quel IDE (de préférence Android Studio, mais V
 Code fonctionne aussi avec les extensions).
 
 Les principaux fichiers source se trouvent dans [`/lib`](/lib). Vous y trouverez le [`main.dart`](/lib/main.dart), 
-ainsi que les autres fichier sources rangés dans 4 dossiers.
+ainsi que les autres fichiers sources rangés dans 4 dossiers.
 
 La gestion de l'authentification de la page de connexion se trouve dans [`/services`](/lib/services).
 
