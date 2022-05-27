@@ -52,7 +52,6 @@ class _GroupFormState extends State<GroupForm> {
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
-
   }
 
   @override
@@ -122,17 +121,21 @@ class _GroupFormState extends State<GroupForm> {
                           _groupNameCtl.clear();
                           _lstDTStart.add("$dtStart/$todStart");
                           _lstDTEnd.add("$dtEnd/$todEnd");
-                          String start = "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
-                          String end = "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
-                          debugPrint("start" + slcDStart.toUtc().toString().split(" ").first);
-                          debugPrint("end" + slcDEnd.toUtc().toString().split(" ").first);
+                          String start =
+                              "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
+                          String end =
+                              "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
+                          debugPrint("start" +
+                              slcDStart.toUtc().toString().split(" ").first);
+                          debugPrint("end" +
+                              slcDEnd.toUtc().toString().split(" ").first);
                           //debugPrint(slcTStart.format(context));
-                          DatabaseTest.listHoursStart.add(DateTime.parse(start));
+                          DatabaseTest.listHoursStart
+                              .add(DateTime.parse(start));
                           DatabaseTest.listHoursEnd.add(DateTime.parse(end));
                           debugPrint(DatabaseTest.listNameGroup.toString());
                           debugPrint(DatabaseTest.listHoursStart.toString());
                           debugPrint(DatabaseTest.listHoursEnd.toString());
-
                         });
                       },
                       //style:  ElevatedButton.styleFrom(side: ),
@@ -160,7 +163,7 @@ class _GroupFormState extends State<GroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height/1.5,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: _groupNameList.length,
@@ -181,7 +184,8 @@ class _GroupFormState extends State<GroupForm> {
                         titleText: _groupNameList[index],
                         //subTitleText: subTitle(_lstDTStart, index, _lstDTEnd),
                         //subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
-                        subTitle: subTitle(DatabaseTest.listHoursStart, index, DatabaseTest.listHoursEnd),
+                        subTitle: subTitle(DatabaseTest.listHoursStart, index,
+                            DatabaseTest.listHoursEnd),
                         color: index.isEven
                             ? CustomColors.lightPrimaryColor
                             : CustomColors.darkPrimaryColor,
@@ -189,7 +193,10 @@ class _GroupFormState extends State<GroupForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.edit_rounded,size: 18,),
+                              icon: Icon(
+                                Icons.edit_rounded,
+                                size: 18,
+                              ),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
                                     text: _groupNameList[index]);
@@ -201,7 +208,10 @@ class _GroupFormState extends State<GroupForm> {
                             ),
                             if (!_zero)
                               IconButton(
-                                icon: Icon(Icons.delete_forever_sharp,size: 18,),
+                                icon: Icon(
+                                  Icons.delete_forever_sharp,
+                                  size: 18,
+                                ),
                                 onPressed: () {
                                   setState(() {
                                     if (!_zero) {
@@ -213,9 +223,6 @@ class _GroupFormState extends State<GroupForm> {
                                     }
                                   });
                                 },
-                                //color: _zero
-                                //     ? Colors.grey
-                                //     : CustomColors.accentDark,
                               )
                           ],
                         ),
@@ -242,7 +249,7 @@ class _GroupFormState extends State<GroupForm> {
             },
             child: Container(
                 width: 125,
-                alignment: Alignment.center,
+                alignment: Alignment.centerRight,
                 child: Text(displayDate(dateInit)))),
         const SizedBox(width: 10.0),
         TextButton(
@@ -250,7 +257,7 @@ class _GroupFormState extends State<GroupForm> {
               _selectTime(context, timeInit, status);
             },
             child: Container(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: Text(displayTime(timeInit))))
       ],
     );
@@ -327,13 +334,21 @@ class _GroupFormState extends State<GroupForm> {
     );
   }*/
 
-  Widget subTitle(List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
+  Widget subTitle(
+      List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
+    TimeOfDay timeStart = TimeOfDay(
+        hour: lstStart[position].toLocal().hour,
+        minute: lstStart[position].toLocal().minute);
+    TimeOfDay timeEnd = TimeOfDay(
+        hour: lstEnd[position].toLocal().hour,
+        minute: lstEnd[position].toLocal().minute);
     String start = lstStart[position].toLocal().toString().split(" ").first +
         " - " +
-        lstStart[position].toLocal().toString().split(" ").last;
+        timeStart.format(context);
     String end = lstEnd[position].toLocal().toString().split(" ").first +
         " - " +
-        lstEnd[position].toLocal().toString().split(" ").last;
+        timeEnd.format(context);
+    //+ lstEnd[position].toLocal().toString().split(" ").last;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -344,7 +359,10 @@ class _GroupFormState extends State<GroupForm> {
               color: Colors.green,
               size: 12,
             ),
-            Text(start,style: TextStyle(fontSize: 12),)
+            Text(
+              start,
+              style: TextStyle(fontSize: 14),
+            )
           ],
         ),
         Row(
@@ -354,7 +372,10 @@ class _GroupFormState extends State<GroupForm> {
               color: Colors.red,
               size: 12,
             ),
-            Text(end,style: TextStyle(fontSize: 12),)
+            Text(
+              end,
+              style: TextStyle(fontSize: 14),
+            )
           ],
         )
       ],
@@ -386,13 +407,13 @@ class _GroupFormState extends State<GroupForm> {
     if (selected != null && selected != dateTimeInit) {
       setState(() {
         dateTimeInit = selected;
-        status ? slcDStart = selected :  slcDEnd= selected;
+        status ? slcDStart = selected : slcDEnd = selected;
         status
             ? dtStart = displayDate(dateTimeInit)
             : dtEnd = displayDate(dateTimeInit);
         debugPrint(displayDate(dateTimeInit));
         debugPrint("az" + dateTimeInit.toLocal().toString());
-        debugPrint(status ? slcDStart.toString():slcDEnd.toString() );
+        debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
       });
     }
   }
@@ -421,10 +442,10 @@ class _GroupFormState extends State<GroupForm> {
     if (timeOfDay != null && timeOfDay != todInit) {
       setState(() {
         todInit = timeOfDay;
-        status ? slcTStart = timeOfDay :  slcTEnd= timeOfDay;
-        status ?
-          todStart = displayTime(todInit) :
-          todEnd =  displayTime(todInit);
+        status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
+        status
+            ? todStart = displayTime(todInit)
+            : todEnd = displayTime(todInit);
       });
     }
   }

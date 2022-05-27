@@ -38,8 +38,11 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(25),
-            child: EditGroupForm(
-              documentId: widget.documentId,
+            child: Container(
+              height: MediaQuery.of(context).size.height/1.2,
+              child: EditGroupForm(
+                documentId: widget.documentId,
+              ),
             )),
       ),
     );

@@ -39,8 +39,11 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(5),
-            child: EditListUserForm(
-              documentId: widget.documentId,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: EditListUserForm(
+                documentId: widget.documentId,
+              ),
             )),
       ),
     );

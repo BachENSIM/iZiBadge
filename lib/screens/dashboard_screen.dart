@@ -27,6 +27,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     // TODO: implement initState
     DatabaseTest.fetchNBRole();
+
   }
 
   @override
@@ -111,7 +112,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             right: 16.0,
             bottom: 20.0,
           ),
-          child: ItemListTest(),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: ItemListTest(),
+          )
         ),
       ),
       //Menu bottom bar

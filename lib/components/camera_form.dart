@@ -8,6 +8,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 class CameraForm extends StatefulWidget {
   // const CameraForm({Key? key}) : super(key: key);
   late final String documentId;
+
   CameraForm({required this.documentId});
 
   @override
@@ -19,6 +20,7 @@ class _CameraFormState extends State<CameraForm> {
   QRViewController? controller;
   late bool verify;
   bool flash = false;
+  bool touch = false;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -40,13 +42,30 @@ class _CameraFormState extends State<CameraForm> {
         Expanded(
             flex: 4,
             child: Stack(children: <Widget>[
-              _buildQrView(context),
+              MaterialButton(
+                  onPressed: () async {
+                    debugPrint("touche");
+                     setState(() {
+                  touch = false;
+                });
+                touch ? await controller!.pauseCamera() : await controller!.resumeCamera();
+                setState(() {
+                  touch = true;
+                });
+
+                    setState(() async {
+                      await controller!.resumeCamera();
+                    });
+                  },
+                  child: _buildQrView(context),
+              minWidth: MediaQuery.of(context).size.width,),
+              //_buildQrView(context),
               Row(
                 //mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Positioned(
                       left: 0.0,
-                      right: 0.0,
+                      right: 10.0,
                       top: 0.0,
                       child: Container(
                           // width: 250,
@@ -160,17 +179,18 @@ class _CameraFormState extends State<CameraForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
+                Text(result!.code.toString().split('//').last),
                 Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
-            duration: Duration(seconds: 365),
+            //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
+            /*action: SnackBarAction(
               label: "Validé",
               onPressed: () async {
                 await controller.resumeCamera();
               },
-            ),
+            ),*/
           ),
         );
       } else {
@@ -183,14 +203,14 @@ class _CameraFormState extends State<CameraForm> {
                 Text('Invalidé.....Veuillez rescanner')
               ],
             ),
-            duration: Duration(seconds: 365),
+            //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
+            /*action: SnackBarAction(
               label: "Rescannez",
               onPressed: () async {
                 await controller.resumeCamera();
               },
-            ),
+            ),*/
           ),
         );
       }

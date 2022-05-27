@@ -50,6 +50,19 @@ class _AddItemFormState extends State<AddItemForm> {
   final TextEditingController _addrCtl = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    debugPrint("Create " + selectedTimeStart.hour.toString());
+    if(selectedTimeStart.hour == 24) {
+      selectedDateStart = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day +1);
+      selectedTimeStart = TimeOfDay(hour: 0, minute: 0);
+      startTime = displayTime(selectedTimeStart);
+      debugPrint("Create " + selectedTimeEnd.hour.toString());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _addItemFormKey,
@@ -270,8 +283,8 @@ class _AddItemFormState extends State<AddItemForm> {
               //showDatePicker(context, dateInit,timeInit);
             },
             child: Container(
-                width: 125,
-                alignment: Alignment.center,
+                width: 150,
+                alignment: Alignment.centerRight,
                 child: //Text(displayDate(dateInit))
                     Text(start ? startDate! : endDate!))),
         TextButton(
@@ -280,7 +293,7 @@ class _AddItemFormState extends State<AddItemForm> {
               setState(() {});
             },
             child: Container(
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
                 child: //Text(displayTime(timeInit))
                     Text(start ? startTime! : endTime!)))
       ],
@@ -344,7 +357,7 @@ class _AddItemFormState extends State<AddItemForm> {
       context: context,
       initialDate: dateTimeInit,
       //bloquer la date entre firstDate et lastDate
-      firstDate: dateTimeInit,
+      firstDate: DateTime.now(),
       lastDate: DateTime(2099),
       initialDatePickerMode: DatePickerMode.day,
       initialEntryMode: DatePickerEntryMode.calendar,
@@ -353,18 +366,28 @@ class _AddItemFormState extends State<AddItemForm> {
       setState(() {
         dateTimeInit = selected;
         if (start) {
-          selectedDateStart = selected;
-          if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+          if(selectedDateEnd.day == selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ) {
+            selectedDateStart = selected;
+            selectedDateEnd = selectedDateStart;
+            endDate = displayDate(selectedDateEnd);
+          }
+
+
+          /*if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
             selectedDateEnd = dateTimeInit;
             endDate = displayDate(selectedDateEnd);
             debugPrint("Start: $selectedDateStart");
             debugPrint("End: $selectedDateEnd");
-          }
-
-
+          }*/
 
         } else {
           selectedDateEnd = dateTimeInit;
+          if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+            selectedDateStart = selectedDateEnd;
+            startDate = displayDate(dateTimeInit);
+            debugPrint("Start: $selectedDateStart");
+            debugPrint("End: $selectedDateEnd");
+          }
         }
         start
             ? startDate = displayDate(dateTimeInit)
@@ -396,6 +419,11 @@ class _AddItemFormState extends State<AddItemForm> {
           selectedTimeStart = todInit;
           selectedTimeEnd =
               TimeOfDay(hour: todInit.hour + 1, minute: todInit.minute);
+          debugPrint(selectedTimeEnd.hour.toString());
+          if(selectedTimeEnd.hour > 23 ) {
+            selectedDateEnd = DateTime(selectedDateEnd.year,selectedDateEnd.month,selectedDateEnd.day+1);
+            endDate = displayDate(selectedDateEnd);
+          }
           endTime = displayTime(selectedTimeEnd);
           debugPrint(start.toString());
         }
@@ -406,6 +434,12 @@ class _AddItemFormState extends State<AddItemForm> {
               selectedDateStart.day == selectedDateEnd.day) {
             selectedTimeStart =
                 TimeOfDay(hour: todInit.hour - 1, minute: todInit.minute);
+            debugPrint("qsd" + selectedTimeStart.hour.toString());
+            if(selectedTimeStart.hour == -1) {
+              selectedDateStart = DateTime(selectedDateStart.year,selectedDateStart.month,selectedDateStart.day-1);
+              selectedTimeStart = TimeOfDay(hour: 23,minute: selectedTimeEnd.minute);
+              startDate = displayDate(selectedDateStart);
+            }
             startTime = displayTime(selectedTimeStart);
           }
         }

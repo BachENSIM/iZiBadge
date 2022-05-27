@@ -28,6 +28,7 @@ class _ItemListTestState extends State<ItemListTest> {
   bool _inviteur = false;
   bool _scanneur = false;
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -65,7 +66,7 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: (MediaQuery.of(context).size.height)/1.5 + kToolbarHeight,
                   child: ListView.separated(
                     shrinkWrap: true,
                     //scrollDirection: Axis.vertical,
@@ -260,7 +261,7 @@ class _ItemListTestState extends State<ItemListTest> {
         children: <Widget>[
           //Text("User: ${DatabaseTest.userUid}"),
           SizedBox(
-            width: 200,
+            width: 250,
             child: Row(
               children: [
                 const CircleAvatar(
@@ -436,7 +437,7 @@ class _ItemListTestState extends State<ItemListTest> {
               Flexible(
                   child: RichText(
                       overflow: TextOverflow.ellipsis,
-                      strutStyle: StrutStyle(fontSize: 10.0),
+                      //strutStyle: StrutStyle(fontSize: 38.0),
                       text: TextSpan(
                         text: address,
                         style: TextStyle(color: CustomColors.textIcons),
@@ -609,11 +610,29 @@ class _ItemListTestState extends State<ItemListTest> {
                 if (!isDel && !_isInviteur)
                   IconButton(
                       onPressed: () async {
-                        await DatabaseTest.fetchItemClicked(
-                            docId: docID, index: position);
+                        debugPrint('Size = ' + MediaQuery.of(context).size.toString());
+                        debugPrint('Height = ' + (MediaQuery.of(context).size.height/1.5).toString());
+                        debugPrint('Width = ' + MediaQuery.of(context).size.width.toString());
+                        debugPrint("size list = " + (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            kToolbarHeight).toString());
+                        debugPrint("${MediaQuery
+                            .of(context)
+                            .padding
+                            .top}");
+                        debugPrint("${kToolbarHeight}");
+
+                        bool checked = await DatabaseTest.fetchItemClicked(
+                            docId: docID, index: position,title: name);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: checked ? Text("Sauvegarde des données en local...") : Text("Problème lors de la sauvegarde..."),
+                            padding: const EdgeInsets.all(15.0),
+                          ),
+                        );
                       },
                       icon: Icon(
-                        Icons.save_alt_rounded,
+                        Icons.save_alt_sharp,
                         color: CustomColors.textIcons,
                       )),
               ],

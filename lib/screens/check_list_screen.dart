@@ -40,10 +40,11 @@ class _CheckListUserScreenState extends State<CheckListUserScreen> {
                 textStyle: const TextStyle(
                     fontSize: 16, fontWeight: FontWeight.bold))),
       ),
-      body:
-      SingleChildScrollView(
-        child:  TableUserForm()
-      )
+      body:TableUserForm(documentId: widget.documentId)
+      /*SingleChildScrollView(
+        child:  TableUserForm(documentId: widget.documentId,)
+      )*/
+
       /* CheckListForm(
           documentId:
               widget.documentId),*/ // Here the scanned result will be shown

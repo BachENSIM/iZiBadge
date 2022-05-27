@@ -104,9 +104,18 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
                           }
-                          //_groupNameList.add(mess);
-                          DatabaseTest.lstGrAdded.add(mess);
-                          _groupNameCtl.clear();
+                          if(DatabaseTest.lstGrAdded.contains(mess)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("$mess est déjà créé ..."),
+                                padding: const EdgeInsets.all(15.0),
+                              ),
+                            );
+                          }else {
+                            //_groupNameList.add(mess);
+                            DatabaseTest.lstGrAdded.add(mess);
+                            _groupNameCtl.clear();
+                          }
                           //print(DatabaseTest.listNameGroup.toString());
                         });
                       },
@@ -131,7 +140,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height/1.7,
                 child: ListView.builder(
                   shrinkWrap: true,
                   //itemCount: _groupNameList.length,
