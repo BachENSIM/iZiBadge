@@ -336,12 +336,15 @@ class _GroupFormState extends State<GroupForm> {
 
   Widget subTitle(
       List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
+<<<<<<< HEAD
     TimeOfDay timeStart = TimeOfDay(
         hour: lstStart[position].toLocal().hour,
         minute: lstStart[position].toLocal().minute);
     TimeOfDay timeEnd = TimeOfDay(
         hour: lstEnd[position].toLocal().hour,
         minute: lstEnd[position].toLocal().minute);
+=======
+>>>>>>> d35ebc0fc1643d49972ac6c31af79a50f61c381c
     String start = lstStart[position].toLocal().toString().split(" ").first +
         " - " +
         timeStart.format(context);
@@ -361,7 +364,11 @@ class _GroupFormState extends State<GroupForm> {
             ),
             Text(
               start,
+<<<<<<< HEAD
               style: TextStyle(fontSize: 14),
+=======
+              style: TextStyle(fontSize: 12),
+>>>>>>> d35ebc0fc1643d49972ac6c31af79a50f61c381c
             )
           ],
         ),
@@ -374,7 +381,11 @@ class _GroupFormState extends State<GroupForm> {
             ),
             Text(
               end,
+<<<<<<< HEAD
               style: TextStyle(fontSize: 14),
+=======
+              style: TextStyle(fontSize: 12),
+>>>>>>> d35ebc0fc1643d49972ac6c31af79a50f61c381c
             )
           ],
         )
@@ -455,59 +466,46 @@ class _GroupFormState extends State<GroupForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            /*title: const Text('Please Confirm'),*/
-            content: const Text('Renommer'),
+            title: const Text("Renommer"),
+            content: TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              controller: _groupEditCtl,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(8),
+                isDense: true,
+              ),
+            ),
             shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    // color: CustomColors.textPrimary,
-                    width: 1),
-                borderRadius: BorderRadius.circular(15)),
+              borderRadius: BorderRadius.circular(15),
+            ),
             actions: [
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 250,
-                    child: TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      controller: _groupEditCtl,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        isDense: true,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              _groupNameList[index] = _groupEditCtl!.text;
-                              DatabaseTest.listNameGroup[index] =
-                                  _groupNameList[index];
-                              print("list" + _groupNameList[index]);
-                              print("data: " +
-                                  DatabaseTest.listNameGroup.toString());
-                              _groupEditCtl?.clear();
-                            });
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler")),
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _groupNameList[index] = _groupEditCtl!.text;
+                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
+                      print("list" + _groupNameList[index]);
+                      print("data: " + DatabaseTest.listNameGroup.toString());
+                      _groupEditCtl?.clear();
+                    });
 
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('OK')),
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Annuler'))
-                    ],
-                  ),
-                ],
-              )
-              // The "Yes" button
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Renommer",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
             ],
           );
         });
