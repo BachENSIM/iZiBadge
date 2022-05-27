@@ -21,6 +21,7 @@ class _CameraFormState extends State<CameraForm> {
   late bool verify;
   bool flash = false;
   bool touch = false;
+  int nbTotal = 0;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -30,37 +31,113 @@ class _CameraFormState extends State<CameraForm> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
     }
-    controller!.resumeCamera();
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    getSize();
+    super.initState();
+  }
+
+  void getSize() async {
+    nbTotal =  await DatabaseTest.fetchListSize(docId:widget.documentId);
+    debugPrint("nbTotal = $nbTotal");
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Expanded(flex: 4, child: _buildQrView(context)),
+        Container(
+          color: Colors.black,
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                  "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                IconButton(
+                    icon: flash
+                        ? Icon(
+                      Icons.flash_on,
+                      color: Colors.white,
+                    )
+                        : Icon(Icons.flash_off, color: Colors.white),
+                    onPressed: () async {
+                      debugPrint("light");
+                      await controller!.toggleFlash();
+                      flash = !flash;
+                      setState(() {});
+                    }),
+
+              ],
+            )),
         Expanded(
             flex: 4,
             child: Stack(children: <Widget>[
               MaterialButton(
-                  onPressed: () async {
-                    debugPrint("touche");
-                     setState(() {
-                  touch = false;
-                });
-                touch ? await controller!.pauseCamera() : await controller!.resumeCamera();
-                setState(() {
-                  touch = true;
-                });
-
-                    setState(() async {
-                      await controller!.resumeCamera();
-                    });
-                  },
-                  child: _buildQrView(context),
-              minWidth: MediaQuery.of(context).size.width,),
+                onPressed: () async {
+                  debugPrint("touche");
+                  await controller!.resumeCamera();
+                  setState(() {
+                    nbTotal = DatabaseTest.nbPersonTotal;
+                  });
+                },
+                child: _buildQrView(context),
+                minWidth: MediaQuery.of(context).size.width,
+              ),
               //_buildQrView(context),
-              Row(
+              /* Positioned(
+                  left: 350.0,
+                  width: 10.0,
+                  top: 10.0,
+                  child: IconButton(
+                      icon: flash
+                          ? Icon(
+                              Icons.flash_on,
+                              color: Colors.white,
+                            )
+                          : Icon(Icons.flash_off, color: Colors.white),
+                      onPressed: () async {
+                        debugPrint("light");
+                        await controller!.toggleFlash();
+                        flash = !flash;
+                        setState(() {});
+                      })),
+              Positioned(
+                  left: 15.0,
+                  child: Container(
+                      */ /*decoration: BoxDecoration(
+                        color: Colors.blue,
+                        border: Border.all(
+                          color: Colors.red,
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                        )),*/ /*
+                      // width: 250,
+                      // height: 50,
+                      child: Text(
+                    "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ))),*/
+              /*SizedBox(
+                width: 250,
+              ),*/
+
+              /* Row(
                 //mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Positioned(
@@ -100,7 +177,7 @@ class _CameraFormState extends State<CameraForm> {
                                 setState(() {});
                               }))),
                 ],
-              ),
+              ),*/
             ])),
         /*Expanded(
             flex: 1,
@@ -152,14 +229,11 @@ class _CameraFormState extends State<CameraForm> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
+    this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
       result = scanData;
-      debugPrint(result!.code);
+      debugPrint("QRCode ${result!.code}");
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
       verify = await DatabaseTest.fetchDataCheck(

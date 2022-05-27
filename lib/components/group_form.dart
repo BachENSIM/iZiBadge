@@ -113,11 +113,20 @@ class _GroupFormState extends State<GroupForm> {
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
-                            _groupNameList.add(mess);
-                          } else {
-                            _groupNameList.add(_groupNameCtl.text);
                           }
-                          DatabaseTest.listNameGroup.add(mess);
+                          if(_groupNameList.contains(mess)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("$mess est déjà créé ..."),
+                                padding: const EdgeInsets.all(15.0),
+                              ),
+                            );
+                          }
+                          else {
+                            _groupNameList.add(_groupNameCtl.text);
+                            DatabaseTest.listNameGroup.add(mess);
+                          }
+
                           _groupNameCtl.clear();
                           _lstDTStart.add("$dtStart/$todStart");
                           _lstDTEnd.add("$dtEnd/$todEnd");

@@ -627,10 +627,14 @@ class DatabaseTest {
               .doc(idParticipation)
               .collection(participants)
               .doc(idClient)
-              .update({"statutEntree": true,"timestamp": DateTime.now()})
-              .whenComplete(
-                  () => print("Updated email: $emailClient with status: true"))
-              .catchError((e) => print(e));
+              .update({
+                "statutEntree": true,
+                "timestamp": DateTime.now(),
+                "nbEntree": lstPersonScanned[contentQRCode]
+              })
+              .whenComplete(() =>
+                  debugPrint("Updated email: $emailClient with status: true"))
+              .catchError((e) => debugPrint(e));
           //countPersonEnter++;
         } else {
           countPersonEnter = ++lstPersonScanned[contentQRCode];
@@ -643,12 +647,13 @@ class DatabaseTest {
               .collection(participants)
               .doc(idClient)
               .update({"nbEntree": countPersonEnter})
-              .whenComplete(
-                  () => debugPrint("Updated email: $emailClient with nbEntrée: $countPersonEnter"))
+              .whenComplete(() => debugPrint(
+                  "Updated email: $emailClient with nbEntrée: $countPersonEnter"))
               .catchError((e) => print(e));
         }
-        emailClient="";
         debugPrint("email after $emailClient ....");
+        emailClient = "";
+
         break;
       } else {
         debugPrint(" content: $contentQRCode data false $i $idClient");
@@ -935,18 +940,38 @@ class DatabaseTest {
         .collection(eventRelated)
         .orderBy("dateDebut", descending: true)
         .get();
-   /* for (int i = 0; i < dataID.docs.length; i++) {
+    /* for (int i = 0; i < dataID.docs.length; i++) {
       if (dataID.docs[i].id == docId) {
         String message = "${dataID.docs[i].data()['titre']} ${dataID.docs[i].data()['adresse']} ${dataID.docs[i].data()['description']} " ;
         debugPrint("message : $message ");
         break;
       }
     }*/
-    //title += title;
+
     debugPrint(index.toString());
     String message =
         "${dataID.docs[index].data()['titre']} ${dataID.docs[index].data()['adresse']} ${dataID.docs[index].data()['description']} ";
     debugPrint("message : $message ");
+    //pour récupérer les groupes
+    var dataGroup = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participantsGr)
+        .get();
+    List<String> group = [];
+    debugPrint(dataGroup.toString());
+    var dataInvite = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    debugPrint(dataInvite.toString());
+
+
     if (title.compareTo(dataID.docs[index].data()['titre']) != 0)
       status = false;
     else
@@ -967,7 +992,7 @@ class DatabaseTest {
           .doc(docId)
           .collection(participants)
           .doc(id)
-          .update({"nbEntree": 0})
+          .update({"nbEntree": 0,"statutEntree": false})
           .whenComplete(
               () => debugPrint("Updated email: $id with nbEntree"))
           .catchError((e) => debugPrint(e));
@@ -977,9 +1002,11 @@ class DatabaseTest {
 
   /*---------------------------------------*/
   //une méthode pour voir la liste d'invitation de cet événement
+  //2 HashMap pour stocker email - status - nbEntrer (putIfAbsent qui ne respecte pas l'ordre dans la BDD)
   static HashMap<String, bool> lstInviteChecked = HashMap<String, bool>();
-  //générer une liste pour voir nb de rentrer de chaque personne dans cet liste d'invitation'
-  static List<int> lstSizeInvite = [];
+  static HashMap<String, int> lstSizeInvite = HashMap<String, int>();
+
+  //static List<int> lstSizeInvite = [];
 
   static Future<void> fetchListInvite({
     required String docId,
@@ -990,20 +1017,41 @@ class DatabaseTest {
         .collection(eventRelated)
         .doc(docId)
         .collection(participants)
+        .orderBy("email", descending: true)
         .get();
     int sizeList = dataID.docs.length;
+    if (lstInviteChecked.isNotEmpty) lstInviteChecked.clear();
+    if (lstSizeInvite.isNotEmpty) lstSizeInvite.clear();
     //méthode pour remplir une liste avec les données par défault
     //lstSizeInvite = List.generate(sizeList, (index) => 0);
     //lstSizeInvite = List.filled (sizeList, 0,growable: false);
     for (int i = 0; i < sizeList; i++) {
       String key = dataID.docs[i].data()['email'];
+      String role = dataID.docs[i].data()['role'];
       bool value = dataID.docs[i].data()['statutEntree'];
-      int nbTimeEnter =  dataID.docs[i].data()['nbEntree'];
-      lstInviteChecked.putIfAbsent(key, () => value);
-      lstSizeInvite.add(nbTimeEnter);
-      debugPrint("message : $key  $value $nbTimeEnter");
+      int nbTimeEnter = dataID.docs[i].data()['nbEntree'];
+      if (!key.contains(userUid) || !role.contains("Organisateur")) {
+        lstInviteChecked.putIfAbsent(key, () => value);
+        lstSizeInvite.putIfAbsent(key, () => nbTimeEnter);
+        //debugPrint("message : $key $nbTimeEnter");
+      }
     }
+  }
 
-    //debugPrint("message : $message ");
+  /*---------------------------------------*/
+  //renvoyer la taille de la liste d'invitation
+  static Future<int> fetchListSize({
+    required String docId,
+  }) async {
+    var dataID = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    int sizeList = dataID.docs.length - 1;
+    return sizeList;
+    //debugPrint("message : $key $value $nbTimeEnter");
   }
 }

@@ -66,7 +66,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                     fontSize: 16, fontWeight: FontWeight.bold))),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(10),
         child: Form(
           key: _lstUserFormKey,
           child: SingleChildScrollView(
@@ -109,9 +109,9 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                     child: GFDropdown(
                                       padding: const EdgeInsets.all(15),
                                       borderRadius: BorderRadius.circular(5),
-                                      border: const BorderSide(
+                                      /*border: const BorderSide(
                                           //color: CustomColors.textPrimary,
-                                          width: 1),
+                                          width: 1),*/
                                       // dropdownButtonColor:
                                       //     CustomColors.textSecondary,
                                       value: _dropdownGroup,
@@ -133,14 +133,14 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 Container(
                                   height: 50,
                                   //width: MediaQuery.of(context).size.width,
-                                  margin: EdgeInsets.all(5),
+                                  margin: const EdgeInsets.all(5),
                                   child: DropdownButtonHideUnderline(
                                     child: GFDropdown(
                                       padding: const EdgeInsets.all(15),
                                       borderRadius: BorderRadius.circular(5),
-                                      border: const BorderSide(
+                                      /* border: const BorderSide(
                                           //color: CustomColors.textPrimary,
-                                          width: 1),
+                                          width: 1),*/
                                       // dropdownButtonColor:
                                       //     CustomColors.textSecondary,
                                       value: _dropdownRole,
@@ -159,31 +159,45 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                     ),
                                   ),
                                 ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          String mess = _guestCtl.text;
+                                          if (_guestCtl.text.isEmpty) {
+                                            mess = "example${taille++}@gmail.com";
+                                          }
+                                          if (_groupListUser.contains(mess)) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    "$mess est déjà invité..."),
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                              ),
+                                            );
+                                          } else {
+                                            _groupListUser.add(mess);
+                                            //_groupListUser.add(_guestCtl.text);
+                                            _groupDropdownGroup
+                                                .add(_dropdownGroup!);
+                                            _groupDropdownRole
+                                                .add(_dropdownRole!);
+                                          }
+
+                                          _guestCtl.clear();
+                                        });
+                                      },
+                                      child: Wrap(
+                                        children: const <Widget>[
+                                          Text('INVITER')
+                                        ],
+                                      )),
+                                )
                               ],
                             ),
-                            ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    String mess = _guestCtl.text;
-                                    if (_guestCtl.text.isEmpty) {
-                                      mess = "example" +
-                                          (taille++).toString() +
-                                          "@gmail.com";
-                                      _groupListUser.add(mess);
-                                    } else {
-                                      _groupListUser.add(_guestCtl.text);
-                                    }
-
-                                    //_groupListUser.add(_guestCtl.text);
-                                    _groupDropdownGroup.add(_dropdownGroup!);
-                                    _groupDropdownRole.add(_dropdownRole!);
-
-                                    _guestCtl.clear();
-                                  });
-                                },
-                                child: Wrap(
-                                  children: const <Widget>[Text('INVITER')],
-                                )),
 
                             const SizedBox(
                               height: 10,
@@ -193,7 +207,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                               SizedBox(height: 15),
                               Container(
                                 height:
-                                    MediaQuery.of(context).size.height / 2.5,
+                                    MediaQuery.of(context).size.height / 1.7,
                                 child: ListView.builder(
                                   //shrinkWrap: true,
                                   itemCount: _groupListUser.length,
@@ -213,7 +227,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                           },
                                           //color: CustomColors.accentDark,
                                           titleText:
-                                              "Email: " + _groupListUser[index],
+                                               _groupListUser[index],
                                           subTitleText: "Groupe: " +
                                               _groupDropdownGroup[index] +
                                               " - Role: " +

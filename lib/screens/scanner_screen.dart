@@ -19,6 +19,8 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +29,10 @@ class _ScannerScreenState extends State<ScannerScreen> {
           title: Text("QR Scanner"),
           leadingWidth: 100,
           leading: ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                //await controller!.stopCamera();
+                Navigator.of(context).pop();
+              } ,
               icon: const Icon(Icons.arrow_left_sharp),
               label: const Text("Back"),
               style: ElevatedButton.styleFrom(
@@ -43,6 +48,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               // )),
               onPressed: () async {
                 await DatabaseTest.fetchListInvite(docId: widget.documentId);
+                //await controller!.pauseCamera();
                 /*sleep(const Duration(
                     milliseconds: 500));*/
                 Navigator.of(context).push(
