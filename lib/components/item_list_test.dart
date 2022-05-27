@@ -28,7 +28,6 @@ class _ItemListTestState extends State<ItemListTest> {
   bool _inviteur = false;
   bool _scanneur = false;
 
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -66,98 +65,100 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: (MediaQuery.of(context).size.height)/1.5 + kToolbarHeight,
+                  height: (MediaQuery.of(context).size.height) / 1.5 +
+                      kToolbarHeight,
                   child: ListView.separated(
-                shrinkWrap: true,
-                //scrollDirection: Axis.vertical,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16.0),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
-                  //Dart doesn’t know which type of object it is getting.
-                  var noteInfo = snapshot.data!.docs[index].data()!
-                      as Map<String, dynamic>;
-                  var _noteInfo = (index == 0
-                          ? snapshot.data!.docs[index].data()!
-                          : snapshot.data!.docs[index - 1].data()!)
-                      as Map<String, dynamic>;
+                    shrinkWrap: true,
+                    //scrollDirection: Axis.vertical,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16.0),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
+                      //Dart doesn’t know which type of object it is getting.
+                      var noteInfo = snapshot.data!.docs[index].data()!
+                          as Map<String, dynamic>;
+                      var _noteInfo = (index == 0
+                              ? snapshot.data!.docs[index].data()!
+                              : snapshot.data!.docs[index - 1].data()!)
+                          as Map<String, dynamic>;
 
-                  String docID = snapshot.data!.docs[index].id;
-                  String name = noteInfo['titre'];
-                  String role = noteInfo['role'];
-                  String address = noteInfo['adresse'];
-                  String desc = noteInfo['description'];
-                  bool isDel = noteInfo['isEfface'];
-                  if (role.compareTo("Organisateur") == 0) {
-                    _organisateur = true;
-                  } else {
-                    _organisateur = false;
-                    if (role.compareTo("Invité") == 0) {
-                      _inviteur = true;
-                    } else {
-                      _inviteur = false;
-                      if (role.compareTo("Scanneur") == 0) {
-                        _scanneur = true;
+                      String docID = snapshot.data!.docs[index].id;
+                      String name = noteInfo['titre'];
+                      String role = noteInfo['role'];
+                      String address = noteInfo['adresse'];
+                      String desc = noteInfo['description'];
+                      bool isDel = noteInfo['isEfface'];
+                      if (role.compareTo("Organisateur") == 0) {
+                        _organisateur = true;
                       } else {
-                        _scanneur = false;
+                        _organisateur = false;
+                        if (role.compareTo("Invité") == 0) {
+                          _inviteur = true;
+                        } else {
+                          _inviteur = false;
+                          if (role.compareTo("Scanneur") == 0) {
+                            _scanneur = true;
+                          } else {
+                            _scanneur = false;
+                          }
+                        }
                       }
-                    }
-                  }
-                  String _docID = index == 0
-                      ? snapshot.data!.docs[index].id
-                      : snapshot.data!.docs[index - 1].id;
-                  DateTime dateStart =
-                      (noteInfo['dateDebut'] as Timestamp).toDate();
-                  DateTime _dateStart = index == 0
-                      ? (noteInfo['dateDebut'] as Timestamp).toDate()
-                      : (_noteInfo['dateDebut'] as Timestamp).toDate();
-                  DateTime dateEnd =
-                      (noteInfo['dateEnd'] as Timestamp).toDate();
-                  //String role = noteInfo['role'];
-                  int currHeader = dateStart.month;
-                  int header = index == 0 ? dateStart.month : _dateStart.month;
-                  if (index == 0 || index == 0
-                      ? true
-                      : (currHeader != header)) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            //color: Theme.of(context).primaryColorDark,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Theme.of(context).indicatorColor,
-                                  width: 2,
+                      String _docID = index == 0
+                          ? snapshot.data!.docs[index].id
+                          : snapshot.data!.docs[index - 1].id;
+                      DateTime dateStart =
+                          (noteInfo['dateDebut'] as Timestamp).toDate();
+                      DateTime _dateStart = index == 0
+                          ? (noteInfo['dateDebut'] as Timestamp).toDate()
+                          : (_noteInfo['dateDebut'] as Timestamp).toDate();
+                      DateTime dateEnd =
+                          (noteInfo['dateEnd'] as Timestamp).toDate();
+                      //String role = noteInfo['role'];
+                      int currHeader = dateStart.month;
+                      int header =
+                          index == 0 ? dateStart.month : _dateStart.month;
+                      if (index == 0 || index == 0
+                          ? true
+                          : (currHeader != header)) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                //color: Theme.of(context).primaryColorDark,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(context).indicatorColor,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
                                 ),
-                                borderRadius: BorderRadius.circular(8.0)),
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: Center(
-                              child: Text(
-                                nameOfMonth(--currHeader) +
-                                    " " +
-                                    dateStart.year.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 26,
-                                ),
-                              ),
-                            )),
-                        const SizedBox(height: 10),
-                        buildListe(context, isDel, address, desc, docID,
-                            dateStart, name, index, dateEnd)
-                      ],
-                    );
-                  } else {
-                    return buildListe(context, isDel, address, desc, docID,
-                        dateStart, name, index, dateEnd);
-                  }
-                },
-              ))
+                                child: Center(
+                                  child: Text(
+                                    nameOfMonth(--currHeader) +
+                                        " " +
+                                        dateStart.year.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26,
+                                    ),
+                                  ),
+                                )),
+                            const SizedBox(height: 10),
+                            buildListe(context, isDel, address, desc, docID,
+                                dateStart, name, index, dateEnd)
+                          ],
+                        );
+                      } else {
+                        return buildListe(context, isDel, address, desc, docID,
+                            dateStart, name, index, dateEnd);
+                      }
+                    },
+                  ))
             ],
           ));
         }
@@ -264,142 +265,144 @@ class _ItemListTestState extends State<ItemListTest> {
 
   //widget pour le menu (filtrer les 3 roles)
   Widget buildMenu(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      // color: CustomColors.backgroundDark,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          //Text("User: ${DatabaseTest.userUid}"),
-          SizedBox(
-            width: 250,
-            child: Row(
-              children: [
-                CircleAvatar(
-                  child: const Icon(
-                    Icons.person_outline_outlined,
-                    size: 18,
-                  ),
-                  backgroundColor: CustomColors.primaryColor,
-                  foregroundColor: CustomColors.textIcons,
-                  radius: 18,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(DatabaseTest.userUid)
-              ],
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        CircleAvatar(
+          child: const Icon(
+            Icons.person_outline_outlined,
+            size: 18,
+          ),
+          backgroundColor: CustomColors.primaryColor,
+          foregroundColor: CustomColors.textIcons,
+          radius: 18,
+        ),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            DatabaseTest.userUid,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
             ),
           ),
-          //pour le filtre par le role
-          PopupMenuButton(
-              icon: const Icon(
-                Icons.filter_list_rounded,
-                // color: CustomColors.secondaryText,
-                size: 36.0,
-              ),
-              offset: const Offset(-40, 0),
-              // color: CustomColors.lightPrimaryColor,
-              elevation: 20,
-              enabled: true,
-              onCanceled: () {},
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                      child: StatefulBuilder(
-                        builder: (_context, _setState) {
-                          // return Row(
-                          //   mainAxisAlignment:
-                          //       MainAxisAlignment.spaceBetween,
-                          //   children: <Widget>[
-                          //     const SizedBox(
-                          //       child: Text("Organisateur "),
-                          //       width: 110,
-                          //     ),
-                          //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
-                          //         .toString()),
-                          //     Checkbox(
-                          //         value: DatabaseTest.isOrgan,
-                          //         onChanged: (bool? value) {
-                          //           setState(() {
-                          //             _setState(() {
-                          //               DatabaseTest.fetchNBRole();
-                          //               DatabaseTest.isOrgan = value!;
-                          //               print("organisateur " +
-                          //                   DatabaseTest.isOrgan
-                          //                       .toString());
-                          //             });
-                          //           });
-                          //         }),
-                          //   ],
-                          // );
-                          return GFCheckboxListTile(
-                              titleText: DatabaseTest.listNbRole.isEmpty
-                                  ? "Organisateur 0"
-                                  : "Organisateur " +
-                                      DatabaseTest.listNbRole[0].toString(),
-                              type: GFCheckboxType.basic,
-                              inactiveIcon: null,
-                              value: DatabaseTest.isOrgan,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _setState(() {
-                                    DatabaseTest.fetchNBRole();
-                                    DatabaseTest.isOrgan = value!;
-                                  });
+        ),
+
+        //pour le filtre par le role
+        PopupMenuButton(
+            icon: const Icon(
+              Icons.filter_list_rounded,
+              // color: CustomColors.secondaryText,
+              size: 36,
+            ),
+            offset: const Offset(0, 45),
+            // color: CustomColors.lightPrimaryColor,
+            // elevation: 20,
+            enabled: true,
+            onCanceled: () {},
+            itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: StatefulBuilder(
+                      builder: (_context, _setState) {
+                        // return Row(
+                        //   mainAxisAlignment:
+                        //       MainAxisAlignment.spaceBetween,
+                        //   children: <Widget>[
+                        //     const SizedBox(
+                        //       child: Text("Organisateur "),
+                        //       width: 110,
+                        //     ),
+                        //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
+                        //         .toString()),
+                        //     Checkbox(
+                        //         value: DatabaseTest.isOrgan,
+                        //         onChanged: (bool? value) {
+                        //           setState(() {
+                        //             _setState(() {
+                        //               DatabaseTest.fetchNBRole();
+                        //               DatabaseTest.isOrgan = value!;
+                        //               print("organisateur " +
+                        //                   DatabaseTest.isOrgan
+                        //                       .toString());
+                        //             });
+                        //           });
+                        //         }),
+                        //   ],
+                        // );
+                        return GFCheckboxListTile(
+                            titleText: "Organisateur",
+                            subTitleText: DatabaseTest.listNbRole.isEmpty
+                                ? "0"
+                                : DatabaseTest.listNbRole[0].toString(),
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
+                            type: GFCheckboxType.basic,
+                            inactiveIcon: null,
+                            value: DatabaseTest.isOrgan,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _setState(() {
+                                  DatabaseTest.fetchNBRole();
+                                  DatabaseTest.isOrgan = value!;
                                 });
                               });
-                        },
-                      ),
+                            });
+                      },
                     ),
-                    PopupMenuItem(
-                      child: StatefulBuilder(
-                        builder: (_context, _setState) {
-                          return GFCheckboxListTile(
-                              titleText: DatabaseTest.listNbRole.isEmpty
-                                  ? "Invité 0"
-                                  : "Invité " +
-                                      DatabaseTest.listNbRole[1].toString(),
-                              type: GFCheckboxType.basic,
-                              inactiveIcon: null,
-                              value: DatabaseTest.isInvite,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _setState(() {
-                                    DatabaseTest.fetchNBRole();
-                                    DatabaseTest.isInvite = value!;
-                                    print("invité " +
-                                        DatabaseTest.isInvite.toString());
-                                  });
+                  ),
+                  PopupMenuItem(
+                    child: StatefulBuilder(
+                      builder: (_context, _setState) {
+                        return GFCheckboxListTile(
+                            titleText: "Invité",
+                            subTitleText: DatabaseTest.listNbRole.isEmpty
+                                ? "0"
+                                : DatabaseTest.listNbRole[1].toString(),
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
+                            type: GFCheckboxType.basic,
+                            inactiveIcon: null,
+                            value: DatabaseTest.isInvite,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _setState(() {
+                                  DatabaseTest.fetchNBRole();
+                                  DatabaseTest.isInvite = value!;
+                                  print("invité " +
+                                      DatabaseTest.isInvite.toString());
                                 });
                               });
-                        },
-                      ),
+                            });
+                      },
                     ),
-                    PopupMenuItem(
-                      child: StatefulBuilder(
-                        builder: (_context, _setState) {
-                          return GFCheckboxListTile(
-                              titleText: DatabaseTest.listNbRole.isEmpty
-                                  ? "Scanneur 0"
-                                  : "Scanneur " +
-                                      DatabaseTest.listNbRole[2].toString(),
-                              value: DatabaseTest.isScan,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _setState(() {
-                                    DatabaseTest.fetchNBRole();
-                                    DatabaseTest.isScan = value!;
-                                    print("scanneur " +
-                                        DatabaseTest.isScan.toString());
-                                  });
+                  ),
+                  PopupMenuItem(
+                    child: StatefulBuilder(
+                      builder: (_context, _setState) {
+                        return GFCheckboxListTile(
+                            titleText: "Scanneur",
+                            subTitleText: DatabaseTest.listNbRole.isEmpty
+                                ? "0"
+                                : DatabaseTest.listNbRole[2].toString(),
+                            margin: EdgeInsets.zero,
+                            padding: EdgeInsets.zero,
+                            value: DatabaseTest.isScan,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _setState(() {
+                                  DatabaseTest.fetchNBRole();
+                                  DatabaseTest.isScan = value!;
+                                  print("scanneur " +
+                                      DatabaseTest.isScan.toString());
                                 });
                               });
-                        },
-                      ),
+                            });
+                      },
                     ),
-                  ]),
-        ],
-      ),
+                  ),
+                ]),
+      ],
     );
   }
 
@@ -625,23 +628,29 @@ class _ItemListTestState extends State<ItemListTest> {
                 if (!isDel && !_isInviteur)
                   IconButton(
                       onPressed: () async {
-                        debugPrint('Size = ' + MediaQuery.of(context).size.toString());
-                        debugPrint('Height = ' + (MediaQuery.of(context).size.height/1.5).toString());
-                        debugPrint('Width = ' + MediaQuery.of(context).size.width.toString());
-                        debugPrint("size list = " + (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            kToolbarHeight).toString());
-                        debugPrint("${MediaQuery
-                            .of(context)
-                            .padding
-                            .top}");
+                        debugPrint(
+                            'Size = ' + MediaQuery.of(context).size.toString());
+                        debugPrint('Height = ' +
+                            (MediaQuery.of(context).size.height / 1.5)
+                                .toString());
+                        debugPrint('Width = ' +
+                            MediaQuery.of(context).size.width.toString());
+                        debugPrint("size list = " +
+                            (MediaQuery.of(context).size.height -
+                                    MediaQuery.of(context).padding.top -
+                                    kToolbarHeight)
+                                .toString());
+                        debugPrint("${MediaQuery.of(context).padding.top}");
                         debugPrint("${kToolbarHeight}");
 
                         bool checked = await DatabaseTest.fetchItemClicked(
-                            docId: docID, index: position,title: name);
+                            docId: docID, index: position, title: name);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: checked ? Text("Sauvegarde des données en local...") : Text("Problème lors de la sauvegarde..."),
+                            content: checked
+                                ? const Text("Données sauvegardées en local !")
+                                : const Text(
+                                    "Problème lors de la sauvegarde..."),
                             padding: const EdgeInsets.all(15.0),
                           ),
                         );
