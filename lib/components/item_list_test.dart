@@ -28,6 +28,7 @@ class _ItemListTestState extends State<ItemListTest> {
   bool _inviteur = false;
   bool _scanneur = false;
 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -65,97 +66,98 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: MediaQuery.of(context).size.height,
+                  height: (MediaQuery.of(context).size.height)/1.5 + kToolbarHeight,
                   child: ListView.separated(
-                    shrinkWrap: true,
-                    //scrollDirection: Axis.vertical,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16.0),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
-                      //Dart doesn’t know which type of object it is getting.
-                      var noteInfo = snapshot.data!.docs[index].data()!
-                          as Map<String, dynamic>;
-                      var _noteInfo = (index == 0
-                              ? snapshot.data!.docs[index].data()!
-                              : snapshot.data!.docs[index - 1].data()!)
-                          as Map<String, dynamic>;
+                shrinkWrap: true,
+                //scrollDirection: Axis.vertical,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16.0),
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
+                  //Dart doesn’t know which type of object it is getting.
+                  var noteInfo = snapshot.data!.docs[index].data()!
+                      as Map<String, dynamic>;
+                  var _noteInfo = (index == 0
+                          ? snapshot.data!.docs[index].data()!
+                          : snapshot.data!.docs[index - 1].data()!)
+                      as Map<String, dynamic>;
 
-                      String docID = snapshot.data!.docs[index].id;
-                      String name = noteInfo['titre'];
-                      String role = noteInfo['role'];
-                      String address = noteInfo['adresse'];
-                      String desc = noteInfo['description'];
-                      bool isDel = noteInfo['isEfface'];
-                      if (role.compareTo("Organisateur") == 0) {
-                        _organisateur = true;
+                  String docID = snapshot.data!.docs[index].id;
+                  String name = noteInfo['titre'];
+                  String role = noteInfo['role'];
+                  String address = noteInfo['adresse'];
+                  String desc = noteInfo['description'];
+                  bool isDel = noteInfo['isEfface'];
+                  if (role.compareTo("Organisateur") == 0) {
+                    _organisateur = true;
+                  } else {
+                    _organisateur = false;
+                    if (role.compareTo("Invité") == 0) {
+                      _inviteur = true;
+                    } else {
+                      _inviteur = false;
+                      if (role.compareTo("Scanneur") == 0) {
+                        _scanneur = true;
                       } else {
-                        _organisateur = false;
-                        if (role.compareTo("Invité") == 0) {
-                          _inviteur = true;
-                        } else {
-                          _inviteur = false;
-                          if (role.compareTo("Scanneur") == 0) {
-                            _scanneur = true;
-                          } else {
-                            _scanneur = false;
-                          }
-                        }
+                        _scanneur = false;
                       }
-                      String _docID = index == 0
-                          ? snapshot.data!.docs[index].id
-                          : snapshot.data!.docs[index - 1].id;
-                      DateTime dateStart =
-                          (noteInfo['dateDebut'] as Timestamp).toDate();
-                      DateTime _dateStart = index == 0
-                          ? (noteInfo['dateDebut'] as Timestamp).toDate()
-                          : (_noteInfo['dateDebut'] as Timestamp).toDate();
-                      DateTime dateEnd =
-                          (noteInfo['dateEnd'] as Timestamp).toDate();
-                      //String role = noteInfo['role'];
-                      int currHeader = dateStart.month;
-                      int header =
-                          index == 0 ? dateStart.month : _dateStart.month;
-                      if (index == 0 || index == 0
-                          ? true
-                          : (currHeader != header)) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                                //color: Theme.of(context).primaryColorDark,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Theme.of(context).indicatorColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0)),
-                                padding: const EdgeInsets.only(
-                                    left: 30, top: 10, bottom: 10),
-                                child: Center(
-                                  child: Text(
-                                    nameOfMonth(--currHeader) +
-                                        " " +
-                                        dateStart.year.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26,
-                                    ),
-                                  ),
-                                )),
-                            const SizedBox(height: 10),
-                            buildListe(context, isDel, address, desc, docID,
-                                dateStart, name, index, dateEnd)
-                          ],
-                        );
-                      } else {
-                        return buildListe(context, isDel, address, desc, docID,
-                            dateStart, name, index, dateEnd);
-                      }
-                    },
-                  ))
+                    }
+                  }
+                  String _docID = index == 0
+                      ? snapshot.data!.docs[index].id
+                      : snapshot.data!.docs[index - 1].id;
+                  DateTime dateStart =
+                      (noteInfo['dateDebut'] as Timestamp).toDate();
+                  DateTime _dateStart = index == 0
+                      ? (noteInfo['dateDebut'] as Timestamp).toDate()
+                      : (_noteInfo['dateDebut'] as Timestamp).toDate();
+                  DateTime dateEnd =
+                      (noteInfo['dateEnd'] as Timestamp).toDate();
+                  //String role = noteInfo['role'];
+                  int currHeader = dateStart.month;
+                  int header = index == 0 ? dateStart.month : _dateStart.month;
+                  if (index == 0 || index == 0
+                      ? true
+                      : (currHeader != header)) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                            //color: Theme.of(context).primaryColorDark,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context).indicatorColor,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0)),
+                            padding: const EdgeInsets.only(
+                              top: 10,
+                              bottom: 10,
+                            ),
+                            child: Center(
+                              child: Text(
+                                nameOfMonth(--currHeader) +
+                                    " " +
+                                    dateStart.year.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 26,
+                                ),
+                              ),
+                            )),
+                        const SizedBox(height: 10),
+                        buildListe(context, isDel, address, desc, docID,
+                            dateStart, name, index, dateEnd)
+                      ],
+                    );
+                  } else {
+                    return buildListe(context, isDel, address, desc, docID,
+                        dateStart, name, index, dateEnd);
+                  }
+                },
+              ))
             ],
           ));
         }
@@ -208,25 +210,35 @@ class _ItemListTestState extends State<ItemListTest> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: const Text('Supprimer'),
-            content: const Text("Voulez-vous supprimer cet événement ?"),
+            content: const Text("Supprimer cet événement ?"),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             actions: [
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annuler'),
+              ),
               // The "Yes" button
               TextButton(
-                  onPressed: () async {
-                    // Remove the box
-                    isDel
-                        ? await DatabaseTest.deleteItemCanceled(docId: id)
-                        : await DatabaseTest.deleteItem(docId: id);
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Supprimer')),
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Annuler'))
+                onPressed: () async {
+                  // Remove the box
+                  isDel
+                      ? await DatabaseTest.deleteItemCanceled(docId: id)
+                      : await DatabaseTest.deleteItem(docId: id);
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Supprimer',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           );
         });
@@ -260,15 +272,16 @@ class _ItemListTestState extends State<ItemListTest> {
         children: <Widget>[
           //Text("User: ${DatabaseTest.userUid}"),
           SizedBox(
-            width: 200,
+            width: 250,
             child: Row(
               children: [
-                const CircleAvatar(
-                  child: Icon(
+                CircleAvatar(
+                  child: const Icon(
                     Icons.person_outline_outlined,
                     size: 18,
                   ),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: CustomColors.primaryColor,
+                  foregroundColor: CustomColors.textIcons,
                   radius: 18,
                 ),
                 const SizedBox(
@@ -432,14 +445,17 @@ class _ItemListTestState extends State<ItemListTest> {
                 color: CustomColors.textIcons,
                 size: 18,
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               Flexible(
                   child: RichText(
                       overflow: TextOverflow.ellipsis,
-                      strutStyle: StrutStyle(fontSize: 10.0),
+                      //strutStyle: StrutStyle(fontSize: 38.0),
                       text: TextSpan(
                         text: address,
-                        style: TextStyle(color: CustomColors.textIcons),
+                        style: TextStyle(
+                          color: CustomColors.textIcons,
+                          fontSize: 15,
+                        ),
                       )))
               /*Text(
                 //"Adresse: " + address + "\nDescription: " + desc,
@@ -453,11 +469,11 @@ class _ItemListTestState extends State<ItemListTest> {
             subtitle: Row(
               children: <Widget>[
                 Icon(
-                  Icons.timer_outlined,
+                  Icons.calendar_today,
                   color: CustomColors.textIcons,
                   size: 18,
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
                   setUp(dateStart, isDel),
                   maxLines: 2,
@@ -609,11 +625,29 @@ class _ItemListTestState extends State<ItemListTest> {
                 if (!isDel && !_isInviteur)
                   IconButton(
                       onPressed: () async {
-                        await DatabaseTest.fetchItemClicked(
-                            docId: docID, index: position);
+                        debugPrint('Size = ' + MediaQuery.of(context).size.toString());
+                        debugPrint('Height = ' + (MediaQuery.of(context).size.height/1.5).toString());
+                        debugPrint('Width = ' + MediaQuery.of(context).size.width.toString());
+                        debugPrint("size list = " + (MediaQuery.of(context).size.height -
+                            MediaQuery.of(context).padding.top -
+                            kToolbarHeight).toString());
+                        debugPrint("${MediaQuery
+                            .of(context)
+                            .padding
+                            .top}");
+                        debugPrint("${kToolbarHeight}");
+
+                        bool checked = await DatabaseTest.fetchItemClicked(
+                            docId: docID, index: position,title: name);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: checked ? Text("Sauvegarde des données en local...") : Text("Problème lors de la sauvegarde..."),
+                            padding: const EdgeInsets.all(15.0),
+                          ),
+                        );
                       },
                       icon: Icon(
-                        Icons.save_alt_rounded,
+                        Icons.save_alt_sharp,
                         color: CustomColors.textIcons,
                       )),
               ],
@@ -640,52 +674,118 @@ class _ItemListTestState extends State<ItemListTest> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Container(
-              constraints: const BoxConstraints(maxHeight: 400, maxWidth: 300),
+              constraints: const BoxConstraints(maxHeight: 510, maxWidth: 300),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Titre: $title",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        wordSpacing: 5,
-                        fontWeight: FontWeight.bold,
+                    Flexible(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: CustomColors.primaryColor,
+                        ),
                       ),
                     ),
-                    const Divider(
-                      color: Colors.black,
+                    Divider(
+                      color: CustomColors.primaryColor,
                       thickness: 1.5,
                     ),
-                    Text(
-                      "Adresse: $address",
-                    ),
-                    const Divider(
-                      color: Colors.black,
-                    ),
-                    RichText(
-                      textAlign: TextAlign.justify,
-                      text: TextSpan(
-                          text: "Description: $description",
+                    Row(children: [
+                      Icon(
+                        Icons.location_on_outlined,
+                        color: CustomColors.primaryColor,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 5),
+                      Flexible(
+                        child: Text(
+                          address,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Colors.black,
-                              wordSpacing: 1)),
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ]),
+                    Divider(
+                      color: CustomColors.primaryColor,
                     ),
-                    const Divider(
-                      color: Colors.black,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.short_text_rounded,
+                          color: CustomColors.primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 5),
+                        Flexible(
+                          child: Text(
+                            description,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 8,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "L'heure commencé: le ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
+                    // RichText(
+                    //   textAlign: TextAlign.justify,
+                    //   text: TextSpan(
+                    //       text: description,
+                    //       style: const TextStyle(
+                    //         fontWeight: FontWeight.w400,
+                    //         fontSize: 14,
+                    //         color: Colors.black,
+                    //         wordSpacing: 1,
+                    //       )),
+                    // ),
+                    Divider(
+                      color: CustomColors.primaryColor,
                     ),
-                    SizedBox(height: 5),
-                    Text(
-                      "L'heure terminé: le ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today_outlined,
+                          color: CustomColors.primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          "Début : ${dateStart.day}/${dateStart.month}/${dateStart.year} à ${dateStart.hour}:${dateStart.minute}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: CustomColors.primaryColor,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          "Fin :      ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

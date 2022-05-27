@@ -90,7 +90,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           onPressed: () {
                             _groupNameCtl.clear();
                           },
-                          icon: Icon(Icons.clear_rounded)),
+                          icon: const Icon(Icons.clear_rounded)),
                     ),
                   ),
                 )),
@@ -104,9 +104,18 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
                           }
-                          //_groupNameList.add(mess);
-                          DatabaseTest.lstGrAdded.add(mess);
-                          _groupNameCtl.clear();
+                          if(DatabaseTest.lstGrAdded.contains(mess)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("$mess est déjà créé ..."),
+                                padding: const EdgeInsets.all(15.0),
+                              ),
+                            );
+                          }else {
+                            //_groupNameList.add(mess);
+                            DatabaseTest.lstGrAdded.add(mess);
+                            _groupNameCtl.clear();
+                          }
                           //print(DatabaseTest.listNameGroup.toString());
                         });
                       },
@@ -131,7 +140,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height/1.7,
                 child: ListView.builder(
                   shrinkWrap: true,
                   //itemCount: _groupNameList.length,
@@ -162,7 +171,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.edit_rounded),
+                              icon: const Icon(Icons.edit_rounded),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
                                     //text: _groupNameList[index]);
@@ -175,7 +184,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                             ),
                             if (!_one)
                               IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
+                                icon: const Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
                                   setState(() {
                                     if (!_one) {
@@ -266,60 +275,48 @@ class _EditGroupFormState extends State<EditGroupForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            /*title: const Text('Please Confirm'),*/
-            content: const Text('Souhaitez-vous modifier le nom de ce group?'),
-            shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    // color: CustomColors.textPrimary,
-                    width: 1),
-                borderRadius: BorderRadius.circular(15)),
+            title: const Text('Modifier le nom du groupe'),
+            content: TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              controller: _groupEditCtl,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(8),
+                isDense: true,
+              ),
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             actions: [
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 250,
-                    child: TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      controller: _groupEditCtl,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        isDense: true,
-                      ),
-                    ),
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annuler'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Remove the box
+                  setState(() {
+                    DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
+                    // DatabaseTest.listNameGroup[index] =
+                    // _groupNameList[index];
+                    //print("list" +  DatabaseTest.lstGrAdded[index]);
+                    // print("data: " +
+                    //     DatabaseTest.listNameGroup.toString());
+                    _groupEditCtl?.clear();
+                  });
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Modifier',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  Row(
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              DatabaseTest.lstGrAdded[index] =
-                                  _groupEditCtl!.text;
-                              // DatabaseTest.listNameGroup[index] =
-                              // _groupNameList[index];
-                              //print("list" +  DatabaseTest.lstGrAdded[index]);
-                              // print("data: " +
-                              //     DatabaseTest.listNameGroup.toString());
-                              _groupEditCtl?.clear();
-                            });
-
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Modifiez')),
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Annulez'))
-                    ],
-                  ),
-                ],
-              )
-              // The "Yes" button
+                ),
+              ),
             ],
           );
         });

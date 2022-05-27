@@ -43,8 +43,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
               // )),
               onPressed: () async {
                 await DatabaseTest.fetchListInvite(docId: widget.documentId);
-                sleep(const Duration(
-                    milliseconds: 500));
+                /*sleep(const Duration(
+                    milliseconds: 500));*/
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => CheckListUserScreen(documentId: widget.documentId,),
