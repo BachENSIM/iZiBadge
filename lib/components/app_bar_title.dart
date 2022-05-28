@@ -7,27 +7,26 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).padding.top,
-      //width: MediaQuery.of(context).padding.top,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        //mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            'asset/image/firebase_logo.png',
-            height: 20,
+    // height: MediaQuery.of(context).padding.top,
+    // width: MediaQuery.of(context).padding.top,
+    return Row(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset(
+          'asset/image/firebase_logo.png',
+          height: 20,
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          'iZiBadge',
+          style: TextStyle(
+            //color: CustomColors.accentLight,
+            fontSize: 20,
           ),
-          SizedBox(width: 8),
-          const Text(
-            'iZiBadge',
-            style: TextStyle(
-              //color: CustomColors.accentLight,
-              fontSize: 18,
-            ),
-          ),
-          SizedBox(width: 225),
-          /*IconButton(
+        ),
+        // const SizedBox(width: 225),
+        /*IconButton(
             onPressed: () {
               */ /*Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => SearchForm()));*/ /*
@@ -38,8 +37,7 @@ class AppBarTitle extends StatelessWidget {
                   });
             },
             icon: Icon(Icons.search_rounded)),*/
-        ],
-      ),
+      ],
     );
   }
 }
