@@ -22,53 +22,52 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
         stream: DatabaseTest.readListInvite(widget.documentId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong....");
+            return const Text("Something went wrong...");
           } else if (snapshot.hasData || snapshot.data != null) {
-            return ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 16.0),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  var noteList = snapshot.data!.docs[index].data()!
-                      as Map<String, dynamic>;
-                  String docID = snapshot.data!.docs[index].id;
-                  String email = noteList['email'];
-                  print("email: " + email + " ID: " + docID);
-                  return Column(
-                    children: <Widget>[
-                      QrImage(data: docID),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          // backgroundColor: MaterialStateProperty.all(
-                          //   CustomColors.accentLight,
-                          // ),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                          child: Text(
-                            'Télécharger',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              //color: CustomColors.textPrimary,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                });
+            // return ListView.separated(
+            //     separatorBuilder: (context, index) =>
+            //         const SizedBox(height: 16),
+            //     itemCount: snapshot.data!.docs.length,
+            //     itemBuilder: (context, index) {
+            var noteList =
+                snapshot.data!.docs[0].data()! as Map<String, dynamic>;
+            String docID = snapshot.data!.docs[0].id;
+            String email = noteList['email'];
+            print("email: " + email + " ID: " + docID);
+            return Column(
+              children: <Widget>[
+                QrImage(data: docID),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    // backgroundColor: MaterialStateProperty.all(
+                    //   CustomColors.accentLight,
+                    // ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                    child: Text(
+                      "Sauvegarder dans la gallerie",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            );
+            // });
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
                 // valueColor: AlwaysStoppedAnimation<Color>(
                 //   CustomColors.accentLight,

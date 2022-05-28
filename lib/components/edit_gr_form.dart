@@ -104,14 +104,14 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
                           }
-                          if(DatabaseTest.lstGrAdded.contains(mess)) {
+                          if (DatabaseTest.lstGrAdded.contains(mess)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text("$mess est déjà créé ..."),
                                 padding: const EdgeInsets.all(15.0),
                               ),
                             );
-                          }else {
+                          } else {
                             //_groupNameList.add(mess);
                             DatabaseTest.lstGrAdded.add(mess);
                             _groupNameCtl.clear();
@@ -140,7 +140,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: MediaQuery.of(context).size.height/1.7,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: ListView.builder(
                   shrinkWrap: true,
                   //itemCount: _groupNameList.length,
@@ -253,12 +253,10 @@ class _EditGroupFormState extends State<EditGroupForm> {
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
-                          'SAUVEGARDER',
+                          "Sauvegarder",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            // color: CustomColors.textSecondary,
-                            // letterSpacing: 2,
                           ),
                         ),
                       ),

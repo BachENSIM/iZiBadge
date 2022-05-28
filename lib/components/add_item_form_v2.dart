@@ -54,8 +54,9 @@ class _AddItemFormState extends State<AddItemForm> {
     // TODO: implement initState
     super.initState();
     debugPrint("Create " + selectedTimeStart.hour.toString());
-    if(selectedTimeStart.hour == 24) {
-      selectedDateStart = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day +1);
+    if (selectedTimeStart.hour == 24) {
+      selectedDateStart = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
       selectedTimeStart = TimeOfDay(hour: 0, minute: 0);
       startTime = displayTime(selectedTimeStart);
       debugPrint("Create " + selectedTimeEnd.hour.toString());
@@ -215,8 +216,10 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.timeStartSave = selectedTimeStart;
                         DatabaseTest.timeEndSave = selectedTimeEnd;
 
-                        String start = "${selectedDateStart.toUtc().toString().split(" ").first} ${selectedTimeStart.format(context)}:00";
-                        String end = "${selectedDateEnd.toUtc().toString().split(" ").first} ${selectedTimeEnd.format(context)}:00";
+                        String start =
+                            "${selectedDateStart.toUtc().toString().split(" ").first} ${selectedTimeStart.format(context)}:00";
+                        String end =
+                            "${selectedDateEnd.toUtc().toString().split(" ").first} ${selectedTimeEnd.format(context)}:00";
                         debugPrint("start " + start);
                         debugPrint("end " + end);
                         //debugPrint(slcTStart.format(context));
@@ -258,10 +261,8 @@ class _AddItemFormState extends State<AddItemForm> {
                       child: Text(
                         'Suivant',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          //color: CustomColors.textPrimary,
-                          letterSpacing: 2,
                         ),
                       ),
                     ),
@@ -366,12 +367,12 @@ class _AddItemFormState extends State<AddItemForm> {
       setState(() {
         dateTimeInit = selected;
         if (start) {
-          if(selectedDateEnd.day == selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ) {
+          if (selectedDateEnd.day == selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
             selectedDateStart = selected;
             selectedDateEnd = selectedDateStart;
             endDate = displayDate(selectedDateEnd);
           }
-
 
           /*if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
             selectedDateEnd = dateTimeInit;
@@ -382,7 +383,8 @@ class _AddItemFormState extends State<AddItemForm> {
 
         } else {
           selectedDateEnd = dateTimeInit;
-          if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+          if (selectedDateEnd.day < selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
             selectedDateStart = selectedDateEnd;
             startDate = displayDate(dateTimeInit);
             debugPrint("Start: $selectedDateStart");
@@ -420,8 +422,9 @@ class _AddItemFormState extends State<AddItemForm> {
           selectedTimeEnd =
               TimeOfDay(hour: todInit.hour + 1, minute: todInit.minute);
           debugPrint(selectedTimeEnd.hour.toString());
-          if(selectedTimeEnd.hour > 23 ) {
-            selectedDateEnd = DateTime(selectedDateEnd.year,selectedDateEnd.month,selectedDateEnd.day+1);
+          if (selectedTimeEnd.hour > 23) {
+            selectedDateEnd = DateTime(selectedDateEnd.year,
+                selectedDateEnd.month, selectedDateEnd.day + 1);
             endDate = displayDate(selectedDateEnd);
           }
           endTime = displayTime(selectedTimeEnd);
@@ -435,9 +438,11 @@ class _AddItemFormState extends State<AddItemForm> {
             selectedTimeStart =
                 TimeOfDay(hour: todInit.hour - 1, minute: todInit.minute);
             debugPrint("qsd" + selectedTimeStart.hour.toString());
-            if(selectedTimeStart.hour == -1) {
-              selectedDateStart = DateTime(selectedDateStart.year,selectedDateStart.month,selectedDateStart.day-1);
-              selectedTimeStart = TimeOfDay(hour: 23,minute: selectedTimeEnd.minute);
+            if (selectedTimeStart.hour == -1) {
+              selectedDateStart = DateTime(selectedDateStart.year,
+                  selectedDateStart.month, selectedDateStart.day - 1);
+              selectedTimeStart =
+                  TimeOfDay(hour: 23, minute: selectedTimeEnd.minute);
               startDate = displayDate(selectedDateStart);
             }
             startTime = displayTime(selectedTimeStart);
