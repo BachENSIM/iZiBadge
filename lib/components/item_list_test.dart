@@ -291,159 +291,213 @@ class _ItemListTestState extends State<ItemListTest> {
 
   //widget pour le menu (filtrer les 3 roles)
   Widget buildMenu(BuildContext context) {
+    int groupValue = 3;
     return Column(
-      // decoration: BoxDecoration(
-      //   border: Border(
-      //     bottom: BorderSide(
-      //       color: CustomColors.primaryColor,
-      //       width: 2,
-      //     ),
-      //   ),
-      // ),
-      children: [
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            CircleAvatar(
-              child: const Icon(
-                Icons.person_outline_outlined,
-                size: 18,
-              ),
-              backgroundColor: CustomColors.primaryColor,
-              foregroundColor: CustomColors.textIcons,
-              radius: 18,
-            ),
-            const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                DatabaseTest.userUid,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: CustomColors.primaryText,
+        // decoration: BoxDecoration(
+        //   border: Border(
+        //     bottom: BorderSide(
+        //       color: CustomColors.primaryColor,
+        //       width: 2,
+        //     ),
+        //   ),
+        // ),
+        children: [
+          Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                CircleAvatar(
+                  child: const Icon(
+                    Icons.person_outline_outlined,
+                    size: 18,
+                  ),
+                  backgroundColor: CustomColors.primaryColor,
+                  foregroundColor: CustomColors.textIcons,
+                  radius: 18,
                 ),
-              ),
-            ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    DatabaseTest.userUid,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: CustomColors.primaryText,
+                    ),
+                  ),
+                ),
 
-            //pour le filtre par le role
-            PopupMenuButton(
-                icon: Icon(
-                  Icons.filter_list_rounded,
-                  color: CustomColors.primaryColor,
-                  size: 36,
-                ),
-                offset: const Offset(0, 45),
-                // color: CustomColors.lightPrimaryColor,
-                // elevation: 20,
-                enabled: true,
-                onCanceled: () {},
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: StatefulBuilder(
-                          builder: (_context, _setState) {
-                            // return Row(
-                            //   mainAxisAlignment:
-                            //       MainAxisAlignment.spaceBetween,
-                            //   children: <Widget>[
-                            //     const SizedBox(
-                            //       child: Text("Organisateur "),
-                            //       width: 110,
-                            //     ),
-                            //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
-                            //         .toString()),
-                            //     Checkbox(
-                            //         value: DatabaseTest.isOrgan,
-                            //         onChanged: (bool? value) {
-                            //           setState(() {
-                            //             _setState(() {
-                            //               DatabaseTest.fetchNBRole();
-                            //               DatabaseTest.isOrgan = value!;
-                            //               print("organisateur " +
-                            //                   DatabaseTest.isOrgan
-                            //                       .toString());
-                            //             });
-                            //           });
-                            //         }),
-                            //   ],
-                            // );
-                            return GFCheckboxListTile(
-                                titleText: "Organisateur",
-                                subTitleText: DatabaseTest.listNbRole.isEmpty
-                                    ? "0"
-                                    : DatabaseTest.listNbRole[0].toString(),
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                type: GFCheckboxType.basic,
-                                inactiveIcon: null,
-                                value: DatabaseTest.isOrgan,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _setState(() {
-                                      DatabaseTest.fetchNBRole();
-                                      DatabaseTest.isOrgan = value!;
-                                    });
-                                  });
-                                });
-                          },
-                        ),
-                      ),
-                      PopupMenuItem(
-                        child: StatefulBuilder(
-                          builder: (_context, _setState) {
-                            return GFCheckboxListTile(
-                                titleText: "Invité",
-                                subTitleText: DatabaseTest.listNbRole.isEmpty
-                                    ? "0"
-                                    : DatabaseTest.listNbRole[1].toString(),
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                type: GFCheckboxType.basic,
-                                inactiveIcon: null,
-                                value: DatabaseTest.isInvite,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _setState(() {
-                                      DatabaseTest.fetchNBRole();
-                                      DatabaseTest.isInvite = value!;
-                                      print("invité " +
-                                          DatabaseTest.isInvite.toString());
-                                    });
-                                  });
-                                });
-                          },
-                        ),
-                      ),
-                      PopupMenuItem(
-                        child: StatefulBuilder(
-                          builder: (_context, _setState) {
-                            return GFCheckboxListTile(
-                                titleText: "Scanneur",
-                                subTitleText: DatabaseTest.listNbRole.isEmpty
-                                    ? "0"
-                                    : DatabaseTest.listNbRole[2].toString(),
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                value: DatabaseTest.isScan,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _setState(() {
-                                      DatabaseTest.fetchNBRole();
-                                      DatabaseTest.isScan = value!;
-                                      print("scanneur " +
-                                          DatabaseTest.isScan.toString());
-                                    });
-                                  });
-                                });
-                          },
-                        ),
-                      ),
-                    ]),
-          ],
-        ),
-        // const Divider(thickness: 3),
-      ],
-    );
+                //pour le filtre par le role
+                PopupMenuButton(
+                    icon: Icon(
+                      Icons.filter_list_rounded,
+                      color: CustomColors.primaryColor,
+                      size: 36,
+                    ),
+                    offset: const Offset(0, 45),
+                    // color: CustomColors.lightPrimaryColor,
+                    // elevation: 20,
+                    enabled: true,
+                    onCanceled: () {},
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            padding: EdgeInsets.zero,
+                            child: StatefulBuilder(
+                              builder: (_context, _setState) {
+                                return Column(
+                                  children: [
+                                    GFRadioListTile(
+                                        titleText: "Organisateur",
+                                        subTitleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "0"
+                                                : DatabaseTest.listNbRole[0]
+                                                    .toString(),
+                                        margin: EdgeInsets.zero,
+                                        // padding: EdgeInsets.zero,
+                                        radioColor: CustomColors.primaryColor,
+                                        // type: GFCheckboxType.basic,
+                                        inactiveIcon: null,
+                                        // value: DatabaseTest.isOrgan,
+                                        value: 0,
+                                        groupValue: groupValue,
+                                        onChanged: (value) {
+                                          // groupValue = value;
+                                          setState(() {
+                                            _setState(() {
+                                              groupValue = value;
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isOrgan = true;
+                                              DatabaseTest.isInvite = false;
+                                              DatabaseTest.isScan = false;
+                                            });
+                                          });
+                                        }),
+                                    const Divider(
+                                      thickness: 1,
+                                      height: 5,
+                                    ),
+                                    GFRadioListTile(
+                                        titleText: "Invité",
+                                        subTitleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "0"
+                                                : DatabaseTest.listNbRole[1]
+                                                    .toString(),
+                                        margin: EdgeInsets.zero,
+                                        // padding: EdgeInsets.zero,
+                                        radioColor: CustomColors.primaryColor,
+                                        // type: GFCheckboxType.basic,
+                                        inactiveIcon: null,
+                                        // value: DatabaseTest.isInvite,
+                                        value: 1,
+                                        groupValue: groupValue,
+                                        onChanged: (value) {
+                                          // groupValue = value;
+                                          setState(() {
+                                            _setState(() {
+                                              groupValue = value;
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isOrgan = false;
+                                              DatabaseTest.isInvite = true;
+                                              DatabaseTest.isScan = false;
+                                              print("invité " +
+                                                  DatabaseTest.isInvite
+                                                      .toString());
+                                            });
+                                          });
+                                        }),
+                                    const Divider(
+                                      thickness: 1,
+                                      height: 5,
+                                    ),
+                                    GFRadioListTile(
+                                        titleText: "Scanneur",
+                                        subTitleText:
+                                            DatabaseTest.listNbRole.isEmpty
+                                                ? "0"
+                                                : DatabaseTest.listNbRole[2]
+                                                    .toString(),
+                                        margin: EdgeInsets.zero,
+                                        // padding: EdgeInsets.zero,
+                                        radioColor: CustomColors.primaryColor,
+                                        // value: DatabaseTest.isScan,
+                                        value: 2,
+                                        inactiveIcon: null,
+                                        groupValue: groupValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _setState(() {
+                                              groupValue = value;
+                                              DatabaseTest.fetchNBRole();
+                                              DatabaseTest.isOrgan = false;
+                                              DatabaseTest.isInvite = false;
+                                              DatabaseTest.isScan = true;
+                                              print("scanneur " +
+                                                  DatabaseTest.isScan
+                                                      .toString());
+                                            });
+                                          });
+                                        }),
+                                    const Divider(
+                                      thickness: 1,
+                                      height: 5,
+                                    ),
+                                    GFRadioListTile(
+                                        titleText: "Sans filtre",
+                                        margin: EdgeInsets.zero,
+                                        // padding: EdgeInsets.zero,
+                                        radioColor: CustomColors.primaryColor,
+                                        // value: DatabaseTest.isScan,
+                                        value: 3,
+                                        inactiveIcon: null,
+                                        groupValue: groupValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _setState(() {
+                                              groupValue = value;
+                                              DatabaseTest.isOrgan = false;
+                                              DatabaseTest.isInvite = false;
+                                              DatabaseTest.isScan = false;
+                                            });
+                                          });
+                                        }),
+                                  ],
+                                );
+                              },
+                            ),
+                          )
+                        ])
+              ])
+        ]);
+
+    // return Row(
+    //   mainAxisAlignment:
+    //       MainAxisAlignment.spaceBetween,
+    //   children: <Widget>[
+    //     const SizedBox(
+    //       child: Text("Organisateur "),
+    //       width: 110,
+    //     ),
+    //     Text( /*DatabaseTest.listNbRole.isEmpty ? "0" :*/ DatabaseTest.listNbRole[0]
+    //         .toString()),
+    //     Checkbox(
+    //         value: DatabaseTest.isOrgan,
+    //         onChanged: (bool? value) {
+    //           setState(() {
+    //             _setState(() {
+    //               DatabaseTest.fetchNBRole();
+    //               DatabaseTest.isOrgan = value!;
+    //               print("organisateur " +
+    //                   DatabaseTest.isOrgan
+    //                       .toString());
+    //             });
+    //           });
+    //         }),
+    //   ],
+    // );
+
+    // const Divider(thickness: 3),
   }
 
   //widget pour le contenu de la liste
