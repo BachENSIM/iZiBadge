@@ -9,7 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example4@gmail.com";
+  static String userUid = "example1@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -138,19 +138,19 @@ class DatabaseTest {
     if (_isOrganisateur && !_isInviteur && !_isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Organisateur")
-          .orderBy("dateDebut", descending: false)
+          .orderBy("dateDebut", descending: true)
           .snapshots();
     }
     //Filtrer par Invité
     else if (!_isOrganisateur && _isInviteur && !_isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Invité")
-          .orderBy("dateDebut", descending: false)
+          .orderBy("dateDebut", descending: true)
           .snapshots();
     } else if (!_isOrganisateur && !_isInviteur && _isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Scanneur")
-          .orderBy("dateDebut", descending: false)
+          .orderBy("dateDebut", descending: true)
           .snapshots();
     }
     //Faire la recherche par le nom de titre
@@ -320,15 +320,16 @@ class DatabaseTest {
         .doc(docIdAdd)
         .collection(participantsGr)
         .doc(listOfGroup);
-    //utiliser hashmap pour éviter les duplicatas
-    HashMap<String, int> hashMapGr = new HashMap<String, int>();
+    //utiliser hashmap pour éviter les duplicatas (dans le cas l'utilisateur choisit un groupe pour une personne, sinon la liste de groupe est vide)
+    HashMap<String, int> hashMapGr = HashMap<String, int>();
     for (int i = 0; i < listGroup.length; i++) {
       hashMapGr.putIfAbsent(listGroup[i], () => i);
     }
     /*print(hashMapGr.toString());
     print(hashMapGr.keys.toList(growable: false));*/
     Map<String, dynamic> dataGr = <String, dynamic>{
-      "nomListeGroupe": hashMapGr.keys.toList(growable: false)
+      //"nomListeGroupe": hashMapGr.keys.toList(growable: false)
+      "nomListeGroupe": listNameGroup
     };
     await documentRefGr
         .set(dataGr)
@@ -436,20 +437,21 @@ class DatabaseTest {
         .doc(docIdAdd)
         .collection(participantsGr)
         .doc(listOfHours);
-    Map<String, dynamic> dataStart = <String, dynamic>{
+    /*Map<String, dynamic> dataStart = <String, dynamic>{
       "listeHeureCommencee": lstStart
     };
     Map<String, dynamic> dataEnd = <String, dynamic>{
       "listeHeureTerminee": lstEnd
+    };*/
+    Map<String, dynamic> data = <String, dynamic>{
+      "listeHeureCommencee": lstStart,
+      "listeHeureTerminee": lstEnd
     };
     await documentRefGr
-        .set(dataStart)
+        .set(data)
         .whenComplete(() => print("Updated group for event $docIdAdd"))
         .catchError((e) => print(e));
-    await documentRefGr
-        .set(dataEnd)
-        .whenComplete(() => print("Updated group for event $docIdAdd"))
-        .catchError((e) => print(e));
+
   }
 
   /*---------------------------------------*/
@@ -664,6 +666,26 @@ class DatabaseTest {
   }
 
   /*---------------------------------------*/
+  //avoir besoins de sauvegarder touts les groupes sur BDD pour
+  static Future<void> updateGroup(
+      {required String docId, required List<String> lstGroupUpdate}) async {
+    DocumentReference documentReferencer = _mainCollection
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participantsGr)
+        .doc(listOfGroup);
+
+    Map<String, dynamic> data = <String, dynamic>{
+      "nomListeGroupe": lstGroupUpdate
+    };
+
+    await documentReferencer
+        .update(data)
+        .whenComplete(() => print("Updated group for event ${docId}"))
+        .catchError((e) => print(e));
+  }
+  /*---------------------------------------*/
   //pour récupérer tous les groupes dans la BDD
   static List<String> lstGrAdded = [];
 
@@ -698,6 +720,9 @@ class DatabaseTest {
   //méthode pour récupérer les groupes dans la collection "groupe"
 
   static Future<void> fetchGroupAdded(String idParticipation) async {
+    //récupérer le nom de cet events pour savoir quel events qu'on touche
+
+
     var dataID = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
@@ -705,34 +730,16 @@ class DatabaseTest {
         .doc(idParticipation)
         .collection(participantsGr)
         .get();
-
-    for (int i = 0; i < dataID.docs.length; i++) {
-      //faut convertir en String parce qu'au début c'est le type dynamic pour que je puisse sauvegarder dans la BDD
-      lstGrAdded = (dataID.docs[i].data()['nomListeGroupe']).cast<String>();
+    if(lstGrAdded.isNotEmpty) lstGrAdded.clear();
+    if(dataID.docs.isNotEmpty ) {
+      lstGrAdded = (dataID.docs[0].data()['nomListeGroupe']).cast<String>();
+     /* for (int i = 0; i < dataID.docs.length; i++) {
+        //faut convertir en String parce qu'au début c'est le type dynamic pour que je puisse sauvegarder dans la BDD
+        lstGrAdded = (dataID.docs[i].data()['nomListeGroupe']).cast<String>();
+      }*/
     }
+
   }
-
-  /*---------------------------------------*/
-  //avoir besoins de sauvegarder touts les groupes sur BDD pour
-  static Future<void> updateGroup(
-      {required String docId, required List<String> lstGroupUpdate}) async {
-    DocumentReference documentReferencer = _mainCollection
-        .doc(userUid)
-        .collection(eventRelated)
-        .doc(docId)
-        .collection(participantsGr)
-        .doc(listOfGroup);
-
-    Map<String, dynamic> data = <String, dynamic>{
-      "nomListeGroupe": lstGroupUpdate
-    };
-
-    await documentReferencer
-        .update(data)
-        .whenComplete(() => print("Updated group for event ${docId}"))
-        .catchError((e) => print(e));
-  }
-
   /*---------------------------------------*/
   //pour récupérer les emails + roles + groups
   static List<String> lstUserAdded = [];
@@ -961,7 +968,9 @@ class DatabaseTest {
         .collection(participantsGr)
         .get();
     List<String> group = [];
-    debugPrint(dataGroup.toString());
+    for (int i = 0; i < dataGroup.docs.length; i++) {
+      group.add(dataGroup.docs[i].data()['nomListeGroupe']);
+    }
     var dataInvite = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
@@ -969,8 +978,11 @@ class DatabaseTest {
         .doc(docId)
         .collection(participants)
         .get();
-    debugPrint(dataInvite.toString());
-
+    List<String> listIdClient = [];
+    for (int i = 0; i < dataInvite.docs.length; i++) {
+      listIdClient.add(dataInvite.docs[i].id);
+    }
+    debugPrint("qrCode" + listIdClient.toString());
 
     if (title.compareTo(dataID.docs[index].data()['titre']) != 0)
       status = false;

@@ -54,8 +54,9 @@ class _AddItemFormState extends State<AddItemForm> {
     // TODO: implement initState
     super.initState();
     debugPrint("Create " + selectedTimeStart.hour.toString());
-    if(selectedTimeStart.hour == 24) {
-      selectedDateStart = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day +1);
+    if (selectedTimeStart.hour == 24) {
+      selectedDateStart = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
       selectedTimeStart = TimeOfDay(hour: 0, minute: 0);
       startTime = displayTime(selectedTimeStart);
       debugPrint("Create " + selectedTimeEnd.hour.toString());
@@ -215,13 +216,20 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.timeStartSave = selectedTimeStart;
                         DatabaseTest.timeEndSave = selectedTimeEnd;
 
-                        String start = "${selectedDateStart.toUtc().toString().split(" ").first} ${selectedTimeStart.format(context)}:00";
-                        String end = "${selectedDateEnd.toUtc().toString().split(" ").first} ${selectedTimeEnd.format(context)}:00";
-                        debugPrint("start " + start);
-                        debugPrint("end " + end);
+                        String start =
+                            "${selectedDateStart.toLocal().toString().split(" ").first}T${selectedTimeStart.format(context)}:00";
+                        String end =
+                            "${selectedDateEnd.toLocal().toString().split(" ").first}T${selectedTimeEnd.format(context)}:00";
+                        debugPrint("start " + DateTime.parse(start).toString());
+                        debugPrint("end " + DateTime.parse(end).toString());
                         //debugPrint(slcTStart.format(context));
-                        DatabaseTest.listHoursStart.add(DateTime.parse(start));
-                        DatabaseTest.listHoursEnd.add(DateTime.parse(end));
+                        if (DatabaseTest.listHoursStart.isNotEmpty)
+                          DatabaseTest.listHoursStart.clear();
+                          DatabaseTest.listHoursStart
+                              .add(DateTime.parse(start));
+                        if (DatabaseTest.listHoursEnd.isNotEmpty)
+                          DatabaseTest.listHoursEnd.clear();
+                          DatabaseTest.listHoursEnd.add(DateTime.parse(end));
 
                         /*debugPrint(
                             "Change page " + selectedDateStart.toString());
@@ -313,27 +321,26 @@ class _AddItemFormState extends State<AddItemForm> {
       'dim.'
     ];
     List<String> months = [
-      'janvier',
-      'février',
+      'jan.',
+      'févr.',
       'mars',
-      'avril',
+      'avr.',
       'mai',
       'juin',
-      'juillet',
+      'juil.',
       'août',
-      'septembre',
-      'octobre',
-      'novembre',
-      'decembre'
+      'sept.',
+      'oct.',
+      'nov.',
+      'déc.'
     ];
-
     if (dateInit.day < 10) {
       day = "0${dateInit.day}";
     } else {
       day = "${dateInit.day}";
     }
     message =
-        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]}, ${dateInit.year}";
+        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
     return message;
   }
 
@@ -366,12 +373,12 @@ class _AddItemFormState extends State<AddItemForm> {
       setState(() {
         dateTimeInit = selected;
         if (start) {
-          if(selectedDateEnd.day == selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ) {
+          if (selectedDateEnd.day == selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
             selectedDateStart = selected;
             selectedDateEnd = selectedDateStart;
             endDate = displayDate(selectedDateEnd);
           }
-
 
           /*if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
             selectedDateEnd = dateTimeInit;
@@ -382,13 +389,14 @@ class _AddItemFormState extends State<AddItemForm> {
 
         } else {
           selectedDateEnd = dateTimeInit;
-          if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+          if (selectedDateEnd.day < selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
             selectedDateStart = selectedDateEnd;
             startDate = displayDate(dateTimeInit);
-            debugPrint("Start: $selectedDateStart");
-            debugPrint("End: $selectedDateEnd");
           }
         }
+        debugPrint("Start: $selectedDateStart");
+        debugPrint("End: $selectedDateEnd");
         start
             ? startDate = displayDate(dateTimeInit)
             : endDate = displayDate(dateTimeInit);
@@ -420,8 +428,9 @@ class _AddItemFormState extends State<AddItemForm> {
           selectedTimeEnd =
               TimeOfDay(hour: todInit.hour + 1, minute: todInit.minute);
           debugPrint(selectedTimeEnd.hour.toString());
-          if(selectedTimeEnd.hour > 23 ) {
-            selectedDateEnd = DateTime(selectedDateEnd.year,selectedDateEnd.month,selectedDateEnd.day+1);
+          if (selectedTimeEnd.hour > 23) {
+            selectedDateEnd = DateTime(selectedDateEnd.year,
+                selectedDateEnd.month, selectedDateEnd.day + 1);
             endDate = displayDate(selectedDateEnd);
           }
           endTime = displayTime(selectedTimeEnd);
@@ -435,9 +444,11 @@ class _AddItemFormState extends State<AddItemForm> {
             selectedTimeStart =
                 TimeOfDay(hour: todInit.hour - 1, minute: todInit.minute);
             debugPrint("qsd" + selectedTimeStart.hour.toString());
-            if(selectedTimeStart.hour == -1) {
-              selectedDateStart = DateTime(selectedDateStart.year,selectedDateStart.month,selectedDateStart.day-1);
-              selectedTimeStart = TimeOfDay(hour: 23,minute: selectedTimeEnd.minute);
+            if (selectedTimeStart.hour == -1) {
+              selectedDateStart = DateTime(selectedDateStart.year,
+                  selectedDateStart.month, selectedDateStart.day - 1);
+              selectedTimeStart =
+                  TimeOfDay(hour: 23, minute: selectedTimeEnd.minute);
               startDate = displayDate(selectedDateStart);
             }
             startTime = displayTime(selectedTimeStart);

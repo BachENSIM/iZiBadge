@@ -5,8 +5,10 @@ import 'package:izibagde/components/edit_gr_form.dart';
 class EditGroupScreen extends StatefulWidget {
   //const EditGroupScreen({Key? key}) : super(key: key);
   late final String documentId;
+  late final String nameEvent;
   EditGroupScreen({
     required this.documentId,
+    required this.nameEvent,
   });
   @override
   _EditGroupScreenState createState() => _EditGroupScreenState();
@@ -42,6 +44,7 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
               height: MediaQuery.of(context).size.height/1.2,
               child: EditGroupForm(
                 documentId: widget.documentId,
+                nameEvent: widget.nameEvent,
               ),
             )),
       ),

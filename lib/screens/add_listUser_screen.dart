@@ -74,12 +74,18 @@ class _ListUserScreenState extends State<ListUserScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //ajouter d'une liste d'invitation (1 QRCode pour toute la durée)
+
                 Padding(
                     padding: const EdgeInsets.all(5),
                     child: SingleChildScrollView(
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          "Titre : ${DatabaseTest.nameSave!}",
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
                         ListView(
                           shrinkWrap: true,
                           children: <Widget>[
@@ -166,8 +172,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                         setState(() {
                                           String mess = _guestCtl.text;
                                           if (_guestCtl.text.isEmpty) {
-                                            mess = "example${taille++}@gmail.com";
+                                            mess =
+                                                "example${taille++}@gmail.com";
                                           }
+                                          //debugPrint(mess);
                                           if (_groupListUser.contains(mess)) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
@@ -226,8 +234,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             });
                                           },
                                           //color: CustomColors.accentDark,
-                                          titleText:
-                                               _groupListUser[index],
+                                          titleText: _groupListUser[index],
                                           subTitleText: "Groupe: " +
                                               _groupDropdownGroup[index] +
                                               " - Role: " +
@@ -264,8 +271,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                       ],
                     ))),
                 _isProcessing
-                    ? Center(
-                        child: const Padding(
+                    ? const Center(
+                        child:  Padding(
                           padding: EdgeInsets.all(16.0),
                           child: CircularProgressIndicator(
                               // valueColor: AlwaysStoppedAnimation<Color>(
@@ -291,12 +298,25 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             setState(() {
                               _isProcessing = true;
                             });
+                            int? yearStart = DatabaseTest.startSave!.year;
+                            int? yearEnd = DatabaseTest.endSave!.year;
+                            int? monthStart = DatabaseTest.endSave!.month;
+                            int? monthEnd = DatabaseTest.endSave!.month;
+                            int? dayStart = DatabaseTest.endSave!.day;
+                            int? dayEnd = DatabaseTest.endSave!.day;
+                            int? hourStart = DatabaseTest.timeStartSave!.hour;
+                            int? hourEnd = DatabaseTest.timeEndSave!.hour;
+                            int? minuteStart = DatabaseTest.timeStartSave!.minute;
+                            int? minuteEnd = DatabaseTest.timeEndSave!.minute;
+
                             await DatabaseTest.addItem(
                               title: DatabaseTest.nameSave.toString(),
                               description: DatabaseTest.descSave.toString(),
                               address: DatabaseTest.addrSave.toString(),
-                              start: DateTime.parse(DateTime.now().toString()),
-                              end: DateTime.parse(DateTime.now().toString()),
+                              /*start: DateTime.parse(DateTime.now().toString()),
+                              end: DateTime.parse(DateTime.now().toString()),*/
+                              start: DateTime(yearStart,monthStart,dayStart,hourStart,minuteStart),
+                              end: DateTime(yearEnd,monthEnd,dayEnd,hourEnd,minuteEnd),
                               role: "Organisateur",
                             );
                             await DatabaseTest.addInviteList(

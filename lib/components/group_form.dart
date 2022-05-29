@@ -52,6 +52,7 @@ class _GroupFormState extends State<GroupForm> {
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
+
   }
 
   @override
@@ -70,6 +71,54 @@ class _GroupFormState extends State<GroupForm> {
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              "Titre : ${DatabaseTest.nameSave!}",
+              textAlign: TextAlign.start,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Row(children: [
+              const SizedBox(
+                width: 75,
+                child: Text(
+                  "Début :",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.green),
+                ),
+              ),
+              Container(
+                  width: 150,
+                  alignment: Alignment.centerLeft,
+                  child: Text(displayDate(DatabaseTest.startSave!))),
+              Container(
+                  width: 50,
+                  alignment: Alignment.centerLeft,
+                  child: Text(displayTime(DatabaseTest.timeStartSave!)))
+            ]),
+            Row(children: [
+              const SizedBox(
+                width: 75,
+                child: Text(
+                  "Fin :",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.red),
+                ),
+              ),
+              Container(
+                  width: 150,
+                  alignment: Alignment.centerLeft,
+                  child: Text(displayDate(DatabaseTest.endSave!))),
+              Container(
+                  width: 50,
+                  alignment: Alignment.centerLeft,
+                  child: Text(displayTime(DatabaseTest.timeEndSave!)))
+            ]),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -114,30 +163,29 @@ class _GroupFormState extends State<GroupForm> {
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
                           }
-                          if(_groupNameList.contains(mess)) {
+                          if (_groupNameList.contains(mess)) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text("$mess est déjà créé ..."),
                                 padding: const EdgeInsets.all(15.0),
                               ),
                             );
-                          }
-                          else {
-                            _groupNameList.add(_groupNameCtl.text);
+                          } else {
+                            _groupNameList.add(mess);
                             DatabaseTest.listNameGroup.add(mess);
                           }
-
                           _groupNameCtl.clear();
+
                           _lstDTStart.add("$dtStart/$todStart");
                           _lstDTEnd.add("$dtEnd/$todEnd");
                           String start =
-                              "${slcDStart.toUtc().toString().split(" ").first} ${slcTStart.format(context)}:00";
+                              "${slcDStart.toLocal().toString().split(" ").first} ${slcTStart.format(context)}:00";
                           String end =
-                              "${slcDEnd.toUtc().toString().split(" ").first} ${slcTEnd.format(context)}:00";
+                              "${slcDEnd.toLocal().toString().split(" ").first} ${slcTEnd.format(context)}:00";
                           debugPrint("start" +
-                              slcDStart.toUtc().toString().split(" ").first);
+                              slcDStart.toLocal().toString().split(" ").first);
                           debugPrint("end" +
-                              slcDEnd.toUtc().toString().split(" ").first);
+                              slcDEnd.toLocal().toString().split(" ").first);
                           //debugPrint(slcTStart.format(context));
                           DatabaseTest.listHoursStart
                               .add(DateTime.parse(start));
@@ -165,10 +213,8 @@ class _GroupFormState extends State<GroupForm> {
             const SizedBox(
               height: 5,
             ),
-            /*dateTime(DatabaseTest.startSave!,"Début",DatabaseTest.timeStartSave!),
-            dateTime(DatabaseTest.endSave!,"Fin",DatabaseTest.timeEndSave!),  */
-            dateTime(slcDStart, "Début", slcTStart, true),
-            dateTime(slcDEnd, "Fin", slcTEnd, false),
+            /*dateTime(slcDStart, "Début", slcTStart, true),
+            dateTime(slcDEnd, "Fin", slcTEnd, false),*/
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
@@ -202,7 +248,7 @@ class _GroupFormState extends State<GroupForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.edit_rounded,
                                 size: 18,
                               ),
@@ -217,7 +263,7 @@ class _GroupFormState extends State<GroupForm> {
                             ),
                             if (!_zero)
                               IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.delete_forever_sharp,
                                   size: 18,
                                 ),
@@ -227,6 +273,9 @@ class _GroupFormState extends State<GroupForm> {
                                       _groupNameList.removeAt(index);
                                       _lstDTStart.removeAt(index);
                                       _lstDTEnd.removeAt(index);
+                                      DatabaseTest.listHoursStart
+                                          .removeAt(index);
+                                      DatabaseTest.listHoursEnd.removeAt(index);
                                       DatabaseTest.listNameGroup
                                           .removeAt(index);
                                     }
@@ -247,7 +296,179 @@ class _GroupFormState extends State<GroupForm> {
     );
   }
 
-  Widget dateTime(
+  void _modify(
+    BuildContext context,
+    int index,
+  ) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: const Text("Renommer"),
+            content: TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              controller: _groupEditCtl,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(8),
+                isDense: true,
+              ),
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            actions: [
+              dateTimeModal(
+                  DateTime(
+                      DatabaseTest.listHoursStart[index].year,
+                      DatabaseTest.listHoursStart[index].month,
+                      DatabaseTest.listHoursStart[index].day),
+                  "Début",
+                  TimeOfDay(
+                      hour: DatabaseTest.listHoursStart[index].hour,
+                      minute: DatabaseTest.listHoursStart[index].minute),
+                  true,index),
+              dateTimeModal(
+                  DateTime(
+                      DatabaseTest.listHoursEnd[index].year,
+                      DatabaseTest.listHoursEnd[index].month,
+                      DatabaseTest.listHoursEnd[index].day),
+                  "Fin",
+                  TimeOfDay(
+                      hour: DatabaseTest.listHoursEnd[index].hour,
+                      minute: DatabaseTest.listHoursEnd[index].minute),
+                  false,index),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Annuler")),
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    setState(() {
+                      _groupNameList[index] = _groupEditCtl!.text;
+                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
+                      print("list" + _groupNameList[index]);
+                      print("data: " + DatabaseTest.listNameGroup.toString());
+                      _groupEditCtl?.clear();
+                    });
+
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Renommer",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+            ],
+          );
+
+        });
+  }
+
+  Widget dateTimeModal(
+      DateTime dateInit, String container, TimeOfDay timeInit, bool status, int index) {
+    return StatefulBuilder(
+        builder: (BuildContext _context, StateSetter  _setState) {
+          return Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.calendar_today_outlined,
+                  color: container.contains("Début") ? Colors.green : Colors.red,
+                  size: 12,
+                ),
+                TextButton(
+                    onPressed: () async {
+                      final DateTime? selected = await showDatePicker(
+                        locale: const Locale('fr', ''),
+                        context: _context,
+                        initialDate: dateInit,
+                        firstDate: DatabaseTest.startSave!,
+                        lastDate: DatabaseTest.endSave!,
+                      );
+                      if (selected != null && selected != dateInit) {
+                        _setState(() {
+                          dateInit = selected;
+                          status ? slcDStart = selected : slcDEnd = selected;
+                          status
+                              ? dtStart = displayDate(dateInit)
+                              : dtEnd = displayDate(dateInit);
+
+                          status ?
+                          DatabaseTest.listHoursStart[index] = DateTime(dateInit.year,dateInit.month,dateInit.day,DatabaseTest.listHoursStart[index].hour,DatabaseTest.listHoursStart[index].minute) :
+                          DatabaseTest.listHoursEnd[index] = DateTime(dateInit.year,dateInit.month,dateInit.day,DatabaseTest.listHoursEnd[index].hour,DatabaseTest.listHoursEnd[index].minute) ;
+
+                          debugPrint(displayDate(dateInit));
+                          debugPrint(dtStart);
+                          debugPrint("az" + dateInit.toLocal().toString());
+                          debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
+                        });
+                      }
+                      _setState(() {
+                        //_selectDate(_context, dateInit, status,index);
+
+                      });
+                    },
+                    child: Container(
+                        width: 125,
+                        alignment: Alignment.centerRight,
+                        child: Text(displayDate(dateInit)))),
+                const SizedBox(width: 10.0),
+                TextButton(
+                    onPressed: () async {
+                      final TimeOfDay? timeOfDay = await showTimePicker(
+                          context: _context,
+                          initialTime: timeInit,
+                          initialEntryMode: TimePickerEntryMode.dial,
+                          builder: (_context, child) {
+                            if (MediaQuery.of(_context).alwaysUse24HourFormat) {
+                              //return child!;
+                              return Localizations.override(
+                                context: _context,
+                                locale: const Locale('fr', 'FR'),
+                                child: child,
+                              );
+                            } else {
+                              return child!;
+                            }
+                          });
+                      if (timeOfDay != null && timeOfDay != timeInit) {
+                        _setState(() {
+                          timeInit = timeOfDay;
+                          status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
+                          status
+                              ? todStart = displayTime(timeInit)
+                              : todEnd = displayTime(timeInit);
+
+                          status ?
+                          DatabaseTest.listHoursStart[index] = DateTime(DatabaseTest.listHoursStart[index].year,DatabaseTest.listHoursStart[index].month,DatabaseTest.listHoursStart[index].day,timeInit.hour,timeInit.minute) :
+                          DatabaseTest.listHoursEnd[index] = DateTime(DatabaseTest.listHoursEnd[index].year,DatabaseTest.listHoursEnd[index].month,DatabaseTest.listHoursEnd[index].day,timeInit.hour,timeInit.minute) ;
+                        });
+                      }
+                      _setState(() {
+                        //_selectTime(_context, timeInit, status,index);
+
+                      });
+                    },
+                    child: Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(displayTime(timeInit))))
+              ],
+            ),
+          );
+        });
+
+  }
+
+ /* Widget dateTime(
       DateTime dateInit, String container, TimeOfDay timeInit, bool status) {
     return Row(
       children: [
@@ -268,77 +489,6 @@ class _GroupFormState extends State<GroupForm> {
             child: Container(
                 alignment: Alignment.centerLeft,
                 child: Text(displayTime(timeInit))))
-      ],
-    );
-  }
-
-  String displayDate(DateTime dateInit) {
-    String message = "";
-    String day = "";
-    List<String> dayOfWeek = [
-      'lun.',
-      'mar.',
-      'mer.',
-      'jeu.',
-      'ven.',
-      'sam.',
-      'dim.'
-    ];
-    List<String> months = [
-      'janvier',
-      'février',
-      'mars',
-      'avril',
-      'mai',
-      'juin',
-      'juillet',
-      'août',
-      'septembre',
-      'octobre',
-      'novembre',
-      'decembre'
-    ];
-
-    if (dateInit.day < 10) {
-      day = "0${dateInit.day}";
-    } else {
-      day = "${dateInit.day}";
-    }
-    message =
-        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]}, ${dateInit.year}";
-    return message;
-  }
-
-  /*Widget subTitle(List<String> lstStart, int position, List<String> lstEnd) {
-    String start = lstStart[position].split("/").first +
-        " - " +
-        lstStart[position].split("/").last;
-    String end = lstEnd[position].split("/").first +
-        " - " +
-        lstEnd[position].split("/").last;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: <Widget>[
-            const Icon(
-              Icons.calendar_today,
-              color: Colors.green,
-              size: 10,
-            ),
-            Text(start,style: TextStyle(fontSize: 12),)
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            const Icon(
-              Icons.calendar_today,
-              color: Colors.red,
-              size: 10,
-            ),
-            Text(end,style: TextStyle(fontSize: 12),)
-          ],
-        )
       ],
     );
   }*/
@@ -391,21 +541,7 @@ class _GroupFormState extends State<GroupForm> {
     );
   }
 
-  String displayTime(TimeOfDay timeInit) {
-    String message = "";
-    String mins = "";
-    String hours = "";
-    (timeInit.minute < 10)
-        ? mins = "0${timeInit.minute}"
-        : mins = "${timeInit.minute}";
-    (timeInit.hour < 10)
-        ? hours = "0${timeInit.hour}"
-        : hours = "${timeInit.hour}";
-    message = "$hours:$mins";
-    return message;
-  }
-
-  _selectDate(BuildContext context, DateTime dateTimeInit, bool status) async {
+  _selectDate(BuildContext context, DateTime dateTimeInit, bool status,int index) async {
     final DateTime? selected = await showDatePicker(
       locale: const Locale('fr', ''),
       context: context,
@@ -414,20 +550,26 @@ class _GroupFormState extends State<GroupForm> {
       lastDate: DatabaseTest.endSave!,
     );
     if (selected != null && selected != dateTimeInit) {
-      setState(() {
+      //setState(() {
         dateTimeInit = selected;
         status ? slcDStart = selected : slcDEnd = selected;
         status
             ? dtStart = displayDate(dateTimeInit)
             : dtEnd = displayDate(dateTimeInit);
+
+        status ?
+        DatabaseTest.listHoursStart[index] = DateTime(dateTimeInit.year,dateTimeInit.month,dateTimeInit.day,DatabaseTest.listHoursStart[index].hour,DatabaseTest.listHoursStart[index].minute) :
+        DatabaseTest.listHoursEnd[index] = DateTime(dateTimeInit.year,dateTimeInit.month,dateTimeInit.day,DatabaseTest.listHoursEnd[index].hour,DatabaseTest.listHoursEnd[index].minute) ;
+
         debugPrint(displayDate(dateTimeInit));
+        debugPrint(dtStart);
         debugPrint("az" + dateTimeInit.toLocal().toString());
         debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
-      });
+      //});
     }
   }
 
-  _selectTime(BuildContext context, TimeOfDay todInit, bool status) async {
+  _selectTime(BuildContext context, TimeOfDay todInit, bool status,int index) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
         context: context,
         initialTime: todInit,
@@ -455,57 +597,63 @@ class _GroupFormState extends State<GroupForm> {
         status
             ? todStart = displayTime(todInit)
             : todEnd = displayTime(todInit);
+
+        status ?
+        DatabaseTest.listHoursStart[index] = DateTime(DatabaseTest.listHoursStart[index].year,DatabaseTest.listHoursStart[index].month,DatabaseTest.listHoursStart[index].day,todInit.hour,todInit.minute) :
+        DatabaseTest.listHoursEnd[index] = DateTime(DatabaseTest.listHoursEnd[index].year,DatabaseTest.listHoursEnd[index].month,DatabaseTest.listHoursEnd[index].day,todInit.hour,todInit.minute) ;
       });
     }
   }
 
-  void _modify(BuildContext context, int index) {
-    showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: const Text("Renommer"),
-            content: TextFormField(
-              maxLines: 1,
-              keyboardType: TextInputType.text,
-              controller: _groupEditCtl,
-              decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(8),
-                isDense: true,
-              ),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Annuler")),
-              TextButton(
-                  onPressed: () {
-                    // Remove the box
-                    setState(() {
-                      _groupNameList[index] = _groupEditCtl!.text;
-                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
-                      print("list" + _groupNameList[index]);
-                      print("data: " + DatabaseTest.listNameGroup.toString());
-                      _groupEditCtl?.clear();
-                    });
+  String displayTime(TimeOfDay timeInit) {
+    String message = "";
+    String mins = "";
+    String hours = "";
+    (timeInit.minute < 10)
+        ? mins = "0${timeInit.minute}"
+        : mins = "${timeInit.minute}";
+    (timeInit.hour < 10)
+        ? hours = "0${timeInit.hour}"
+        : hours = "${timeInit.hour}";
+    message = "$hours:$mins";
+    return message;
+  }
 
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    "Renommer",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-            ],
-          );
-        });
+  String displayDate(DateTime dateInit) {
+    String message = "";
+    String day = "";
+    List<String> dayOfWeek = [
+      'lun.',
+      'mar.',
+      'mer.',
+      'jeu.',
+      'ven.',
+      'sam.',
+      'dim.'
+    ];
+    List<String> months = [
+      'jan.',
+      'févr.',
+      'mars',
+      'avr.',
+      'mai',
+      'juin',
+      'juil.',
+      'août',
+      'sept.',
+      'oct.',
+      'nov.',
+      'déc.'
+    ];
+
+    if (dateInit.day < 10) {
+      day = "0${dateInit.day}";
+    } else {
+      day = "${dateInit.day}";
+    }
+
+    message =
+        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
+    return message;
   }
 }

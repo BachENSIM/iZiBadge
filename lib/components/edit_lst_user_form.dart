@@ -7,9 +7,11 @@ import 'package:izibagde/screens/dashboard_screen.dart';
 class EditListUserForm extends StatefulWidget {
   //const EditListUserForm({Key? key}) : super(key: key);
   late final String documentId;
+  late final String nameEvent;
 
   EditListUserForm({
     required this.documentId,
+    required this.nameEvent,
   });
 
   @override
@@ -24,7 +26,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
   TextEditingController? _editGuestCtl;
 
   //dropDown pour le group
-  String? _dropdownGroup = DatabaseTest.lstGroupAdded[0];
+  String? _dropdownGroup = DatabaseTest.lstGrAdded[0];
 
   //dropDown pour le role
   static final List<String> _roleDropDown = ["Invité", "Scanneur"];
@@ -57,6 +59,11 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            "Titre : ${widget.nameEvent}",
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
                           ListView(
                             shrinkWrap: true,
                             children: <Widget>[

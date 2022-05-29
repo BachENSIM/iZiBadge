@@ -60,6 +60,10 @@ dependencies:
   sticky_headers: "0.2.0"
   ##Cupertino picker
   ##flutter_cupertino_date_picker: ^1.0.26+2
+  ##s'approvisionner le path pour le directoire
+  path_provider: ^2.0.10
+  ##utiliser le gallery - faut donner le droit d'écrire dans la meémoire externale
+  gallery_saver: ^2.3.2
 
 dev_dependencies:
   flutter_test:

@@ -7,9 +7,11 @@ import 'package:izibagde/screens/dashboard_screen.dart';
 class EditGroupForm extends StatefulWidget {
   //const EditGroupForm({Key? key}) : super(key: key);
   late final String documentId;
+  late final String nameEvent;
 
   EditGroupForm({
     required this.documentId,
+    required this.nameEvent,
   });
 
   @override
@@ -59,6 +61,11 @@ class _EditGroupFormState extends State<EditGroupForm> {
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              "Titre : ${widget.nameEvent}",
+              textAlign: TextAlign.start,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,

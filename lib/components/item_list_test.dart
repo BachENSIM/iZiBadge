@@ -28,7 +28,6 @@ class _ItemListTestState extends State<ItemListTest> {
   bool _inviteur = false;
   bool _scanneur = false;
 
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -66,98 +65,100 @@ class _ItemListTestState extends State<ItemListTest> {
                 height: 15,
               ),
               SizedBox(
-                  height: (MediaQuery.of(context).size.height)/1.5 + kToolbarHeight,
+                  height: (MediaQuery.of(context).size.height) / 1.5 +
+                      kToolbarHeight,
                   child: ListView.separated(
-                shrinkWrap: true,
-                //scrollDirection: Axis.vertical,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 16.0),
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
-                  //Dart doesn’t know which type of object it is getting.
-                  var noteInfo = snapshot.data!.docs[index].data()!
-                      as Map<String, dynamic>;
-                  var _noteInfo = (index == 0
-                          ? snapshot.data!.docs[index].data()!
-                          : snapshot.data!.docs[index - 1].data()!)
-                      as Map<String, dynamic>;
+                    shrinkWrap: true,
+                    //scrollDirection: Axis.vertical,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16.0),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      //DocumentSnapshot _userData = index == 0 ? snapshot.data!.docs[index] : snapshot.data!.docs[index - 1];
+                      //Dart doesn’t know which type of object it is getting.
+                      var noteInfo = snapshot.data!.docs[index].data()!
+                          as Map<String, dynamic>;
+                      var _noteInfo = (index == 0
+                              ? snapshot.data!.docs[index].data()!
+                              : snapshot.data!.docs[index - 1].data()!)
+                          as Map<String, dynamic>;
 
-                  String docID = snapshot.data!.docs[index].id;
-                  String name = noteInfo['titre'];
-                  String role = noteInfo['role'];
-                  String address = noteInfo['adresse'];
-                  String desc = noteInfo['description'];
-                  bool isDel = noteInfo['isEfface'];
-                  if (role.compareTo("Organisateur") == 0) {
-                    _organisateur = true;
-                  } else {
-                    _organisateur = false;
-                    if (role.compareTo("Invité") == 0) {
-                      _inviteur = true;
-                    } else {
-                      _inviteur = false;
-                      if (role.compareTo("Scanneur") == 0) {
-                        _scanneur = true;
+                      String docID = snapshot.data!.docs[index].id;
+                      String name = noteInfo['titre'];
+                      String role = noteInfo['role'];
+                      String address = noteInfo['adresse'];
+                      String desc = noteInfo['description'];
+                      bool isDel = noteInfo['isEfface'];
+                      if (role.compareTo("Organisateur") == 0) {
+                        _organisateur = true;
                       } else {
-                        _scanneur = false;
+                        _organisateur = false;
+                        if (role.compareTo("Invité") == 0) {
+                          _inviteur = true;
+                        } else {
+                          _inviteur = false;
+                          if (role.compareTo("Scanneur") == 0) {
+                            _scanneur = true;
+                          } else {
+                            _scanneur = false;
+                          }
+                        }
                       }
-                    }
-                  }
-                  String _docID = index == 0
-                      ? snapshot.data!.docs[index].id
-                      : snapshot.data!.docs[index - 1].id;
-                  DateTime dateStart =
-                      (noteInfo['dateDebut'] as Timestamp).toDate();
-                  DateTime _dateStart = index == 0
-                      ? (noteInfo['dateDebut'] as Timestamp).toDate()
-                      : (_noteInfo['dateDebut'] as Timestamp).toDate();
-                  DateTime dateEnd =
-                      (noteInfo['dateEnd'] as Timestamp).toDate();
-                  //String role = noteInfo['role'];
-                  int currHeader = dateStart.month;
-                  int header = index == 0 ? dateStart.month : _dateStart.month;
-                  if (index == 0 || index == 0
-                      ? true
-                      : (currHeader != header)) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                            //color: Theme.of(context).primaryColorDark,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Theme.of(context).indicatorColor,
-                                  width: 2,
+                      String _docID = index == 0
+                          ? snapshot.data!.docs[index].id
+                          : snapshot.data!.docs[index - 1].id;
+                      DateTime dateStart =
+                          (noteInfo['dateDebut'] as Timestamp).toDate();
+                      DateTime _dateStart = index == 0
+                          ? (noteInfo['dateDebut'] as Timestamp).toDate()
+                          : (_noteInfo['dateDebut'] as Timestamp).toDate();
+                      DateTime dateEnd =
+                          (noteInfo['dateEnd'] as Timestamp).toDate();
+                      //String role = noteInfo['role'];
+                      int currHeader = dateStart.month;
+                      int header =
+                          index == 0 ? dateStart.month : _dateStart.month;
+                      if (index == 0 || index == 0
+                          ? true
+                          : (currHeader != header)) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                                //color: Theme.of(context).primaryColorDark,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(context).indicatorColor,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0)),
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
                                 ),
-                                borderRadius: BorderRadius.circular(8.0)),
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              bottom: 10,
-                            ),
-                            child: Center(
-                              child: Text(
-                                nameOfMonth(--currHeader) +
-                                    " " +
-                                    dateStart.year.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 26,
-                                ),
-                              ),
-                            )),
-                        const SizedBox(height: 10),
-                        buildListe(context, isDel, address, desc, docID,
-                            dateStart, name, index, dateEnd)
-                      ],
-                    );
-                  } else {
-                    return buildListe(context, isDel, address, desc, docID,
-                        dateStart, name, index, dateEnd);
-                  }
-                },
-              ))
+                                child: Center(
+                                  child: Text(
+                                    nameOfMonth(--currHeader) +
+                                        " " +
+                                        dateStart.year.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 26,
+                                    ),
+                                  ),
+                                )),
+                            const SizedBox(height: 10),
+                            buildListe(context, isDel, address, desc, docID,
+                                dateStart, name, index, dateEnd)
+                          ],
+                        );
+                      } else {
+                        return buildListe(context, isDel, address, desc, docID,
+                            dateStart, name, index, dateEnd);
+                      }
+                    },
+                  ))
             ],
           ));
         }
@@ -332,7 +333,7 @@ class _ItemListTestState extends State<ItemListTest> {
                           //         }),
                           //   ],
                           // );
-                          return GFCheckboxListTile(
+                           return GFCheckboxListTile(
                               titleText: DatabaseTest.listNbRole.isEmpty
                                   ? "Organisateur 0"
                                   : "Organisateur " +
@@ -348,6 +349,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                   });
                                 });
                               });
+
                         },
                       ),
                     ),
@@ -534,6 +536,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                         builder: (_context, _setState) {
                                           return IconButton(
                                               onPressed: () {
+                                                debugPrint(name);
                                                 DatabaseTest.fetchGroupAdded(
                                                     docID);
                                                 print("editedi " +
@@ -547,6 +550,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                                     builder: (context) =>
                                                         EditGroupScreen(
                                                       documentId: docID,
+                                                      nameEvent: name,
                                                     ),
                                                   ),
                                                 );
@@ -560,10 +564,11 @@ class _ItemListTestState extends State<ItemListTest> {
                                         builder: (_context, _setState) {
                                           return IconButton(
                                               onPressed: () async {
-                                                await DatabaseTest
-                                                    .fetchListUsers(docID);
+                                                debugPrint(name);
                                                 await DatabaseTest
                                                     .fetchGroupAdded(docID);
+                                                await DatabaseTest
+                                                    .fetchListUsers(docID);
                                                 sleep(const Duration(
                                                     milliseconds: 500));
                                                 Navigator.of(context).push(
@@ -571,6 +576,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                                     builder: (context) =>
                                                         EditListUserScreen(
                                                       documentId: docID,
+                                                      nameEvent: name,
                                                     ),
                                                   ),
                                                 );
@@ -625,23 +631,28 @@ class _ItemListTestState extends State<ItemListTest> {
                 if (!isDel && !_isInviteur)
                   IconButton(
                       onPressed: () async {
-                        debugPrint('Size = ' + MediaQuery.of(context).size.toString());
-                        debugPrint('Height = ' + (MediaQuery.of(context).size.height/1.5).toString());
-                        debugPrint('Width = ' + MediaQuery.of(context).size.width.toString());
-                        debugPrint("size list = " + (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).padding.top -
-                            kToolbarHeight).toString());
-                        debugPrint("${MediaQuery
-                            .of(context)
-                            .padding
-                            .top}");
+                        debugPrint(
+                            'Size = ' + MediaQuery.of(context).size.toString());
+                        debugPrint('Height = ' +
+                            (MediaQuery.of(context).size.height / 1.5)
+                                .toString());
+                        debugPrint('Width = ' +
+                            MediaQuery.of(context).size.width.toString());
+                        debugPrint("size list = " +
+                            (MediaQuery.of(context).size.height -
+                                    MediaQuery.of(context).padding.top -
+                                    kToolbarHeight)
+                                .toString());
+                        debugPrint("${MediaQuery.of(context).padding.top}");
                         debugPrint("${kToolbarHeight}");
 
                         bool checked = await DatabaseTest.fetchItemClicked(
-                            docId: docID, index: position,title: name);
+                            docId: docID, index: position, title: name);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: checked ? Text("Sauvegarde des données en local...") : Text("Problème lors de la sauvegarde..."),
+                            content: checked
+                                ? Text("Sauvegarde des données en local...")
+                                : Text("Problème lors de la sauvegarde..."),
                             padding: const EdgeInsets.all(15.0),
                           ),
                         );
@@ -780,7 +791,7 @@ class _ItemListTestState extends State<ItemListTest> {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          "Fin :      ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
+                          "Fin : ${dateEnd.day}/${dateEnd.month}/${dateEnd.year} à ${dateEnd.hour}:${dateEnd.minute}",
                           style: const TextStyle(
                             fontSize: 16,
                           ),

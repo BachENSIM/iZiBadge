@@ -6,8 +6,10 @@ class EditListUserScreen extends StatefulWidget {
   //const EditListUserScreen({Key? key}) : super(key: key);
 
   late final String documentId;
+  late final String nameEvent;
   EditListUserScreen({
     required this.documentId,
+    required this.nameEvent,
   });
   @override
   _EditListUserScreenState createState() => _EditListUserScreenState();
@@ -43,6 +45,7 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
               height: MediaQuery.of(context).size.height,
               child: EditListUserForm(
                 documentId: widget.documentId,
+                nameEvent: widget.nameEvent,
               ),
             )),
       ),

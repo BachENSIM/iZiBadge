@@ -254,7 +254,7 @@ class _CameraFormState extends State<CameraForm> {
               children: <Widget>[
                 Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
                 Text(result!.code.toString().split('//').last),
-                Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
+                Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
             //duration: Duration(seconds: 365),
@@ -288,7 +288,9 @@ class _CameraFormState extends State<CameraForm> {
           ),
         );
       }
-      setState(() {});
+      setState(() {
+        verify = false;
+      });
     });
   }
 
