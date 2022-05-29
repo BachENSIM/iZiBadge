@@ -44,15 +44,16 @@ class _CameraFormState extends State<CameraForm> {
   }
 
   void getSize() async {
-    nbTotal =  await DatabaseTest.fetchListSize(docId:widget.documentId);
+    nbTotal = await DatabaseTest.fetchListSize(docId: widget.documentId);
     debugPrint("nbTotal = $nbTotal");
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
-          color: Colors.black,
+            color: Colors.black,
             width: MediaQuery.of(context).size.width,
             height: 50,
             child: Row(
@@ -61,31 +62,31 @@ class _CameraFormState extends State<CameraForm> {
                 Text(
                   //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
                   "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                   ),
                 ),
                 IconButton(
                     icon: flash
-                        ? Icon(
-                      Icons.flash_on,
-                      color: Colors.white,
-                    )
-                        : Icon(Icons.flash_off, color: Colors.white),
+                        ? const Icon(
+                            Icons.flash_on,
+                            color: Colors.white,
+                          )
+                        : const Icon(Icons.flash_off, color: Colors.white),
                     onPressed: () async {
                       debugPrint("light");
                       await controller!.toggleFlash();
                       flash = !flash;
                       setState(() {});
                     }),
-
               ],
             )),
         Expanded(
             flex: 4,
             child: Stack(children: <Widget>[
               MaterialButton(
+                padding: EdgeInsets.zero,
                 onPressed: () async {
                   debugPrint("touche");
                   await controller!.resumeCamera();
@@ -252,7 +253,8 @@ class _CameraFormState extends State<CameraForm> {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
+                const Icon(Icons.check_circle_outline,
+                    color: Colors.green, size: 40),
                 Text(result!.code.toString().split('//').last),
                 Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
@@ -274,7 +276,7 @@ class _CameraFormState extends State<CameraForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                Text('Invalidé.....Veuillez rescanner')
+                Text("Code non valide...")
               ],
             ),
             //duration: Duration(seconds: 365),
@@ -298,7 +300,7 @@ class _CameraFormState extends State<CameraForm> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text("Pas de permission")),
       );
       Navigator.of(context).pop();
     }
@@ -307,8 +309,8 @@ class _CameraFormState extends State<CameraForm> {
   void _showToast(BuildContext context) {
     final scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Go'),
+      const SnackBar(
+        content: Text('Go'),
       ),
     );
   }

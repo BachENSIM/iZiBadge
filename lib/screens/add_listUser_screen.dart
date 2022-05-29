@@ -200,7 +200,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                       },
                                       child: Wrap(
                                         children: const <Widget>[
-                                          Text('INVITER')
+                                          Text("Inviter")
                                         ],
                                       )),
                                 )
@@ -336,12 +336,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                           child: const Padding(
                             padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
                             child: Text(
-                              'VALIDER',
+                              "Valider",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                //color: CustomColors.textSecondary,
-                                letterSpacing: 2,
                               ),
                             ),
                           ),
