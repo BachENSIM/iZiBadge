@@ -155,19 +155,15 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                                 mess =
                                                     "example${taille++}@gmail.com";
                                               }
-                                              if (DatabaseTest.lstUserAdded
-                                                  .contains(mess)) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
+                                              if(DatabaseTest.lstUserAdded.contains(mess)) {
+                                                ScaffoldMessenger.of(context).showSnackBar(
                                                   SnackBar(
-                                                    content: Text(
-                                                        "$mess est déjà invité..."),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            15.0),
+                                                    content: Text("$mess est déjà invité..."),
+                                                    padding: const EdgeInsets.all(15.0),
                                                   ),
                                                 );
-                                              } else {
+                                              }
+                                              else {
                                                 DatabaseTest.lstUserAdded
                                                     .add(mess);
                                                 DatabaseTest.lstGroupAdded
@@ -191,8 +187,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               //afficher la liste d'invitation afin de consulter avant de sauvegarder dans la BDD
                               ListView(shrinkWrap: true, children: <Widget>[
                                 Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 1.5,
+                                  height: MediaQuery.of(context).size.height/1.5,
                                   /*decoration: BoxDecoration(
                                   border: Border.all(color: Colors.blueAccent)
                               ),*/
@@ -303,10 +298,12 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             child: const Padding(
                               padding: EdgeInsets.only(top: 16, bottom: 16),
                               child: Text(
-                                "Sauvegarder",
+                                "SAUVEGARDER",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
+                                  /* color: CustomColors.textSecondary,*/
+                                  // letterSpacing: 2,
                                 ),
                               ),
                             ),

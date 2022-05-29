@@ -188,9 +188,9 @@ class _EditItemFormState extends State<EditItemForm> {
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
-                          "Sauvegarder",
+                          "SAUVEGARDER",
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             //color: CustomColors.textPrimary,
                             // letterSpacing: 2,
@@ -202,4 +202,5 @@ class _EditItemFormState extends State<EditItemForm> {
           ],
         ));
   }
+
 }

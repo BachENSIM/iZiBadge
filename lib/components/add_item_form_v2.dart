@@ -266,8 +266,10 @@ class _AddItemFormState extends State<AddItemForm> {
                       child: Text(
                         'Suivant',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
+                          //color: CustomColors.textPrimary,
+                          letterSpacing: 2,
                         ),
                       ),
                     ),
