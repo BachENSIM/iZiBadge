@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/custom_form_field.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/model/validator.dart';
 import 'package:izibagde/screens/add_group_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class AddItemForm extends StatefulWidget {
   //const AddItemForm({Key? key}) : super(key: key);
@@ -21,23 +23,45 @@ class AddItemForm extends StatefulWidget {
   _AddItemFormState createState() => _AddItemFormState();
 }
 
-late String? startDate;
-late String? startTime;
-late String? endDate;
-late String? endTime;
-
 class _AddItemFormState extends State<AddItemForm> {
   final _addItemFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
+
   //for create date and hours of event
+/*  DateTime selectedDateStart = DateTime.now();
+  TimeOfDay selectedTimeStart = TimeOfDay.now(); */
   DateTime selectedDateStart = DateTime.now();
-  TimeOfDay selectedTimeStart = TimeOfDay.now();
-  DateTime selectedDateEnd = DateTime.now();
-  TimeOfDay selectedTimeEnd = TimeOfDay.now();
+  TimeOfDay selectedTimeStart =
+      TimeOfDay(hour: TimeOfDay.now().hour + 1, minute: TimeOfDay.now().minute);
+  late DateTime selectedDateEnd = selectedDateStart;
+
+  late TimeOfDay selectedTimeEnd = TimeOfDay(
+      hour: selectedTimeStart.hour + 1, minute: selectedTimeStart.minute);
+
+  late String? startDate = displayDate(selectedDateStart);
+  late String? startTime =
+      displayTime(TimeOfDay(hour: selectedDateStart.hour + 1, minute: 00));
+  late String? endDate = displayDate(selectedDateEnd);
+  late String? endTime =
+      displayTime(TimeOfDay(hour: selectedDateStart.hour + 2, minute: 00));
 
   final TextEditingController _titleCtl = TextEditingController();
   final TextEditingController _descCtl = TextEditingController();
   final TextEditingController _addrCtl = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    debugPrint("Create " + selectedTimeStart.hour.toString());
+    if (selectedTimeStart.hour == 24) {
+      selectedDateStart = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+      selectedTimeStart = TimeOfDay(hour: 0, minute: 0);
+      startTime = displayTime(selectedTimeStart);
+      debugPrint("Create " + selectedTimeEnd.hour.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,50 +160,8 @@ class _AddItemFormState extends State<AddItemForm> {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          _selectDateStart(context);
-                        },
-                        // style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.all(
-                        //         CustomColors.textSecondary)),
-                        child: Wrap(
-                          children: const <Widget>[
-                            Icon(
-                              Icons.calendar_today_rounded,
-                              //color: CustomColors.accentLight,
-                              size: 32.0,
-                            ),
-                          ],
-                        )),
-                    const SizedBox(width: 10.0),
-                    Text(
-                        "${selectedDateStart.day}/${selectedDateStart.month}/${selectedDateStart.year}"),
-                    const SizedBox(width: 30.0),
-                    ElevatedButton(
-                        onPressed: () {
-                          _selectTimeStart(context);
-                        },
-                        // style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.all(
-                        //         CustomColors.textSecondary)),
-                        child: Wrap(
-                          children: const <Widget>[
-                            Icon(
-                              Icons.timer_rounded,
-                              //color: CustomColors.accentLight,
-                              size: 32.0,
-                            ),
-                          ],
-                        )),
-                    const SizedBox(width: 10.0),
-                    Text(
-                        "${selectedTimeStart.hour}:${selectedTimeStart.minute}"),
-                  ],
-                ),
-                const SizedBox(height: 24.0),
+                dateTime(selectedDateStart, selectedTimeStart, true),
+                const SizedBox(height: 12.0),
                 const Text(
                   'Date et heure de fin',
                   style: TextStyle(
@@ -190,49 +172,8 @@ class _AddItemFormState extends State<AddItemForm> {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          _selectDateEnd(context);
-                        },
-                        // style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.all(
-                        //         CustomColors.textSecondary)),
-                        child: Wrap(
-                          children: const <Widget>[
-                            Icon(
-                              Icons.calendar_today_rounded,
-                              //color: CustomColors.accentLight,
-                              size: 32.0,
-                            ),
-                          ],
-                        )),
-                    const SizedBox(width: 10.0),
-                    Text(
-                        "${selectedDateEnd.day}/${selectedDateEnd.month}/${selectedDateEnd.year}"),
-                    const SizedBox(width: 30.0),
-                    ElevatedButton(
-                        onPressed: () {
-                          _selectTimeEnd(context);
-                        },
-                        // style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.all(
-                        //         CustomColors.textSecondary)),
-                        child: Wrap(
-                          children: const <Widget>[
-                            Icon(
-                              Icons.timer_rounded,
-                              //color: CustomColors.accentLight,
-                              size: 32.0,
-                            ),
-                          ],
-                        )),
-                    const SizedBox(width: 10.0),
-                    Text("${selectedTimeEnd.hour}:${selectedTimeEnd.minute}"),
-                  ],
-                ),
-                const SizedBox(height: 24.0),
+                dateTime(selectedDateEnd, selectedTimeEnd, false),
+                const SizedBox(height: 12.0),
               ],
             ),
           ),
@@ -270,17 +211,30 @@ class _AddItemFormState extends State<AddItemForm> {
                         DatabaseTest.nameSave = _titleCtl.text;
                         DatabaseTest.addrSave = _addrCtl.text;
                         DatabaseTest.descSave = _descCtl.text;
-                        DatabaseTest.startSave =
-                            DateTime.parse(DateTime.now().toString());
-                        DatabaseTest.endSave =
-                            DateTime.parse(DateTime.now().toString());
-                        print("T:[" +
-                            DatabaseTest.nameSave! +
-                            "]  A:[" +
-                            DatabaseTest.addrSave! +
-                            "]  D:[" +
-                            DatabaseTest.descSave! +
-                            "]");
+                        DatabaseTest.startSave = selectedDateStart;
+                        DatabaseTest.endSave = selectedDateEnd;
+                        DatabaseTest.timeStartSave = selectedTimeStart;
+                        DatabaseTest.timeEndSave = selectedTimeEnd;
+
+                        String start =
+                            "${selectedDateStart.toLocal().toString().split(" ").first}T${selectedTimeStart.format(context)}:00";
+                        String end =
+                            "${selectedDateEnd.toLocal().toString().split(" ").first}T${selectedTimeEnd.format(context)}:00";
+                        debugPrint("start " + DateTime.parse(start).toString());
+                        debugPrint("end " + DateTime.parse(end).toString());
+                        //debugPrint(slcTStart.format(context));
+                        if (DatabaseTest.listHoursStart.isNotEmpty)
+                          DatabaseTest.listHoursStart.clear();
+                        DatabaseTest.listHoursStart.add(DateTime.parse(start));
+                        if (DatabaseTest.listHoursEnd.isNotEmpty)
+                          DatabaseTest.listHoursEnd.clear();
+                        DatabaseTest.listHoursEnd.add(DateTime.parse(end));
+
+                        /*debugPrint(
+                            "Change page " + selectedDateStart.toString());
+                        debugPrint(selectedDateEnd.toString());
+                        debugPrint(selectedTimeStart.format(context));
+                        debugPrint(selectedTimeEnd.format(context));*/
 
                         /*await Database.addItem(
                           title: _titleCtl.text,
@@ -311,10 +265,8 @@ class _AddItemFormState extends State<AddItemForm> {
                       child: Text(
                         'Suivant',
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          //color: CustomColors.textPrimary,
-                          letterSpacing: 2,
                         ),
                       ),
                     ),
@@ -325,152 +277,188 @@ class _AddItemFormState extends State<AddItemForm> {
     );
   }
 
-  _selectDateStart(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDateStart,
-      firstDate: DateTime(1999),
-      lastDate: DateTime(2099),
+  Widget dateTime(DateTime dateInit, TimeOfDay timeInit, bool start) {
+    return Row(
+      children: [
+        const Icon(Icons.calendar_today),
+        TextButton(
+            onPressed: () {
+              _selectDate(context, dateInit, start);
+              setState(() {});
+              //showDatePicker(context, dateInit,timeInit);
+            },
+            child: Container(
+                width: 150,
+                alignment: Alignment.centerRight,
+                child: //Text(displayDate(dateInit))
+                    Text(start ? startDate! : endDate!))),
+        TextButton(
+            onPressed: () {
+              _selectTime(context, timeInit, start);
+              setState(() {});
+            },
+            child: Container(
+                alignment: Alignment.centerLeft,
+                child: //Text(displayTime(timeInit))
+                    Text(start ? startTime! : endTime!)))
+      ],
     );
-    if (selected != null && selected != selectedDateStart) {
-      setState(() {
-        selectedDateStart = selected;
-        //startDate = selectedDateStart.day.toString()+ "-" + selectedDateStart.month.toString()  +"-"+selectedDateStart.year.toString();
-        if (selectedDateStart.month < 10) {
-          if (selectedDateStart.day < 10) {
-            startDate = selectedDateStart.year.toString() +
-                "-0" +
-                selectedDateStart.month.toString() +
-                "-0" +
-                selectedDateStart.day.toString();
-          } else {
-            startDate = selectedDateStart.year.toString() +
-                "-0" +
-                selectedDateStart.month.toString() +
-                "-" +
-                selectedDateStart.day.toString();
-          }
-        } else {
-          startDate = selectedDateStart.year.toString() +
-              "-" +
-              selectedDateStart.month.toString() +
-              "-" +
-              selectedDateStart.day.toString();
-        }
-        //startDate = selectedDateStart.toString();
-        //print("StartDate: " + startDate! + " " + startTime!);
+  }
 
-        //print((DateTime.parse(startDate!)) );
-        //print((DateTime.parse(selectedDateStart.toString())) );
+  String displayDate(DateTime dateInit) {
+    String message = "";
+    String day = "";
+    List<String> dayOfWeek = [
+      'lun.',
+      'mar.',
+      'mer.',
+      'jeu.',
+      'ven.',
+      'sam.',
+      'dim.'
+    ];
+    List<String> months = [
+      'jan.',
+      'févr.',
+      'mars',
+      'avr.',
+      'mai',
+      'juin',
+      'juil.',
+      'août',
+      'sept.',
+      'oct.',
+      'nov.',
+      'déc.'
+    ];
+    if (dateInit.day < 10) {
+      day = "0${dateInit.day}";
+    } else {
+      day = "${dateInit.day}";
+    }
+    message =
+        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
+    return message;
+  }
+
+  String displayTime(TimeOfDay timeInit) {
+    String message = "";
+    String mins = "";
+    String hours = "";
+    (timeInit.minute < 10)
+        ? mins = "0${timeInit.minute}"
+        : mins = "${timeInit.minute}";
+    (timeInit.hour < 10)
+        ? hours = "0${timeInit.hour}"
+        : hours = "${timeInit.hour}";
+    message = "$hours:$mins";
+    return message;
+  }
+
+  _selectDate(BuildContext context, DateTime dateTimeInit, bool start) async {
+    final DateTime? selected = await showDatePicker(
+      locale: const Locale('fr', ''),
+      context: context,
+      initialDate: dateTimeInit,
+      //bloquer la date entre firstDate et lastDate
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2099),
+      initialDatePickerMode: DatePickerMode.day,
+      initialEntryMode: DatePickerEntryMode.calendar,
+    );
+    if (selected != null && selected != dateTimeInit) {
+      setState(() {
+        dateTimeInit = selected;
+        if (start) {
+          if (selectedDateEnd.day == selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
+            selectedDateStart = selected;
+            selectedDateEnd = selectedDateStart;
+            endDate = displayDate(selectedDateEnd);
+          }
+
+          /*if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
+            selectedDateEnd = dateTimeInit;
+            endDate = displayDate(selectedDateEnd);
+            debugPrint("Start: $selectedDateStart");
+            debugPrint("End: $selectedDateEnd");
+          }*/
+
+        } else {
+          selectedDateEnd = dateTimeInit;
+          if (selectedDateEnd.day < selectedDateStart.day &&
+              selectedDateEnd.month == selectedDateStart.month) {
+            selectedDateStart = selectedDateEnd;
+            startDate = displayDate(dateTimeInit);
+          }
+        }
+        debugPrint("Start: $selectedDateStart");
+        debugPrint("End: $selectedDateEnd");
+        start
+            ? startDate = displayDate(dateTimeInit)
+            : endDate = displayDate(dateTimeInit);
       });
     }
   }
 
-  _selectTimeStart(BuildContext context) async {
+  _selectTime(BuildContext context, TimeOfDay todInit, bool start) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
       context: context,
-      initialTime: selectedTimeStart,
+      initialTime: TimeOfDay(hour: todInit.hour, minute: 00),
+      //initialTime:  todInit,
       initialEntryMode: TimePickerEntryMode.dial,
+      builder: (context, child) {
+        //return child!;
+        return Localizations.override(
+          context: context,
+          locale: const Locale('fr', 'FR'),
+          child: child,
+        );
+      },
     );
-    if (timeOfDay != null && timeOfDay != selectedTimeStart) {
+    if (timeOfDay != null && timeOfDay != todInit) {
       setState(() {
-        selectedTimeStart = timeOfDay;
-        if (selectedTimeStart.hour < 10) {
-          if (selectedTimeStart.minute < 10) {
-            startTime = "0" +
-                selectedTimeStart.hour.toString() +
-                ":0" +
-                selectedTimeStart.minute.toString() +
-                ":00.000";
-          } else {
-            startTime = "0" +
-                selectedTimeStart.hour.toString() +
-                ":" +
-                selectedTimeStart.minute.toString() +
-                ":00.000";
+        todInit = timeOfDay;
+        //pour l'heure début
+        if (start) {
+          selectedTimeStart = todInit;
+          selectedTimeEnd =
+              TimeOfDay(hour: todInit.hour + 1, minute: todInit.minute);
+          debugPrint(selectedTimeEnd.hour.toString());
+          if (selectedTimeEnd.hour > 23) {
+            selectedDateEnd = DateTime(selectedDateEnd.year,
+                selectedDateEnd.month, selectedDateEnd.day + 1);
+            endDate = displayDate(selectedDateEnd);
           }
-        } else {
-          startTime = selectedTimeStart.hour.toString() +
-              ":" +
-              selectedTimeStart.minute.toString() +
-              ":00.000";
+          endTime = displayTime(selectedTimeEnd);
+          debugPrint(start.toString());
         }
-
-        //startTime = selectedTimeStart.hour.toString() + ":" + selectedTimeStart.minute.toString() + ":00";
-        //print("StartDate: " + startDate! + " " + startTime!);
-        //print((DateTime.parse(startDate! + " " + startTime!)));
-      });
-    }
-  }
-
-  _selectDateEnd(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: selectedDateEnd,
-      firstDate: DateTime(1999),
-      lastDate: DateTime(2099),
-    );
-    if (selected != null && selected != selectedDateEnd) {
-      setState(() {
-        selectedDateEnd = selected;
-        //endDate = selectedDateEnd.day.toString()+ "-" + selectedDateEnd.month.toString()  +"-"+selectedDateEnd.year.toString();
-        if (selectedDateEnd.month < 10) {
-          if (selectedDateEnd.day < 10) {
-            endDate = selectedDateEnd.year.toString() +
-                "-0" +
-                selectedDateEnd.month.toString() +
-                "-0" +
-                selectedDateEnd.day.toString();
-          } else {
-            endDate = selectedDateEnd.year.toString() +
-                "-0" +
-                selectedDateEnd.month.toString() +
-                "-" +
-                selectedDateEnd.day.toString();
+        //pour l'heure fin
+        else {
+          selectedTimeEnd = todInit;
+          if (todInit.hour <= selectedTimeStart.hour &&
+              selectedDateStart.day == selectedDateEnd.day) {
+            selectedTimeStart =
+                TimeOfDay(hour: todInit.hour - 1, minute: todInit.minute);
+            debugPrint("qsd" + selectedTimeStart.hour.toString());
+            if (selectedTimeStart.hour == -1) {
+              selectedDateStart = DateTime(selectedDateStart.year,
+                  selectedDateStart.month, selectedDateStart.day - 1);
+              selectedTimeStart =
+                  TimeOfDay(hour: 23, minute: selectedTimeEnd.minute);
+              startDate = displayDate(selectedDateStart);
+            }
+            startTime = displayTime(selectedTimeStart);
           }
-        } else {
-          endDate = selectedDateEnd.year.toString() +
-              "-" +
-              selectedDateEnd.month.toString() +
-              "-" +
-              selectedDateEnd.day.toString();
         }
-        //print("EndDate: " + endDate! + " " + endTime!);
-      });
-    }
-  }
+        debugPrint("Start $selectedTimeStart");
+        debugPrint("End $selectedTimeEnd");
+        //pour les afficher
+        start
+            ? startTime = displayTime(todInit)
+            : endTime = displayTime(todInit);
 
-  _selectTimeEnd(BuildContext context) async {
-    final TimeOfDay? timeOfDay = await showTimePicker(
-      context: context,
-      initialTime: selectedTimeEnd,
-      initialEntryMode: TimePickerEntryMode.dial,
-    );
-    if (timeOfDay != null && timeOfDay != selectedTimeEnd) {
-      setState(() {
-        selectedTimeEnd = timeOfDay;
-        //endTime = selectedTimeEnd.hour.toString() + ":" + selectedTimeEnd.minute.toString() + ":00";
-        if (selectedTimeEnd.hour < 10) {
-          if (selectedTimeEnd.minute < 10) {
-            endTime = "0" +
-                selectedTimeEnd.hour.toString() +
-                ":0" +
-                selectedTimeEnd.minute.toString() +
-                ":00.000";
-          } else {
-            endTime = "0" +
-                selectedTimeEnd.hour.toString() +
-                ":" +
-                selectedTimeEnd.minute.toString() +
-                ":00.000";
-          }
-        } else {
-          endTime = selectedTimeEnd.hour.toString() +
-              ":" +
-              selectedTimeEnd.minute.toString() +
-              ":00.000";
-        }
-        //print("EndDate: " + endDate! + " " + endTime!);
+        //debugPrint(timeOfDay.format(context));
       });
     }
   }

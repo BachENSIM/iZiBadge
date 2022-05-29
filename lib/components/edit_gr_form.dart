@@ -7,9 +7,11 @@ import 'package:izibagde/screens/dashboard_screen.dart';
 class EditGroupForm extends StatefulWidget {
   //const EditGroupForm({Key? key}) : super(key: key);
   late final String documentId;
+  late final String nameEvent;
 
   EditGroupForm({
     required this.documentId,
+    required this.nameEvent,
   });
 
   @override
@@ -19,18 +21,21 @@ class EditGroupForm extends StatefulWidget {
 class _EditGroupFormState extends State<EditGroupForm> {
   // un autre controller pour saisir => creer des groupe differents
   final _groupNameCtl = TextEditingController();
+
   //un autre controller pour modifier le nom d'un groupe
   TextEditingController? _groupEditCtl;
+
   //un controller par default => afficher un groupe par default
-  String initialText = "Groupe 1";
+  String initialText = "Groupe 2";
   TextEditingController? _groupInitCtl;
+
   //verifier l'indice de la liste => si = 0 => c'est le default
   bool _one = false;
   bool _isProcessing = false;
 
   //pour sauvegarder dans la BDD
 
-  late int taille = 1;
+  late int taille = 2;
 
   @override
   void initState() {
@@ -56,6 +61,11 @@ class _EditGroupFormState extends State<EditGroupForm> {
           //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              "Titre : ${widget.nameEvent}",
+              textAlign: TextAlign.start,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,12 +76,14 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   autofocus: false,
                   controller: _groupNameCtl,
                   decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior
-                        .never, //Hides label on focus or if filled
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    //Hides label on focus or if filled
                     labelText: "Ex: Groupe Etudiant",
-                    filled: true, // Needed for adding a fill color
+                    filled: true,
+                    // Needed for adding a fill color
                     // fillColor: CustomColors.backgroundLight,
-                    isDense: false, // Reduces height a bit
+                    isDense: false,
+                    // Reduces height a bit
                     border: const OutlineInputBorder(
                       borderSide: BorderSide.none, // No border
                       borderRadius: BorderRadius.only(
@@ -85,7 +97,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           onPressed: () {
                             _groupNameCtl.clear();
                           },
-                          icon: Icon(Icons.clear_rounded)),
+                          icon: const Icon(Icons.clear_rounded)),
                     ),
                   ),
                 )),
@@ -99,9 +111,18 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
                           }
-                          //_groupNameList.add(mess);
-                          DatabaseTest.lstGrAdded.add(mess);
-                          _groupNameCtl.clear();
+                          if (DatabaseTest.lstGrAdded.contains(mess)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("$mess est déjà créé ..."),
+                                padding: const EdgeInsets.all(15.0),
+                              ),
+                            );
+                          } else {
+                            //_groupNameList.add(mess);
+                            DatabaseTest.lstGrAdded.add(mess);
+                            _groupNameCtl.clear();
+                          }
                           //print(DatabaseTest.listNameGroup.toString());
                         });
                       },
@@ -126,24 +147,21 @@ class _EditGroupFormState extends State<EditGroupForm> {
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
-                height: 375.0,
+                height: MediaQuery.of(context).size.height / 1.7,
                 child: ListView.builder(
                   shrinkWrap: true,
                   //itemCount: _groupNameList.length,
                   itemCount: DatabaseTest.lstGrAdded.length,
                   itemBuilder: (BuildContext context, int index) {
                     //if (_groupNameList.length == 1)
-                    if (DatabaseTest.lstGrAdded.length == 1)
-                      _one = true;
-                    else
-                      _one = false;
-                    return Container(
-                        child: Column(children: <Widget>[
-                      const SizedBox(
-                        height: 0,
-                      ),
+                    (DatabaseTest.lstGrAdded.length == 1)
+                        ? _one = true
+                        : _one = false;
+                    return Column(children: <Widget>[
                       GFListTile(
-                        // color: CustomColors.accentLight,
+                        color: index.isEven
+                            ? CustomColors.lightPrimaryColor
+                            : CustomColors.lightPrimaryColor.withOpacity(0.6),
                         avatar: CircleAvatar(
                             radius: 20,
                             // backgroundColor: CustomColors.accentDark,
@@ -160,7 +178,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              icon: Icon(Icons.edit_rounded),
+                              icon: const Icon(Icons.edit_rounded),
                               onPressed: () {
                                 _groupEditCtl = TextEditingController(
                                     //text: _groupNameList[index]);
@@ -173,7 +191,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                             ),
                             if (!_one)
                               IconButton(
-                                icon: Icon(Icons.delete_forever_sharp),
+                                icon: const Icon(Icons.delete_forever_sharp),
                                 onPressed: () {
                                   setState(() {
                                     if (!_one) {
@@ -190,7 +208,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           ],
                         ),
                       ),
-                    ]));
+                    ]);
                   },
                 ),
               )
@@ -211,6 +229,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   )
                 : Container(
                     width: double.maxFinite,
+                    // alignment: Alignment.center,
                     child: ElevatedButton(
                       style: ButtonStyle(
                         // backgroundColor: MaterialStateProperty.all(
@@ -239,14 +258,12 @@ class _EditGroupFormState extends State<EditGroupForm> {
                         );
                       },
                       child: const Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
+                        padding: EdgeInsets.only(top: 16, bottom: 16),
                         child: Text(
-                          'Sauvegarder',
+                          "Sauvegarder",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            // color: CustomColors.textSecondary,
-                            letterSpacing: 2,
                           ),
                         ),
                       ),
@@ -263,60 +280,48 @@ class _EditGroupFormState extends State<EditGroupForm> {
         context: context,
         builder: (BuildContext ctx) {
           return AlertDialog(
-            /*title: const Text('Please Confirm'),*/
-            content: const Text('Souhaitez-vous modifier le nom de ce group?'),
-            shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                    // color: CustomColors.textPrimary,
-                    width: 1),
-                borderRadius: BorderRadius.circular(15)),
+            title: const Text('Modifier le nom du groupe'),
+            content: TextFormField(
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              controller: _groupEditCtl,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(8),
+                isDense: true,
+              ),
+            ),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             actions: [
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    width: 250,
-                    child: TextFormField(
-                      maxLines: 1,
-                      keyboardType: TextInputType.text,
-                      controller: _groupEditCtl,
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        isDense: true,
-                      ),
-                    ),
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annuler'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Remove the box
+                  setState(() {
+                    DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
+                    // DatabaseTest.listNameGroup[index] =
+                    // _groupNameList[index];
+                    //print("list" +  DatabaseTest.lstGrAdded[index]);
+                    // print("data: " +
+                    //     DatabaseTest.listNameGroup.toString());
+                    _groupEditCtl?.clear();
+                  });
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Modifier',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  Row(
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () {
-                            // Remove the box
-                            setState(() {
-                              DatabaseTest.lstGrAdded[index] =
-                                  _groupEditCtl!.text;
-                              // DatabaseTest.listNameGroup[index] =
-                              // _groupNameList[index];
-                              //print("list" +  DatabaseTest.lstGrAdded[index]);
-                              // print("data: " +
-                              //     DatabaseTest.listNameGroup.toString());
-                              _groupEditCtl?.clear();
-                            });
-
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Modifiez')),
-                      TextButton(
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Annulez'))
-                    ],
-                  ),
-                ],
-              )
-              // The "Yes" button
+                ),
+              ),
             ],
           );
         });

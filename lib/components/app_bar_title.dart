@@ -7,23 +7,25 @@ class AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // height: MediaQuery.of(context).padding.top,
+    // width: MediaQuery.of(context).padding.top,
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      //mainAxisSize: MainAxisSize.min,
+      // crossAxisAlignment: CrossAxisAlignment.start,
+      // mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
           'asset/image/firebase_logo.png',
           height: 20,
         ),
-        SizedBox(width: 8),
-        Text(
+        const SizedBox(width: 8),
+        const Text(
           'iZiBadge',
           style: TextStyle(
             //color: CustomColors.accentLight,
-            fontSize: 18,
+            fontSize: 20,
           ),
         ),
-        SizedBox(width: 225),
+        // const SizedBox(width: 225),
         /*IconButton(
             onPressed: () {
               */ /*Navigator.of(context)

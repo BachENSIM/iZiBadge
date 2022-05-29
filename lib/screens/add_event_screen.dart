@@ -41,7 +41,7 @@ class AddScreen extends StatelessWidget {
                 elevation: 0,
                 // primary: Colors.transparent
               )),
-          actions: [
+/*          actions: [
             ElevatedButton(
               // style: ButtonStyle(
               //     backgroundColor: MaterialStateProperty.all(
@@ -67,7 +67,7 @@ class AddScreen extends StatelessWidget {
                 ],
               ),
             )
-          ],
+          ],*/
         ),
         //scrollView
         body: Center(
