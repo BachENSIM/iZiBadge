@@ -225,11 +225,10 @@ class _AddItemFormState extends State<AddItemForm> {
                         //debugPrint(slcTStart.format(context));
                         if (DatabaseTest.listHoursStart.isNotEmpty)
                           DatabaseTest.listHoursStart.clear();
-                          DatabaseTest.listHoursStart
-                              .add(DateTime.parse(start));
+                        DatabaseTest.listHoursStart.add(DateTime.parse(start));
                         if (DatabaseTest.listHoursEnd.isNotEmpty)
                           DatabaseTest.listHoursEnd.clear();
-                          DatabaseTest.listHoursEnd.add(DateTime.parse(end));
+                        DatabaseTest.listHoursEnd.add(DateTime.parse(end));
 
                         /*debugPrint(
                             "Change page " + selectedDateStart.toString());
@@ -266,10 +265,8 @@ class _AddItemFormState extends State<AddItemForm> {
                       child: Text(
                         'Suivant',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          //color: CustomColors.textPrimary,
-                          letterSpacing: 2,
                         ),
                       ),
                     ),

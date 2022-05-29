@@ -30,92 +30,89 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
         stream: DatabaseTest.readListInvite(widget.documentId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong....");
+            return const Text("Something went wrong...");
           } else if (snapshot.hasData || snapshot.data != null) {
-            return ListView.separated(
-                separatorBuilder: (context, index) => SizedBox(height: 16.0),
-                //itemCount: snapshot.data!.docs.length,
-                itemCount: 1,
-                itemBuilder: (context, index) {
-                  var noteList = snapshot.data!.docs[index].data()!
-                      as Map<String, dynamic>;
-                  String docID = snapshot.data!.docs[index].id;
-                  String email = noteList['email'];
-                  print("email: " + email + " ID: " + docID);
-                  return Column(
-                    children: <Widget>[
-                      QrImage(data: docID),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          // backgroundColor: MaterialStateProperty.all(
-                          //   CustomColors.accentLight,
-                          // ),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        onPressed: () async {
-                          //télécharger le QRCOde sur le téléphone
-                          //Etape 1: valider le QRCode
-                          final qrValidationResult = QrValidator.validate(
-                            data: docID,
-                            version: QrVersions.auto,
-                            errorCorrectionLevel: QrErrorCorrectLevel.L,
-                          );
-                          //prendre le QRCode
-                          final qrCode = qrValidationResult.qrCode;
-                          //dessiner le QRCode (ajouter des couleurs,...)
-                          final painter = QrPainter.withQr(
-                            qr: qrCode!,
-                            color: const Color(0xFFFFFFFF),
-                            emptyColor: const Color(0xFF000000),
-                            gapless: true,
-                            embeddedImageStyle: null,
-                            embeddedImage: null,
-                          );
-                          //le mettre dans un hazard fichier
-                          Directory tempDir = await getTemporaryDirectory();
-                          String tempPath = tempDir.path;
-                          final ts =
-                              DateTime.now().toUtc().toString();
-                          String path = '$tempPath/$ts.png';
-                          //exporter QRCode d'image au fichier
-                          final picData = await painter.toImageData(2048);
-                          await writeToFile(picData!, path);
-                          //Sauvergarder dans le gallery
-                          //String pathCreate = await createQrPicture(qr);
+            // return ListView.separated(
+            //     separatorBuilder: (context, index) =>
+            //         const SizedBox(height: 16),
+            //     itemCount: snapshot.data!.docs.length,
+            //     itemBuilder: (context, index) {
+            var noteList =
+                snapshot.data!.docs[0].data()! as Map<String, dynamic>;
+            String docID = snapshot.data!.docs[0].id;
+            String email = noteList['email'];
+            print("email: " + email + " ID: " + docID);
+            return Column(
+              children: <Widget>[
+                QrImage(data: docID),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    // backgroundColor: MaterialStateProperty.all(
+                    //   CustomColors.accentLight,
+                    // ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    //télécharger le QRCOde sur le téléphone
+                    //Etape 1: valider le QRCode
+                    final qrValidationResult = QrValidator.validate(
+                      data: docID,
+                      version: QrVersions.auto,
+                      errorCorrectionLevel: QrErrorCorrectLevel.L,
+                    );
+                    //prendre le QRCode
+                    final qrCode = qrValidationResult.qrCode;
+                    //dessiner le QRCode (ajouter des couleurs,...)
+                    final painter = QrPainter.withQr(
+                      qr: qrCode!,
+                      color: const Color(0xFFFFFFFF),
+                      emptyColor: const Color(0xFF000000),
+                      gapless: true,
+                      embeddedImageStyle: null,
+                      embeddedImage: null,
+                    );
+                    //le mettre dans un hazard fichier
+                    Directory tempDir = await getTemporaryDirectory();
+                    String tempPath = tempDir.path;
+                    final ts = DateTime.now().toUtc().toString();
+                    String path = '$tempPath/$ts.png';
+                    //exporter QRCode d'image au fichier
+                    final picData = await painter.toImageData(2048);
+                    await writeToFile(picData!, path);
+                    //Sauvergarder dans le gallery
+                    //String pathCreate = await createQrPicture(qr);
 
-                          final success = await GallerySaver.saveImage(path);
+                    final success = await GallerySaver.saveImage(path);
 
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: success!
-                                ? Text('Image saved to Gallery')
-                                : Text('Error saving image'),
-                          ));
-                          debugPrint(success.toString());
-                          Navigator.of(context).pop();
-                        },
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(top: 16.0, bottom: 16.0),
-                          child: Text(
-                            'Télécharger',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              //color: CustomColors.textPrimary,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  );
-                });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: success!
+                          ? Text('Image saved to Gallery')
+                          : Text('Error saving image'),
+                    ));
+                    debugPrint(success.toString());
+                    Navigator.of(context).pop();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                    child: Text(
+                      "Sauvegarder dans la gallerie",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            );
+            // });
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
                 // valueColor: AlwaysStoppedAnimation<Color>(
                 //   CustomColors.accentLight,
