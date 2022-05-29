@@ -30,7 +30,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
         stream: DatabaseTest.readListInvite(widget.documentId),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text("Something went wrong....");
+            return const Text("Something went wrong...");
           } else if (snapshot.hasData || snapshot.data != null) {
             return ListView.separated(
                 separatorBuilder: (context, index) => SizedBox(height: 16.0),
@@ -115,7 +115,7 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                   );
                 });
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
                 // valueColor: AlwaysStoppedAnimation<Color>(
                 //   CustomColors.accentLight,
