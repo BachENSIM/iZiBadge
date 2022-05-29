@@ -14,6 +14,8 @@ import 'package:izibagde/screens/edit_listUser_screen.dart';
 import 'package:izibagde/screens/qrcode_screen.dart';
 import 'package:izibagde/screens/scanner_screen.dart';
 
+import '../screens/ScanTypeScreen.dart';
+
 class ItemListTest extends StatefulWidget {
   @override
   _ItemListTestState createState() => _ItemListTestState();
@@ -528,7 +530,7 @@ class _ItemListTestState extends State<ItemListTest> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => ScannerScreen(
+                            builder: (context) => ScanTypeScreen(
                               documentId: docID,
                             ),
                           ),
