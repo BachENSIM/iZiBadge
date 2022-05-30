@@ -32,6 +32,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  ##configuration la language
+  flutter_localizations: # Add this line
+    sdk: flutter
+  intl: ^0.17.0 # Add this line
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -59,11 +63,12 @@ dependencies:
   flutter_nearby_connections: ^1.1.1
   device_info: ^2.0.3
 
-
-
-
-
-
+  ##Cupertino picker
+  ##flutter_cupertino_date_picker: ^1.0.26+2
+  ##s'approvisionner le path pour le directoire
+  path_provider: ^2.0.10
+  ##utiliser le gallery - faut donner le droit d'écrire dans la meémoire externale
+  gallery_saver: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +87,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
+  ## The generate: true line is necessary for the automatic code generation the localization packages provide for us.
+  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

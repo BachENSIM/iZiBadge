@@ -5,8 +5,10 @@ import 'package:izibagde/components/edit_gr_form.dart';
 class EditGroupScreen extends StatefulWidget {
   //const EditGroupScreen({Key? key}) : super(key: key);
   late final String documentId;
+  late final String nameEvent;
   EditGroupScreen({
     required this.documentId,
+    required this.nameEvent,
   });
   @override
   _EditGroupScreenState createState() => _EditGroupScreenState();
@@ -22,24 +24,28 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
         title: const Text("Modifier les groupes"),
         //AppBarTitle()
         centerTitle: true,
-        leadingWidth: 150,
+        leadingWidth: 100,
         leading: ElevatedButton.icon(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_left_sharp),
-            label: const Text("Back",
+            icon: const Icon(Icons.clear),
+            label: const Text("",
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  // color: CustomColors.textSecondary,
-                )),
+                    // fontSize: 16,
+                    // fontWeight: FontWeight.w700,
+                    // color: CustomColors.textSecondary,
+                    )),
             style: ElevatedButton.styleFrom(
                 elevation: 0, primary: Colors.transparent)),
       ),
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(25),
-            child: EditGroupForm(
-              documentId: widget.documentId,
+            child: Container(
+              height: MediaQuery.of(context).size.height/1.2,
+              child: EditGroupForm(
+                documentId: widget.documentId,
+                nameEvent: widget.nameEvent,
+              ),
             )),
       ),
     );

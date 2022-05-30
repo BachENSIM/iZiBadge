@@ -8,6 +8,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 class CameraForm extends StatefulWidget {
   // const CameraForm({Key? key}) : super(key: key);
   late final String documentId;
+
   CameraForm({required this.documentId});
 
   @override
@@ -19,6 +20,8 @@ class _CameraFormState extends State<CameraForm> {
   QRViewController? controller;
   late bool verify;
   bool flash = false;
+  bool touch = false;
+  int nbTotal = 0;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -28,36 +31,130 @@ class _CameraFormState extends State<CameraForm> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
     }
-    controller!.resumeCamera();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getSize();
+    super.initState();
+  }
+
+  void getSize() async {
+    nbTotal = await DatabaseTest.fetchListSize(docId: widget.documentId);
+    debugPrint("nbTotal = $nbTotal");
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Expanded(flex: 4, child: _buildQrView(context)),
+        Container(
+            color: Colors.black,
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                  "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                IconButton(
+                    icon: flash
+                        ? const Icon(
+                            Icons.flash_on,
+                            color: Colors.white,
+                          )
+                        : const Icon(Icons.flash_off, color: Colors.white),
+                    onPressed: () async {
+                      debugPrint("light");
+                      await controller!.toggleFlash();
+                      flash = !flash;
+                      setState(() {});
+                    }),
+              ],
+            )),
         Expanded(
             flex: 4,
             child: Stack(children: <Widget>[
-              _buildQrView(context),
-              Row(
+              MaterialButton(
+                padding: EdgeInsets.zero,
+                onPressed: () async {
+                  debugPrint("touche");
+                  await controller!.resumeCamera();
+                  setState(() {
+                    nbTotal = DatabaseTest.nbPersonTotal;
+                  });
+                },
+                child: _buildQrView(context),
+                minWidth: MediaQuery.of(context).size.width,
+              ),
+              //_buildQrView(context),
+              /* Positioned(
+                  left: 350.0,
+                  width: 10.0,
+                  top: 10.0,
+                  child: IconButton(
+                      icon: flash
+                          ? Icon(
+                              Icons.flash_on,
+                              color: Colors.white,
+                            )
+                          : Icon(Icons.flash_off, color: Colors.white),
+                      onPressed: () async {
+                        debugPrint("light");
+                        await controller!.toggleFlash();
+                        flash = !flash;
+                        setState(() {});
+                      })),
+              Positioned(
+                  left: 15.0,
+                  child: Container(
+                      */ /*decoration: BoxDecoration(
+                        color: Colors.blue,
+                        border: Border.all(
+                          color: Colors.red,
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                        )),*/ /*
+                      // width: 250,
+                      // height: 50,
+                      child: Text(
+                    "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ))),*/
+              /*SizedBox(
+                width: 250,
+              ),*/
+
+              /* Row(
                 //mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Positioned(
                       left: 0.0,
-                      right: 0.0,
+                      right: 10.0,
                       top: 0.0,
                       child: Container(
-                          width: 250,
-                          height: 50,
+                          // width: 250,
+                          // height: 50,
                           child: Text(
-                            "Nombre de persons entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ))),
+                        "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ))),
                   SizedBox(
                     width: 90,
                   ),
@@ -66,13 +163,13 @@ class _CameraFormState extends State<CameraForm> {
                       right: 0.0,
                       top: 0.0,
                       child: Container(
-                          width: 50,
-                          height: 50,
+                          // width: 50,
+                          // height: 50,
                           child: IconButton(
                               icon: flash
                                   ? Icon(
                                       Icons.flash_on,
-                                      //color: Colors.white,
+                                      color: Colors.white,
                                     )
                                   : Icon(Icons.flash_off, color: Colors.white),
                               onPressed: () async {
@@ -81,7 +178,7 @@ class _CameraFormState extends State<CameraForm> {
                                 setState(() {});
                               }))),
                 ],
-              ),
+              ),*/
             ])),
         /*Expanded(
             flex: 1,
@@ -133,21 +230,21 @@ class _CameraFormState extends State<CameraForm> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
+    this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
-      result = scanData ;
-      debugPrint(result!.code);
+      result = scanData;
+      debugPrint("QRCode ${result!.code}");
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      verify =  await DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString().split('//').last);
+      verify = await DatabaseTest.fetchDataCheck(
+          widget.documentId, result!.code.toString().split('//').last);
       debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
-          DatabaseTest.emailClient + " nb d'entrée: " + DatabaseTest.countPersonScanned.toString());
+          DatabaseTest.emailClient +
+          " nb d'entrée: " +
+          DatabaseTest.countPersonScanned.toString());
       //verify = DatabaseTest.status;
 
       if (verify) {
@@ -156,19 +253,20 @@ class _CameraFormState extends State<CameraForm> {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(Icons.check_circle_outline,
+                const Icon(Icons.check_circle_outline,
                     color: Colors.green, size: 40),
-                Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
+                Text(result!.code.toString().split('//').last),
+                Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
-            duration: Duration(seconds: 365),
+            //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
+            /*action: SnackBarAction(
               label: "Validé",
               onPressed: () async {
                 await controller.resumeCamera();
               },
-            ),
+            ),*/
           ),
         );
       } else {
@@ -178,21 +276,22 @@ class _CameraFormState extends State<CameraForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                Text('Invalidé.....Veuillez rescanner')
+                Text("Code non valide...")
               ],
             ),
-            duration: Duration(seconds: 365),
+            //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
+            /*action: SnackBarAction(
               label: "Rescannez",
               onPressed: () async {
                 await controller.resumeCamera();
               },
-            ),
+            ),*/
           ),
         );
       }
-      setState(()  {
+      setState(() {
+        verify = false;
       });
     });
   }
@@ -201,7 +300,7 @@ class _CameraFormState extends State<CameraForm> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text("Pas de permission")),
       );
       Navigator.of(context).pop();
     }
@@ -210,8 +309,8 @@ class _CameraFormState extends State<CameraForm> {
   void _showToast(BuildContext context) {
     final scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Go'),
+      const SnackBar(
+        content: Text('Go'),
       ),
     );
   }

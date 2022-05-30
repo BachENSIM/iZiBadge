@@ -4,21 +4,24 @@
 6. supprimer button en bas et garder en haut (button next)
 9. probleme de camera/snackbar/compter cb personne sur personne totale => faut compter "statutEntree" dans la BDD (80%)
 10. vérifier quand supprimer un events => faut changer l'etat sur autre compte
-15. Le probleme de modification la liste d'invitaion => commenet mettre à jour la liste?
+15. Le probleme de modification la liste d'invitation => commenet mettre à jour la liste?
 15.1 => supprimer l'ancienne et rajouter une nouvelle => mettre à jour pour tous les comptes (ça a l'air facile) (faut comparer les contenus entre 2 listes pour changer l'attribute sur un events)
 15.2 => comparer la taille de 2 liste => s'il y a des changements => les corriger (plus compliqué)
 16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text
-17. des differences créneaux pour chaque groupe
+17. des differences créneaux pour chaque groupe (la suite 26,27)
 18. un endroit ou je sais sur quel compte que je me connecte (50% => pour l'instant le mettre sur le header)
 19. notifier l'utilisateur quand changer qq chose
 20. historique de BDD avant changements (snapshot)
 21. pour le role "Scanneur" => il faut mettre aussi la liste d'invitaion dans la BDD (done)
 (organisateur cree la liste et synchronise aux autres comptes => check role = Scanneur => cree une pareil liste )
-23. Creer un bouton pour sauvegarder les données en local (done)
-24. Changer le title sur le header (done)
-25. Table de liste d'invitation (done)
 
-
+27. Pour chaque groupe, il faut mettre dans la BDD l'intervalle de heure correspond, ctd, créer un autre document dans la collection "groupe" qui s'appelle "listeHeure" et  les balancer dedans.
+28. Le scanneur doit aussi le droit d'accéder la BDD, sur tout la liste de Groupe et la liste de Heure ?????
+29. IL faut sauvegarder où l'heure de chaque groupe ? Pt les mettre directement dans le détail de cet events
+30. Le détail d'un events qui affiche l'heure début et fin ?? le scanneur qui récupere le qr code => trouver le nom de persons et le groupe => revenir à la collection afin de définir la position de ce groupe => trouver les heures
+31. Changer l'interface de partie scanner un QR Code (un modal affichant au milieu d'écran et toucher pour reprendre la camera).
+32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer
+33. éviter inviter nous même (une comparaison avec le nom de host)
 
 ------------done---------------
 3. 3 types de modifications: events/groupe/user => done
@@ -32,3 +35,7 @@
 15. Changer icône ajout de groupe (on dirait que c'est un ajout d'invité)
 18. garder juste le button supprimer si un events est annulé (done)
 22. Mettre à jour le scanneur dans le filtre (done)
+23. Creer un bouton pour sauvegarder les données en local (done)
+24. Changer le title sur le header (done)
+25. Table de liste d'invitation (done)
+26. Changer l'interface l'heure (garder tjs le titre pour la page d'events et laisser une icone et 2 text buttons(pour date et pour l'heure) (done)
