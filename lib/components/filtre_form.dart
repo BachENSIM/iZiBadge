@@ -65,7 +65,7 @@ class _FiltreFormState extends State<FiltreForm> {
                           onChanged: (bool? value) {
                             setState(() {
                               DatabaseTest.isInvite = value!;
-                              print("invité " + DatabaseTest.isInvite.toString());
+                              debugPrint("invité " + DatabaseTest.isInvite.toString());
                             });
                           }),
                       Text("Count : " +  widget.nbInviteur.toString()),
@@ -81,7 +81,7 @@ class _FiltreFormState extends State<FiltreForm> {
                           onChanged: (bool? value) {
                             setState(() {
                               DatabaseTest.isScan = value!;
-                              print("scanneur " + DatabaseTest.isScan.toString());
+                              debugPrint("scanneur " + DatabaseTest.isScan.toString());
                             });
                           }),
                       Text("Count : " +  widget.nbScan.toString()),
@@ -93,7 +93,7 @@ class _FiltreFormState extends State<FiltreForm> {
                       onChanged: (bool? value) {
                         setState(() {
                           DatabaseTest.isScan = value!;
-                          print("scanneur " + DatabaseTest.isScan.toString());
+                          debugPrint("scanneur " + DatabaseTest.isScan.toString());
                         });
                       }
                       )

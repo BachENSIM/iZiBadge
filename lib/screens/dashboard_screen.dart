@@ -61,7 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           hintStyle: TextStyle(
                             color: CustomColors.textIcons.withOpacity(0.7),
                           ),
-                          contentPadding: EdgeInsets.all(8),
+                          contentPadding: const EdgeInsets.all(8),
                           isDense: true,
                         ),
                         style: TextStyle(
@@ -98,22 +98,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
         },
         backgroundColor: CustomColors.accentColor,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           // color: CustomColors.textIcons,
           size: 32,
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            bottom: 20.0,
-          ),
-          child: ItemListTest(),
-        ),
-      ),
+          child: Padding(
+        padding: const EdgeInsets.only(
+            // left: 16,
+            // right: 16,
+            // bottom: 20,
+            ),
+        child: ItemListTest(),
+      )),
+      // ),
       //Menu bottom bar
       // bottomNavigationBar: BottomNavigationBar(
       //   currentIndex: _currentIndex,

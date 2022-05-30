@@ -6,8 +6,10 @@ class EditListUserScreen extends StatefulWidget {
   //const EditListUserScreen({Key? key}) : super(key: key);
 
   late final String documentId;
+  late final String nameEvent;
   EditListUserScreen({
     required this.documentId,
+    required this.nameEvent,
   });
   @override
   _EditListUserScreenState createState() => _EditListUserScreenState();
@@ -20,17 +22,17 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
       appBar: AppBar(
         //elevation: 0,
         //backgroundColor: CustomColors.backgroundDark,
-        title: const Text("Modification la liste"),
+        title: const Text("Modifier la liste"),
         //AppBarTitle()
         centerTitle: true,
-        leadingWidth: 150,
+        leadingWidth: 100,
         leading: ElevatedButton.icon(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_left_sharp),
-            label: const Text("Back",
+            icon: const Icon(Icons.clear),
+            label: const Text("",
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  // fontWeight: FontWeight.w700,
                   //color: CustomColors.secondaryText,
                 )),
             style: ElevatedButton.styleFrom(
@@ -39,8 +41,12 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(5),
-            child: EditListUserForm(
-              documentId: widget.documentId,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: EditListUserForm(
+                documentId: widget.documentId,
+                nameEvent: widget.nameEvent,
+              ),
             )),
       ),
     );
