@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -333,7 +332,7 @@ class _ItemListTestState extends State<ItemListTest> {
                           //         }),
                           //   ],
                           // );
-                           return GFCheckboxListTile(
+                          return GFCheckboxListTile(
                               titleText: DatabaseTest.listNbRole.isEmpty
                                   ? "Organisateur 0"
                                   : "Organisateur " +
@@ -349,7 +348,6 @@ class _ItemListTestState extends State<ItemListTest> {
                                   });
                                 });
                               });
-
                         },
                       ),
                     ),
@@ -551,6 +549,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                                         EditGroupScreen(
                                                       documentId: docID,
                                                       nameEvent: name,
+                                                      dateEnd: dateEnd,
+                                                      dateStart: dateStart,
                                                     ),
                                                   ),
                                                 );

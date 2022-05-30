@@ -296,10 +296,7 @@ class _GroupFormState extends State<GroupForm> {
     );
   }
 
-  void _modify(
-    BuildContext context,
-    int index,
-  ) {
+  void _modify(BuildContext context, int index,) {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -348,11 +345,31 @@ class _GroupFormState extends State<GroupForm> {
                   onPressed: () {
                     // Remove the box
                     setState(() {
-                      _groupNameList[index] = _groupEditCtl!.text;
-                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
-                      print("list" + _groupNameList[index]);
-                      print("data: " + DatabaseTest.listNameGroup.toString());
-                      _groupEditCtl?.clear();
+                      if(_groupNameList.contains(_groupEditCtl!.text)) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "${_groupEditCtl!.text} est déjà dans la liste..."),
+                            padding:
+                            const EdgeInsets.all(15.0),
+                          ),
+                        );
+                      }else {
+                        _groupNameList[index] = _groupEditCtl!.text;
+                        DatabaseTest.listNameGroup[index] = _groupNameList[index];
+                        _groupEditCtl?.clear();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Modification réussie..."),
+                            padding: EdgeInsets.all(15.0),
+
+                          ),
+                        );
+                      }
+
                     });
 
                     // Close the dialog

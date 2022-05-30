@@ -66,7 +66,7 @@ class DatabaseTest {
     required String role,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection(eventRelated).doc();
+    _mainCollection.doc(userUid).collection(eventRelated).doc();
     //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc();
 
     Map<String, dynamic> data = <String, dynamic>{
@@ -82,7 +82,8 @@ class DatabaseTest {
     docIdAdd = documentReferencer.id;
     await documentReferencer
         .set(data)
-        .whenComplete(() => print("Event " +
+        .whenComplete(() =>
+        print("Event " +
             title +
             " have been added into database avec id " +
             docIdAdd!))
@@ -98,7 +99,7 @@ class DatabaseTest {
     required String docId,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
+    _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
     //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc(docId);
 
     Map<String, dynamic> data = <String, dynamic>{
@@ -129,10 +130,10 @@ class DatabaseTest {
 
   /*---------------------------------------*/
   //pour récupérer tous les events dans la BDD mais trier par "role"
-  static Stream<QuerySnapshot> readRoles(
-      bool _isOrganisateur, bool _isInviteur, bool _isScanneur) {
+  static Stream<QuerySnapshot> readRoles(bool _isOrganisateur, bool _isInviteur,
+      bool _isScanneur) {
     Query<Map<String, dynamic>> notesItemCollection =
-        _mainCollection.doc(userUid).collection(eventRelated);
+    _mainCollection.doc(userUid).collection(eventRelated);
     //.orderBy("dateDebut", descending: true);
     //Filtrer par Organisateur
     if (_isOrganisateur && !_isInviteur && !_isScanneur) {
@@ -157,13 +158,13 @@ class DatabaseTest {
     else if (searchSave.isNotEmpty) {
       return notesItemCollection
           .where("titre",
-              /* isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
-              //Same as below
-              isGreaterThanOrEqualTo: searchSave,
-              isLessThan: searchSave.substring(0, searchSave.length - 1) +
-                  String.fromCharCode(
-                      searchSave.codeUnitAt(searchSave.length - 1) + 1))
-          //.startAt([searchSave]).endAt([searchSave + '\uf8ff'])
+          /* isGreaterThanOrEqualTo: searchSave, isLessThan: searchSave+ 'z')*/
+          //Same as below
+          isGreaterThanOrEqualTo: searchSave,
+          isLessThan: searchSave.substring(0, searchSave.length - 1) +
+              String.fromCharCode(
+                  searchSave.codeUnitAt(searchSave.length - 1) + 1))
+      //.startAt([searchSave]).endAt([searchSave + '\uf8ff'])
           .orderBy("titre", descending: true)
           .orderBy("dateDebut", descending: false)
           .snapshots();
@@ -171,7 +172,7 @@ class DatabaseTest {
     //Revoyer toutes les infos dans la BDD
     else {
       return notesItemCollection
-          /*.where("titre",
+      /*.where("titre",
           isGreaterThanOrEqualTo: searchSave,
           isLessThan: searchSave + 'z')
           .orderBy("titre", descending: true)*/
@@ -183,7 +184,7 @@ class DatabaseTest {
   /*---------------------------------------*/
   static Stream<QuerySnapshot> readEmails() {
     Query<Map<String, dynamic>> itemsEmailCollection =
-        _mainCollection.doc(userUid).collection("emails");
+    _mainCollection.doc(userUid).collection("emails");
     //_mainCollection.doc("test@gmail.com").collection(eventRelated);
 
     return itemsEmailCollection.snapshots();
@@ -218,7 +219,8 @@ class DatabaseTest {
           .collection(eventRelated)
           .doc(docId)
           .update({"isEfface": true})
-          .whenComplete(() => print("Event of this account :" +
+          .whenComplete(() =>
+          print("Event of this account :" +
               data.docs[j].data()['email'] +
               "has been updated in the database"))
           .catchError((e) => print(e));
@@ -230,7 +232,8 @@ class DatabaseTest {
         .doc(docId)
         .collection(participants)
         .get();
-    await documentRefList.then((value) => value.docs.forEach((element) {
+    await documentRefList.then((value) =>
+        value.docs.forEach((element) {
           element.reference.delete();
         }));
     //Step 2bis : delete list of group (participation) of this event
@@ -240,20 +243,23 @@ class DatabaseTest {
         .doc(docId)
         .collection(participantsGr)
         .get();
-    await documentRefGroup.then((value) => value.docs.forEach((element) {
+    await documentRefGroup.then((value) =>
+        value.docs.forEach((element) {
           element.reference.delete();
         }));
 
     //Step 3 : delete this event from DB
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
+    _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
     //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc(docId);
     await documentReferencer
         .delete()
-        .whenComplete(() => print('Event with id ' +
+        .whenComplete(() =>
+        print('Event with id ' +
             docId +
             ' have been deleted from the database!!!'))
         .catchError((e) => print(e));
+    isDel = false;
   }
 
   /*---------------------------------------*/
@@ -268,17 +274,19 @@ class DatabaseTest {
         .doc(docId)
         .collection(participants)
         .get();
-    await documentRefList.then((value) => value.docs.forEach((element) {
+    await documentRefList.then((value) =>
+        value.docs.forEach((element) {
           element.reference.delete();
         }));
 
     //Step 3 : delete this event from DB
     DocumentReference documentReferencer =
-        _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
+    _mainCollection.doc(userUid).collection(eventRelated).doc(docId);
     //_mainCollection.doc("test@gmail.com").collection(eventRelated).doc(docId);
     await documentReferencer
         .delete()
-        .whenComplete(() => print('Event with id ' +
+        .whenComplete(() =>
+        print('Event with id ' +
             docId +
             ' have been deleted from the database!!!'))
         .catchError((e) => print(e));
@@ -361,7 +369,8 @@ class DatabaseTest {
 
       await documentReferencer
           .set(data)
-          .whenComplete(() => print("Add Invité[" +
+          .whenComplete(() =>
+          print("Add Invité[" +
               i.toString() +
               "] avec id: " +
               documentReferencer.id))
@@ -388,7 +397,8 @@ class DatabaseTest {
             .collection(participants)
             .doc(documentReferencer.id)
             .set(data)
-            .whenComplete(() => print("Add this event into email : " +
+            .whenComplete(() =>
+            print("Add this event into email : " +
                 listEmail[i] +
                 " with id: " +
                 documentReferencer.id))
@@ -451,7 +461,6 @@ class DatabaseTest {
         .set(data)
         .whenComplete(() => print("Updated group for event $docIdAdd"))
         .catchError((e) => print(e));
-
   }
 
   /*---------------------------------------*/
@@ -507,7 +516,7 @@ class DatabaseTest {
     required String role,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(email).collection(eventRelated).doc(docIdAdd);
+    _mainCollection.doc(email).collection(eventRelated).doc(docIdAdd);
 
     Map<String, dynamic> data = <String, dynamic>{
       "titre": title,
@@ -598,8 +607,8 @@ class DatabaseTest {
   static HashMap lstPersonScanned = HashMap<String, int>();
 
   //fonction pour verifier le status du client
-  static Future<bool> fetchDataCheck(
-      String idParticipation, String contentQRCode) async {
+  static Future<bool> fetchDataCheck(String idParticipation,
+      String contentQRCode) async {
     //lstPersonEnter = HashMap<String,bool>();
     //lstPersonScanned = HashMap<String,int>();
 
@@ -621,7 +630,7 @@ class DatabaseTest {
         //countPersonScanned++;
         if (!lstPersonScanned.containsKey(contentQRCode)) {
           lstPersonScanned.putIfAbsent(contentQRCode,
-              () => 1); //ajouter une valeur dans la table de Hachage
+                  () => 1); //ajouter une valeur dans la table de Hachage
           //mettre à jour le statut d'entrée d'une personne = true
           await _mainCollection
               .doc(userUid)
@@ -630,12 +639,12 @@ class DatabaseTest {
               .collection(participants)
               .doc(idClient)
               .update({
-                "statutEntree": true,
-                "timestamp": DateTime.now(),
-                "nbEntree": lstPersonScanned[contentQRCode]
-              })
+            "statutEntree": true,
+            "timestamp": DateTime.now(),
+            "nbEntree": lstPersonScanned[contentQRCode]
+          })
               .whenComplete(() =>
-                  debugPrint("Updated email: $emailClient with status: true"))
+              debugPrint("Updated email: $emailClient with status: true"))
               .catchError((e) => debugPrint(e));
           //countPersonEnter++;
         } else {
@@ -649,7 +658,8 @@ class DatabaseTest {
               .collection(participants)
               .doc(idClient)
               .update({"nbEntree": countPersonEnter})
-              .whenComplete(() => debugPrint(
+              .whenComplete(() =>
+              debugPrint(
                   "Updated email: $emailClient with nbEntrée: $countPersonEnter"))
               .catchError((e) => print(e));
         }
@@ -667,27 +677,53 @@ class DatabaseTest {
 
   /*---------------------------------------*/
   //avoir besoins de sauvegarder touts les groupes sur BDD pour
-  static Future<void> updateGroup(
-      {required String docId, required List<String> lstGroupUpdate}) async {
-    DocumentReference documentReferencer = _mainCollection
+  static Future<void> updateGroup({required String docId, required List<
+      String> lstGroupUpdate, required List<DateTime> lstDateStart,
+       required List<DateTime> lstDateEnd}) async {
+    //mettre à jour la liste de groupe
+    DocumentReference documentGroup = _mainCollection
         .doc(userUid)
         .collection(eventRelated)
         .doc(docId)
         .collection(participantsGr)
         .doc(listOfGroup);
 
-    Map<String, dynamic> data = <String, dynamic>{
+    Map<String, dynamic> dataGr = <String, dynamic>{
       "nomListeGroupe": lstGroupUpdate
     };
 
-    await documentReferencer
-        .update(data)
-        .whenComplete(() => print("Updated group for event ${docId}"))
-        .catchError((e) => print(e));
+    await documentGroup
+        .update(dataGr)
+        .whenComplete(() => debugPrint("Updated group for event $docId"))
+        .catchError((e) => debugPrint(e));
+
+    //mettre à jour la liste de date commencé/terminé
+    DocumentReference documentDate = _mainCollection
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participantsGr)
+        .doc(listOfHours);
+
+    Map<String, dynamic> dataDate = <String, dynamic>{
+      "listeHeureCommencee": lstDateStart,
+      "listeHeureTerminee": lstDateEnd
+    };
+
+    await documentDate
+        .update(dataDate)
+        .whenComplete(() => debugPrint("Updated time for event $docId"))
+        .catchError((e) => debugPrint(e));
   }
+
   /*---------------------------------------*/
   //pour récupérer tous les groupes dans la BDD
+  // pour voir les groupes sauvegardées dans la BDD
   static List<String> lstGrAdded = [];
+
+  //les 2 autres listes pour consulter les dates débuts et fins
+  static List<DateTime> lstDateStartAdded = [];
+  static List<DateTime> lstDateEndAdded = [];
 
   //méthode pour récupérer les groupes dans la liste d'invitation
   /*static void fetchGroupAdded(String idParticipation) async{
@@ -721,8 +757,9 @@ class DatabaseTest {
 
   static Future<void> fetchGroupAdded(String idParticipation) async {
     //récupérer le nom de cet events pour savoir quel events qu'on touche
-
-
+    //2
+    List<Timestamp> start = [];
+    List<Timestamp> end = [];
     var dataID = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
@@ -730,16 +767,27 @@ class DatabaseTest {
         .doc(idParticipation)
         .collection(participantsGr)
         .get();
-    if(lstGrAdded.isNotEmpty) lstGrAdded.clear();
-    if(dataID.docs.isNotEmpty ) {
+    if (lstGrAdded.isNotEmpty) lstGrAdded.clear();
+    if (lstDateStartAdded.isNotEmpty) lstDateStartAdded.clear();
+    if (lstDateEndAdded.isNotEmpty) lstDateEndAdded.clear();
+    if (dataID.docs.isNotEmpty) {
       lstGrAdded = (dataID.docs[0].data()['nomListeGroupe']).cast<String>();
-     /* for (int i = 0; i < dataID.docs.length; i++) {
+      //cast en Timestamp parce que sur Firebase, il n'a pas de type DateTime
+      start = (dataID.docs[1].data()['listeHeureCommencee']).cast<Timestamp>();
+      end = (dataID.docs[1].data()['listeHeureTerminee']).cast<Timestamp>();
+      /* for (int i = 0; i < dataID.docs.length; i++) {
         //faut convertir en String parce qu'au début c'est le type dynamic pour que je puisse sauvegarder dans la BDD
         lstGrAdded = (dataID.docs[i].data()['nomListeGroupe']).cast<String>();
       }*/
     }
-
+    //parcourir la liste et convertir en DateTime
+    lstDateStartAdded =
+        start.map((date) => date.toDate()).toList();
+    lstDateEndAdded = end.map((date) => date.toDate()).toList();
+    debugPrint(lstDateStartAdded.toString());
+    debugPrint(lstDateEndAdded.toString());
   }
+
   /*---------------------------------------*/
   //pour récupérer les emails + roles + groups
   static List<String> lstUserAdded = [];
@@ -865,7 +913,8 @@ class DatabaseTest {
             .collection(eventRelated)
             .doc(docId)
             .update({"isEfface": false})
-            .whenComplete(() => print(
+            .whenComplete(() =>
+            print(
                 "Changer l'etat de l'attribute isEfface = false de ${emailCheck}"))
             .catchError((e) => print(e));
       } else if (check && index > 0) {
@@ -957,7 +1006,8 @@ class DatabaseTest {
 
     debugPrint(index.toString());
     String message =
-        "${dataID.docs[index].data()['titre']} ${dataID.docs[index].data()['adresse']} ${dataID.docs[index].data()['description']} ";
+        "${dataID.docs[index].data()['titre']} ${dataID.docs[index]
+        .data()['adresse']} ${dataID.docs[index].data()['description']} ";
     debugPrint("message : $message ");
     //pour récupérer les groupes
     var dataGroup = await FirebaseFirestore.instance

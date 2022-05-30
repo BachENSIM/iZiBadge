@@ -4,10 +4,10 @@
 6. supprimer button en bas et garder en haut (button next)
 9. probleme de camera/snackbar/compter cb personne sur personne totale => faut compter "statutEntree" dans la BDD (80%)
 10. vérifier quand supprimer un events => faut changer l'etat sur autre compte
-15. Le probleme de modification la liste d'invitation => commenet mettre à jour la liste?
+15. Le probleme de modification la liste d'invitation => comment mettre à jour la liste?
 15.1 => supprimer l'ancienne et rajouter une nouvelle => mettre à jour pour tous les comptes (ça a l'air facile) (faut comparer les contenus entre 2 listes pour changer l'attribute sur un events)
 15.2 => comparer la taille de 2 liste => s'il y a des changements => les corriger (plus compliqué)
-16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text
+16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text (pas de temps)
 17. des differences créneaux pour chaque groupe (la suite 26,27)
 18. un endroit ou je sais sur quel compte que je me connecte (50% => pour l'instant le mettre sur le header)
 19. notifier l'utilisateur quand changer qq chose
@@ -20,8 +20,10 @@
 29. IL faut sauvegarder où l'heure de chaque groupe ? Pt les mettre directement dans le détail de cet events
 30. Le détail d'un events qui affiche l'heure début et fin ?? le scanneur qui récupere le qr code => trouver le nom de persons et le groupe => revenir à la collection afin de définir la position de ce groupe => trouver les heures
 31. Changer l'interface de partie scanner un QR Code (un modal affichant au milieu d'écran et toucher pour reprendre la camera).
-32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer
-33. éviter inviter nous même (une comparaison avec le nom de host)
+32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer (done)
+33. éviter inviter nous même (une comparaison avec le nom de host) (done)
+34. vérifier la date/ l'heure pour chaque groupe (done) / mettre la date-l'heure dans la BDD (done)
+
 
 ------------done---------------
 3. 3 types de modifications: events/groupe/user => done
@@ -39,3 +41,13 @@
 24. Changer le title sur le header (done)
 25. Table de liste d'invitation (done)
 26. Changer l'interface l'heure (garder tjs le titre pour la page d'events et laisser une icone et 2 text buttons(pour date et pour l'heure) (done)
+
+
+
+-------------------------
+Nouvelle méthode pour git pour iZiBadge:
+Checkout to bach
+Commit & Sync
+Checkout to master
+Pull from bach
+Sync
