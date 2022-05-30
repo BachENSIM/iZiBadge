@@ -1018,9 +1018,10 @@ class DatabaseTest {
         .collection(participantsGr)
         .get();
     List<String> group = [];
-    for (int i = 0; i < dataGroup.docs.length; i++) {
+    /*for (int i = 0; i < dataGroup.docs.length; i++) {
       group.add(dataGroup.docs[i].data()['nomListeGroupe']);
-    }
+    }*/
+    group = (dataGroup.docs[0].data()['nomListeGroupe']).cast<String>();
     var dataInvite = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)

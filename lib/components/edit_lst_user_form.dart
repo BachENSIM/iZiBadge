@@ -165,7 +165,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                               String snackBar = userExist
                                                   ? "$mess est déjà dans la liste..."
                                                   : (uIdExist
-                                                      ? "$mess : Vous ne pouvez pas inviter vous même parce que vous êtes organisateur"
+                                                      ? "$mess : Vous êtes déjà invité !"
                                                       : "Ajout réussi...");
                                               if (userExist || uIdExist) {
                                                 ScaffoldMessenger.of(context)
@@ -333,12 +333,10 @@ class _EditListUserFormState extends State<EditListUserForm> {
                             child: const Padding(
                               padding: EdgeInsets.only(top: 16, bottom: 16),
                               child: Text(
-                                "SAUVEGARDER",
+                                "Sauvegarder",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  /* color: CustomColors.textSecondary,*/
-                                  // letterSpacing: 2,
                                 ),
                               ),
                             ),
@@ -460,7 +458,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           : userExist
                               ? "$mess est déjà dans la liste..."
                               : (uIdExist
-                                  ? "$mess : Vous ne pouvez pas inviter vous même parce que vous êtes organisateur"
+                                  ? "$mess : Vous êtes déjà invité !"
                                   : "Modification réussie...");
                       if (!diff && (userExist || uIdExist)) {
                         ScaffoldMessenger.of(context).showSnackBar(
