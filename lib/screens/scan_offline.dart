@@ -9,13 +9,16 @@ import 'package:izibagde/screens/check_list_screen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanOffline extends StatefulWidget {
-  Device connected_device;
   NearbyService nearbyService;
   String documentId;
+  List<Device> connectedDevices = [];
 
   var chat_state;
 
-  ScanOffline({ required this.connected_device, required this.nearbyService, required this.documentId});
+  ScanOffline(
+      {required this.connectedDevices,
+      required this.nearbyService,
+      required this.documentId});
 
   @override
   _ScanOfflineState createState() => _ScanOfflineState();
@@ -25,32 +28,40 @@ class _ScanOfflineState extends State<ScanOffline> {
   late StreamSubscription subscription;
   late StreamSubscription receivedDataSubscription;
   List<ChatMessage> messages = [];
-  void addMessgeToList(ChatMessage  obj){
-
+  void addMessgeToList(ChatMessage obj) {
     setState(() {
       messages.insert(0, obj);
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     init();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     receivedDataSubscription.cancel();
   }
-  void init(){
-    receivedDataSubscription =
-        this.widget.nearbyService.dataReceivedSubscription(callback: (data) {
-          var obj = ChatMessage(messageContent: data["message"], messageType: "receiver");
-          log(obj.messageContent);
-        });
 
+  void init() {
+    receivedDataSubscription = this
+        .widget
+        .nearbyService
+        .dataReceivedSubscription(callback: (data) async {
+      //Réception du contenu du QR Code
+      var obj =
+          ChatMessage(messageContent: data["message"], messageType: "receiver");
+      log(obj.messageContent);
+      await DatabaseTest.fetchDataCheck(
+          widget.documentId, obj.messageContent.toString().split('//').last);
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,12 +86,13 @@ class _ScanOfflineState extends State<ScanOffline> {
               // )),
               onPressed: () async {
                 await DatabaseTest.fetchListInvite(docId: widget.documentId);
-                sleep(const Duration(
-                    milliseconds: 500));
+                sleep(const Duration(milliseconds: 500));
                 log(widget.documentId);
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CheckListUserScreen(documentId: widget.documentId,),
+                    builder: (context) => CheckListUserScreen(
+                      documentId: widget.documentId,
+                    ),
                   ),
                 );
               },
@@ -99,24 +111,29 @@ class _ScanOfflineState extends State<ScanOffline> {
             )
           ]),
       body: CameraFormOffline(
-          documentId: widget.documentId, connected_device: widget.connected_device, nearbyService: widget.nearbyService), // Here the scanned result will be shown
+          documentId: widget.documentId,
+          connectedDevices: widget.connectedDevices,
+          nearbyService:
+              widget.nearbyService), // Here the scanned result will be shown
     );
   }
 }
 
-
-class ChatMessage{
+class ChatMessage {
   String messageContent;
   String messageType;
-  ChatMessage({ required this.messageContent,  required this.messageType});
+  ChatMessage({required this.messageContent, required this.messageType});
 }
 
 class CameraFormOffline extends StatefulWidget {
   // const CameraForm({Key? key}) : super(key: key);
   late final String documentId;
-  Device connected_device;
+  List<Device> connectedDevices = [];
   NearbyService nearbyService;
-  CameraFormOffline({required this.documentId, required this.connected_device, required this.nearbyService});
+  CameraFormOffline(
+      {required this.documentId,
+      required this.connectedDevices,
+      required this.nearbyService});
 
   @override
   _CameraFormOfflineState createState() => _CameraFormOfflineState();
@@ -181,9 +198,9 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
                           child: IconButton(
                               icon: flash
                                   ? Icon(
-                                Icons.flash_on,
-                                //color: Colors.white,
-                              )
+                                      Icons.flash_on,
+                                      //color: Colors.white,
+                                    )
                                   : Icon(Icons.flash_off, color: Colors.white),
                               onPressed: () async {
                                 await controller!.toggleFlash();
@@ -200,7 +217,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-        MediaQuery.of(context).size.height < 400)
+            MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -209,7 +226,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-        // borderColor: Colors.orangeAccent,
+          // borderColor: Colors.orangeAccent,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -225,16 +242,19 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
 
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
-      result = scanData ;
+      result = scanData;
       debugPrint(result!.code);
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      myControllerText = result!.code.toString().split('//').last;
-      verify =  await DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString().split('//').last);
+      myControllerText = result!.code.toString();
+      verify = await DatabaseTest.fetchDataCheck(
+          widget.documentId, result!.code.toString());
       debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
-          DatabaseTest.emailClient + " nb d'entrée: " + DatabaseTest.countPersonScanned.toString());
+          DatabaseTest.emailClient +
+          " nb d'entrée: " +
+          DatabaseTest.countPersonScanned.toString());
       //verify = DatabaseTest.status;
 
       if (verify) {
@@ -243,8 +263,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(Icons.check_circle_outline,
-                    color: Colors.green, size: 40),
+                Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
                 Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
@@ -252,18 +271,22 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             padding: const EdgeInsets.all(15.0),
             action: SnackBarAction(
               label: "Validé",
-
               onPressed: () async {
-                if(this.widget.connected_device.state == SessionState.notConnected) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("disconnected"),
-                    backgroundColor: Colors.red,
-                  ));
-                  return;
+                for (int i = 0; i < widget.connectedDevices.length; i++) {
+                  if (this.widget.connectedDevices[i].state ==
+                      SessionState.notConnected) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("disconnected"),
+                      backgroundColor: Colors.red,
+                    ));
+                    return;
+                  }
+
+                  this.widget.nearbyService.sendMessage(
+                      this.widget.connectedDevices[i].deviceId,
+                      myControllerText);
                 }
 
-                this.widget.nearbyService.sendMessage(
-                    this.widget.connected_device.deviceId, myControllerText);
                 myControllerText = "";
                 await controller.resumeCamera();
               },
@@ -285,16 +308,20 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             action: SnackBarAction(
               label: "Rescannez",
               onPressed: () async {
-                if(this.widget.connected_device.state == SessionState.notConnected) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("disconnected"),
-                    backgroundColor: Colors.red,
-                  ));
-                  return;
-                }
+                for (int i = 0; i < widget.connectedDevices.length; i++) {
+                  if (this.widget.connectedDevices[i].state ==
+                      SessionState.notConnected) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("disconnected"),
+                      backgroundColor: Colors.red,
+                    ));
+                    return;
+                  }
 
-                this.widget.nearbyService.sendMessage(
-                    this.widget.connected_device.deviceId, myControllerText);
+                  this.widget.nearbyService.sendMessage(
+                      this.widget.connectedDevices[i].deviceId,
+                      myControllerText);
+                }
                 myControllerText = "";
                 await controller.resumeCamera();
               },
@@ -302,8 +329,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
           ),
         );
       }
-      setState(()  {
-      });
+      setState(() {});
     });
   }
 

@@ -13,8 +13,7 @@ import 'chat.dart';
 enum DeviceType { advertiser, browser }
 
 class DevicesListScreen extends StatefulWidget {
-
-  DevicesListScreen({ required this.deviceType, required this.documentId});
+  DevicesListScreen({required this.deviceType, required this.documentId});
 
   final DeviceType deviceType;
 
@@ -49,15 +48,12 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
-
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           centerTitle: true,
           title: Row(
-
             children: [
               SizedBox(width: 40),
               Text(widget.deviceType.toString().substring(11).toUpperCase()),
@@ -66,7 +62,6 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         ),
         backgroundColor: Colors.white,
         body: ListView.builder(
-
             itemCount: getItemCount(),
             itemBuilder: (context, index) {
               final device = widget.deviceType == DeviceType.advertiser
@@ -75,55 +70,48 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
               return Container(
                 margin: EdgeInsets.all(8.0),
                 child: Column(
-
                   children: [
                     Row(
                       textDirection: TextDirection.rtl,
-
                       children: [
                         Expanded(
-
                             child: GestureDetector(
-
-                              onTap: () => _onTabItemListener(device),
-                              child: Column(
-
-                                textDirection: TextDirection.rtl,
-                                children: [
-                                  SizedBox(height: 9.0),
-                                  Text(device.deviceName,),
-                                  Text(
-                                    getStateName(device.state),
-                                    style: TextStyle(
-                                        color: getStateColor(device.state)),
-                                  ),
-                                ],
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
+                          onTap: () => _onTabItemListener(device),
+                          child: Column(
+                            textDirection: TextDirection.rtl,
+                            children: [
+                              SizedBox(height: 9.0),
+                              Text(
+                                device.deviceName,
                               ),
-                            )),
+                              Text(
+                                getStateName(device.state),
+                                style: TextStyle(
+                                    color: getStateColor(device.state)),
+                              ),
+                            ],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                        )),
                         // Request connect
                         GestureDetector(
-
                           onTap: () => _onButtonClicked(device),
                           child: Container(
-
                             margin: EdgeInsets.symmetric(horizontal: 8.0),
-
                             height: 40,
                             width: 40,
                             color: getButtonColor(device.state),
-
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-
                                 children: <Widget>[
-
-                                  new Icon(getButtonStateIcon(device.state),color: Colors.white,)
-                                ]
-                            ),
+                                  new Icon(
+                                    getButtonStateIcon(device.state),
+                                    color: Colors.white,
+                                  )
+                                ]),
                           ),
-                        ),SizedBox.fromSize(
+                        ),
+                        SizedBox.fromSize(
                           size: Size(40, 40), // button width and height
                           // child: ClipOval(
 
@@ -132,18 +120,24 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                             child: InkWell(
                               // splash color
                               onTap: () {
-                                if(device.state == SessionState.connected) {
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                if (device.state == SessionState.connected) {
+                                  connectedDevices.add(device);
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
                                     content: Text(" Connected"),
                                     backgroundColor: Colors.black,
                                   ));
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => ScanOffline(connected_device: device,nearbyService: nearbyService, documentId: widget.documentId)),
+                                        builder: (context) => ScanOffline(
+                                            connectedDevices: connectedDevices,
+                                            nearbyService: nearbyService,
+                                            documentId: widget.documentId)),
                                   );
-                                }else{
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
                                     content: Text("Disconnected "),
                                     backgroundColor: Colors.red,
                                   ));
@@ -152,7 +146,10 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Icon(Icons.chat,color: Colors.white,), // icon
+                                  Icon(
+                                    Icons.chat,
+                                    color: Colors.white,
+                                  ), // icon
                                 ],
                               ),
                             ),
@@ -195,16 +192,18 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         return "Disconnect";
     }
   }
+
   IconData getButtonStateIcon(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        return  Icons.link;
+        return Icons.link;
       case SessionState.connecting:
-        return  Icons.autorenew;
+        return Icons.autorenew;
       default:
-        return  Icons.link_off ;
+        return Icons.link_off;
     }
   }
+
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -301,7 +300,6 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         callback: (isRunning) async {
           if (isRunning) {
             if (widget.deviceType == DeviceType.browser) {
-
               await nearbyService.stopBrowsingForPeers();
               await Future.delayed(Duration(microseconds: 200));
               await nearbyService.startBrowsingForPeers();
@@ -316,30 +314,28 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         });
     subscription =
         nearbyService.stateChangedSubscription(callback: (devicesList) {
-          devicesList.forEach((element) {
-            print(
-                " deviceId: ${element.deviceId} | deviceName: ${element.deviceName} | state: ${element.state}");
+      devicesList.forEach((element) {
+        print(
+            " deviceId: ${element.deviceId} | deviceName: ${element.deviceName} | state: ${element.state}");
 
-            if (Platform.isAndroid) {
-              if (element.state == SessionState.connected) {
-                nearbyService.stopBrowsingForPeers();
-              } else {
-                nearbyService.startBrowsingForPeers();
-              }
-            }
-          });
+        if (Platform.isAndroid) {
+          if (element.state == SessionState.connected) {
+            nearbyService.stopBrowsingForPeers();
+          } else {
+            nearbyService.startBrowsingForPeers();
+          }
+        }
+      });
 
-          setState(() {
-            devices.clear();
-            devices.addAll(devicesList);
-            connectedDevices.clear();
-            connectedDevices.addAll(devicesList
-                .where((d) => d.state == SessionState.connected)
-                .toList());
-          });
-        });
-
-
+      setState(() {
+        devices.clear();
+        devices.addAll(devicesList);
+        connectedDevices.clear();
+        connectedDevices.addAll(devicesList
+            .where((d) => d.state == SessionState.connected)
+            .toList());
+      });
+    });
   }
 }
 
