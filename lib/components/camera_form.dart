@@ -45,7 +45,10 @@ class _CameraFormState extends State<CameraForm> {
 
   void getSize() async {
     nbTotal = await DatabaseTest.fetchListSize(docId: widget.documentId);
-    debugPrint("nbTotal = $nbTotal");
+    setState(() {
+      debugPrint("nbTotal = $nbTotal");
+    });
+
   }
 
   @override

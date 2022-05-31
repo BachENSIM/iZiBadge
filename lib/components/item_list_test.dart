@@ -26,6 +26,8 @@ class _ItemListTestState extends State<ItemListTest> {
   bool _organisateur = false;
   bool _inviteur = false;
   bool _scanneur = false;
+  //pour éviter appuyer plusieurs fois
+  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -234,39 +236,64 @@ class _ItemListTestState extends State<ItemListTest> {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: const Text('Supprimer'),
-            content: const Text("Supprimer cet événement ?"),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Annuler'),
-              ),
-              // The "Yes" button
-              TextButton(
-                onPressed: () async {
-                  // Remove the box
-                  isDel
-                      ? await DatabaseTest.deleteItemCanceled(docId: id)
-                      : await DatabaseTest.deleteItem(docId: id);
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Supprimer',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
+          return StatefulBuilder(builder: (BuildContext _context, StateSetter  _setState) {
+            if(_isProcessing) {
+              return  const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(
+                  // valueColor: AlwaysStoppedAnimation<Color>(
+                  //   CustomColors.accentLight,
+                  // ),
                 ),
               ),
-            ],
-          );
+            );
+            } else {
+              return AlertDialog(
+              title: const Text('Supprimer'),
+              content: const Text("Supprimer cet événement ?"),
+              shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Annuler'),
+                ),
+                // The "Yes" button
+                TextButton(
+                  onPressed: () async {
+                    debugPrint(" 4 ${_isProcessing}");
+                    _setState(() {
+                      _isProcessing = true;
+                      debugPrint(" 1 ${_isProcessing}");
+                    });
+                    // Remove the box
+                    isDel
+                        ? await DatabaseTest.deleteItemCanceled(docId: id)
+                        : await DatabaseTest.deleteItem(docId: id);
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                    debugPrint(" 2 ${_isProcessing}");
+                   /* _setState(() {
+                      _isProcessing = false;
+                    });*/
+                  },
+                  child: const Text(
+                    'Supprimer',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            }
+          });
+
         });
   }
 
@@ -721,6 +748,10 @@ class _ItemListTestState extends State<ItemListTest> {
                         IconButton(
                             onPressed: () {
                               _delete(context, docID, isDel);
+                              setState(() {
+                                _isProcessing = false;
+                                debugPrint(" 3 ${_isProcessing}");
+                              });
                             },
                             icon: Icon(
                               Icons.delete,
@@ -728,7 +759,8 @@ class _ItemListTestState extends State<ItemListTest> {
                             )),
                       if ((_scanneur || _organisateur) && !isDel)
                         IconButton(
-                            onPressed: () {
+                            onPressed: () async{
+                              debugPrint(await DatabaseTest.fetchListSize(docId: docID).toString());
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ScannerScreen(

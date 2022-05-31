@@ -345,7 +345,8 @@ class _GroupFormState extends State<GroupForm> {
                   onPressed: () {
                     // Remove the box
                     setState(() {
-                      if(_groupNameList.contains(_groupEditCtl!.text)) {
+
+                      if(_groupNameList.contains(_groupEditCtl!.text) && !_groupNameList[index].contains(_groupEditCtl!.text) ) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(
                           SnackBar(
