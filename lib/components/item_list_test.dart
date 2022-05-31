@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -675,6 +674,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                                   EditGroupScreen(
                                                 nameEvent: name,
                                                 documentId: docID,
+                                                dateEnd: dateEnd,
+                                                dateStart: dateStart,
                                               ),
                                             ),
                                           );

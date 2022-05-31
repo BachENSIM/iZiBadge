@@ -6,9 +6,14 @@ class EditGroupScreen extends StatefulWidget {
   //const EditGroupScreen({Key? key}) : super(key: key);
   late final String documentId;
   late final String nameEvent;
+  late final DateTime dateStart;
+  late final DateTime dateEnd;
+
   EditGroupScreen({
     required this.documentId,
     required this.nameEvent,
+    required this.dateStart,
+    required this.dateEnd,
   });
   @override
   _EditGroupScreenState createState() => _EditGroupScreenState();
@@ -41,10 +46,12 @@ class _EditGroupScreenState extends State<EditGroupScreen> {
         child: Padding(
             padding: const EdgeInsets.all(25),
             child: Container(
-              height: MediaQuery.of(context).size.height/1.2,
+              height: MediaQuery.of(context).size.height,
               child: EditGroupForm(
                 documentId: widget.documentId,
                 nameEvent: widget.nameEvent,
+                dateStart: widget.dateStart,
+                dateEnd: widget.dateEnd,
               ),
             )),
       ),
