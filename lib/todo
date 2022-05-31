@@ -4,10 +4,10 @@
 6. supprimer button en bas et garder en haut (button next)
 9. probleme de camera/snackbar/compter cb personne sur personne totale => faut compter "statutEntree" dans la BDD (80%)
 10. vérifier quand supprimer un events => faut changer l'etat sur autre compte
-15. Le probleme de modification la liste d'invitation => commenet mettre à jour la liste?
+15. Le probleme de modification la liste d'invitation => comment mettre à jour la liste?
 15.1 => supprimer l'ancienne et rajouter une nouvelle => mettre à jour pour tous les comptes (ça a l'air facile) (faut comparer les contenus entre 2 listes pour changer l'attribute sur un events)
 15.2 => comparer la taille de 2 liste => s'il y a des changements => les corriger (plus compliqué)
-16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text
+16. un peu tutos pour expliquer le button => mettre ? dans un cirle en appuyant => petit text (pas de temps)
 17. des differences créneaux pour chaque groupe (la suite 26,27)
 18. un endroit ou je sais sur quel compte que je me connecte (50% => pour l'instant le mettre sur le header)
 19. notifier l'utilisateur quand changer qq chose
@@ -39,3 +39,13 @@
 24. Changer le title sur le header (done)
 25. Table de liste d'invitation (done)
 26. Changer l'interface l'heure (garder tjs le titre pour la page d'events et laisser une icone et 2 text buttons(pour date et pour l'heure) (done)
+
+
+
+-------------------------
+Nouvelle méthode pour git pour iZiBadge:
+Checkout to bach
+Commit & Sync
+Checkout to master
+Pull from bach
+Sync

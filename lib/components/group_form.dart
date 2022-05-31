@@ -52,7 +52,6 @@ class _GroupFormState extends State<GroupForm> {
     if (DatabaseTest.listNameGroup.isNotEmpty)
       DatabaseTest.listNameGroup.clear();
     DatabaseTest.listNameGroup.add(_groupNameList[0]);
-
   }
 
   @override
@@ -327,7 +326,8 @@ class _GroupFormState extends State<GroupForm> {
                   TimeOfDay(
                       hour: DatabaseTest.listHoursStart[index].hour,
                       minute: DatabaseTest.listHoursStart[index].minute),
-                  true,index),
+                  true,
+                  index),
               dateTimeModal(
                   DateTime(
                       DatabaseTest.listHoursEnd[index].year,
@@ -337,7 +337,8 @@ class _GroupFormState extends State<GroupForm> {
                   TimeOfDay(
                       hour: DatabaseTest.listHoursEnd[index].hour,
                       minute: DatabaseTest.listHoursEnd[index].minute),
-                  false,index),
+                  false,
+                  index),
               TextButton(
                   onPressed: () {
                     // Close the dialog
@@ -348,11 +349,28 @@ class _GroupFormState extends State<GroupForm> {
                   onPressed: () {
                     // Remove the box
                     setState(() {
-                      _groupNameList[index] = _groupEditCtl!.text;
-                      DatabaseTest.listNameGroup[index] = _groupNameList[index];
-                      print("list" + _groupNameList[index]);
-                      print("data: " + DatabaseTest.listNameGroup.toString());
-                      _groupEditCtl?.clear();
+                      if (_groupNameList.contains(_groupEditCtl!.text) &&
+                          !_groupNameList[index]
+                              .contains(_groupEditCtl!.text)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                "${_groupEditCtl!.text} est déjà dans la liste..."),
+                            padding: const EdgeInsets.all(15.0),
+                          ),
+                        );
+                      } else {
+                        _groupNameList[index] = _groupEditCtl!.text;
+                        DatabaseTest.listNameGroup[index] =
+                            _groupNameList[index];
+                        _groupEditCtl?.clear();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Modification réussie..."),
+                            padding: EdgeInsets.all(15.0),
+                          ),
+                        );
+                      }
                     });
 
                     // Close the dialog
@@ -366,109 +384,178 @@ class _GroupFormState extends State<GroupForm> {
                   )),
             ],
           );
-
         });
   }
 
-  Widget dateTimeModal(
-      DateTime dateInit, String container, TimeOfDay timeInit, bool status, int index) {
+  String displayTime(TimeOfDay timeInit) {
+    String message = "";
+    String mins = "";
+    String hours = "";
+    (timeInit.minute < 10)
+        ? mins = "0${timeInit.minute}"
+        : mins = "${timeInit.minute}";
+    (timeInit.hour < 10)
+        ? hours = "0${timeInit.hour}"
+        : hours = "${timeInit.hour}";
+    message = "$hours:$mins";
+    return message;
+  }
+
+  String displayDate(DateTime dateInit) {
+    String message = "";
+    String day = "";
+    List<String> dayOfWeek = [
+      'lun.',
+      'mar.',
+      'mer.',
+      'jeu.',
+      'ven.',
+      'sam.',
+      'dim.'
+    ];
+    List<String> months = [
+      'jan.',
+      'févr.',
+      'mars',
+      'avr.',
+      'mai',
+      'juin',
+      'juil.',
+      'août',
+      'sept.',
+      'oct.',
+      'nov.',
+      'déc.'
+    ];
+
+    if (dateInit.day < 10) {
+      day = "0${dateInit.day}";
+    } else {
+      day = "${dateInit.day}";
+    }
+
+    message =
+        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
+    return message;
+  }
+
+  Widget dateTimeModal(DateTime dateInit, String container, TimeOfDay timeInit,
+      bool status, int index) {
     return StatefulBuilder(
-        builder: (BuildContext _context, StateSetter  _setState) {
-          return Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
+        builder: (BuildContext _context, StateSetter _setState) {
+      return Padding(
+        padding: const EdgeInsets.only(
+          left: 20.0,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.calendar_today_outlined,
+              color: container.contains("Début") ? Colors.green : Colors.red,
+              size: 12,
             ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  color: container.contains("Début") ? Colors.green : Colors.red,
-                  size: 12,
-                ),
-                TextButton(
-                    onPressed: () async {
-                      final DateTime? selected = await showDatePicker(
-                        locale: const Locale('fr', ''),
-                        context: _context,
-                        initialDate: dateInit,
-                        firstDate: DatabaseTest.startSave!,
-                        lastDate: DatabaseTest.endSave!,
-                      );
-                      if (selected != null && selected != dateInit) {
-                        _setState(() {
-                          dateInit = selected;
-                          status ? slcDStart = selected : slcDEnd = selected;
-                          status
-                              ? dtStart = displayDate(dateInit)
-                              : dtEnd = displayDate(dateInit);
+            TextButton(
+                onPressed: () async {
+                  final DateTime? selected = await showDatePicker(
+                    locale: const Locale('fr', ''),
+                    context: _context,
+                    initialDate: dateInit,
+                    firstDate: DatabaseTest.startSave!,
+                    lastDate: DatabaseTest.endSave!,
+                  );
+                  if (selected != null && selected != dateInit) {
+                    _setState(() {
+                      dateInit = selected;
+                      status ? slcDStart = selected : slcDEnd = selected;
+                      status
+                          ? dtStart = displayDate(dateInit)
+                          : dtEnd = displayDate(dateInit);
 
-                          status ?
-                          DatabaseTest.listHoursStart[index] = DateTime(dateInit.year,dateInit.month,dateInit.day,DatabaseTest.listHoursStart[index].hour,DatabaseTest.listHoursStart[index].minute) :
-                          DatabaseTest.listHoursEnd[index] = DateTime(dateInit.year,dateInit.month,dateInit.day,DatabaseTest.listHoursEnd[index].hour,DatabaseTest.listHoursEnd[index].minute) ;
+                      status
+                          ? DatabaseTest.listHoursStart[index] = DateTime(
+                              dateInit.year,
+                              dateInit.month,
+                              dateInit.day,
+                              DatabaseTest.listHoursStart[index].hour,
+                              DatabaseTest.listHoursStart[index].minute)
+                          : DatabaseTest.listHoursEnd[index] = DateTime(
+                              dateInit.year,
+                              dateInit.month,
+                              dateInit.day,
+                              DatabaseTest.listHoursEnd[index].hour,
+                              DatabaseTest.listHoursEnd[index].minute);
 
-                          debugPrint(displayDate(dateInit));
-                          debugPrint(dtStart);
-                          debugPrint("az" + dateInit.toLocal().toString());
-                          debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
-                        });
-                      }
-                      _setState(() {
-                        //_selectDate(_context, dateInit, status,index);
-
+                      debugPrint(displayDate(dateInit));
+                      debugPrint(dtStart);
+                      debugPrint("az" + dateInit.toLocal().toString());
+                      debugPrint(
+                          status ? slcDStart.toString() : slcDEnd.toString());
+                    });
+                  }
+                  _setState(() {
+                    //_selectDate(_context, dateInit, status,index);
+                  });
+                },
+                child: Container(
+                    width: 125,
+                    alignment: Alignment.centerRight,
+                    child: Text(displayDate(dateInit)))),
+            const SizedBox(width: 10.0),
+            TextButton(
+                onPressed: () async {
+                  final TimeOfDay? timeOfDay = await showTimePicker(
+                      context: _context,
+                      initialTime: timeInit,
+                      initialEntryMode: TimePickerEntryMode.dial,
+                      builder: (_context, child) {
+                        if (MediaQuery.of(_context).alwaysUse24HourFormat) {
+                          //return child!;
+                          return Localizations.override(
+                            context: _context,
+                            locale: const Locale('fr', 'FR'),
+                            child: child,
+                          );
+                        } else {
+                          return child!;
+                        }
                       });
-                    },
-                    child: Container(
-                        width: 125,
-                        alignment: Alignment.centerRight,
-                        child: Text(displayDate(dateInit)))),
-                const SizedBox(width: 10.0),
-                TextButton(
-                    onPressed: () async {
-                      final TimeOfDay? timeOfDay = await showTimePicker(
-                          context: _context,
-                          initialTime: timeInit,
-                          initialEntryMode: TimePickerEntryMode.dial,
-                          builder: (_context, child) {
-                            if (MediaQuery.of(_context).alwaysUse24HourFormat) {
-                              //return child!;
-                              return Localizations.override(
-                                context: _context,
-                                locale: const Locale('fr', 'FR'),
-                                child: child,
-                              );
-                            } else {
-                              return child!;
-                            }
-                          });
-                      if (timeOfDay != null && timeOfDay != timeInit) {
-                        _setState(() {
-                          timeInit = timeOfDay;
-                          status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
-                          status
-                              ? todStart = displayTime(timeInit)
-                              : todEnd = displayTime(timeInit);
+                  if (timeOfDay != null && timeOfDay != timeInit) {
+                    _setState(() {
+                      timeInit = timeOfDay;
+                      status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
+                      status
+                          ? todStart = displayTime(timeInit)
+                          : todEnd = displayTime(timeInit);
 
-                          status ?
-                          DatabaseTest.listHoursStart[index] = DateTime(DatabaseTest.listHoursStart[index].year,DatabaseTest.listHoursStart[index].month,DatabaseTest.listHoursStart[index].day,timeInit.hour,timeInit.minute) :
-                          DatabaseTest.listHoursEnd[index] = DateTime(DatabaseTest.listHoursEnd[index].year,DatabaseTest.listHoursEnd[index].month,DatabaseTest.listHoursEnd[index].day,timeInit.hour,timeInit.minute) ;
-                        });
-                      }
-                      _setState(() {
-                        //_selectTime(_context, timeInit, status,index);
-
-                      });
-                    },
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(displayTime(timeInit))))
-              ],
-            ),
-          );
-        });
-
+                      status
+                          ? DatabaseTest.listHoursStart[index] = DateTime(
+                              DatabaseTest.listHoursStart[index].year,
+                              DatabaseTest.listHoursStart[index].month,
+                              DatabaseTest.listHoursStart[index].day,
+                              timeInit.hour,
+                              timeInit.minute)
+                          : DatabaseTest.listHoursEnd[index] = DateTime(
+                              DatabaseTest.listHoursEnd[index].year,
+                              DatabaseTest.listHoursEnd[index].month,
+                              DatabaseTest.listHoursEnd[index].day,
+                              timeInit.hour,
+                              timeInit.minute);
+                    });
+                  }
+                  _setState(() {
+                    //_selectTime(_context, timeInit, status,index);
+                  });
+                },
+                child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(displayTime(timeInit))))
+          ],
+        ),
+      );
+    });
   }
 
- /* Widget dateTime(
+  /* Widget dateTime(
       DateTime dateInit, String container, TimeOfDay timeInit, bool status) {
     return Row(
       children: [
@@ -541,7 +628,8 @@ class _GroupFormState extends State<GroupForm> {
     );
   }
 
-  _selectDate(BuildContext context, DateTime dateTimeInit, bool status,int index) async {
+  _selectDate(BuildContext context, DateTime dateTimeInit, bool status,
+      int index) async {
     final DateTime? selected = await showDatePicker(
       locale: const Locale('fr', ''),
       context: context,
@@ -551,25 +639,36 @@ class _GroupFormState extends State<GroupForm> {
     );
     if (selected != null && selected != dateTimeInit) {
       //setState(() {
-        dateTimeInit = selected;
-        status ? slcDStart = selected : slcDEnd = selected;
-        status
-            ? dtStart = displayDate(dateTimeInit)
-            : dtEnd = displayDate(dateTimeInit);
+      dateTimeInit = selected;
+      status ? slcDStart = selected : slcDEnd = selected;
+      status
+          ? dtStart = displayDate(dateTimeInit)
+          : dtEnd = displayDate(dateTimeInit);
 
-        status ?
-        DatabaseTest.listHoursStart[index] = DateTime(dateTimeInit.year,dateTimeInit.month,dateTimeInit.day,DatabaseTest.listHoursStart[index].hour,DatabaseTest.listHoursStart[index].minute) :
-        DatabaseTest.listHoursEnd[index] = DateTime(dateTimeInit.year,dateTimeInit.month,dateTimeInit.day,DatabaseTest.listHoursEnd[index].hour,DatabaseTest.listHoursEnd[index].minute) ;
+      status
+          ? DatabaseTest.listHoursStart[index] = DateTime(
+              dateTimeInit.year,
+              dateTimeInit.month,
+              dateTimeInit.day,
+              DatabaseTest.listHoursStart[index].hour,
+              DatabaseTest.listHoursStart[index].minute)
+          : DatabaseTest.listHoursEnd[index] = DateTime(
+              dateTimeInit.year,
+              dateTimeInit.month,
+              dateTimeInit.day,
+              DatabaseTest.listHoursEnd[index].hour,
+              DatabaseTest.listHoursEnd[index].minute);
 
-        debugPrint(displayDate(dateTimeInit));
-        debugPrint(dtStart);
-        debugPrint("az" + dateTimeInit.toLocal().toString());
-        debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
+      debugPrint(displayDate(dateTimeInit));
+      debugPrint(dtStart);
+      debugPrint("az" + dateTimeInit.toLocal().toString());
+      debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
       //});
     }
   }
 
-  _selectTime(BuildContext context, TimeOfDay todInit, bool status,int index) async {
+  _selectTime(
+      BuildContext context, TimeOfDay todInit, bool status, int index) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
         context: context,
         initialTime: todInit,
@@ -598,62 +697,20 @@ class _GroupFormState extends State<GroupForm> {
             ? todStart = displayTime(todInit)
             : todEnd = displayTime(todInit);
 
-        status ?
-        DatabaseTest.listHoursStart[index] = DateTime(DatabaseTest.listHoursStart[index].year,DatabaseTest.listHoursStart[index].month,DatabaseTest.listHoursStart[index].day,todInit.hour,todInit.minute) :
-        DatabaseTest.listHoursEnd[index] = DateTime(DatabaseTest.listHoursEnd[index].year,DatabaseTest.listHoursEnd[index].month,DatabaseTest.listHoursEnd[index].day,todInit.hour,todInit.minute) ;
+        status
+            ? DatabaseTest.listHoursStart[index] = DateTime(
+                DatabaseTest.listHoursStart[index].year,
+                DatabaseTest.listHoursStart[index].month,
+                DatabaseTest.listHoursStart[index].day,
+                todInit.hour,
+                todInit.minute)
+            : DatabaseTest.listHoursEnd[index] = DateTime(
+                DatabaseTest.listHoursEnd[index].year,
+                DatabaseTest.listHoursEnd[index].month,
+                DatabaseTest.listHoursEnd[index].day,
+                todInit.hour,
+                todInit.minute);
       });
     }
-  }
-
-  String displayTime(TimeOfDay timeInit) {
-    String message = "";
-    String mins = "";
-    String hours = "";
-    (timeInit.minute < 10)
-        ? mins = "0${timeInit.minute}"
-        : mins = "${timeInit.minute}";
-    (timeInit.hour < 10)
-        ? hours = "0${timeInit.hour}"
-        : hours = "${timeInit.hour}";
-    message = "$hours:$mins";
-    return message;
-  }
-
-  String displayDate(DateTime dateInit) {
-    String message = "";
-    String day = "";
-    List<String> dayOfWeek = [
-      'lun.',
-      'mar.',
-      'mer.',
-      'jeu.',
-      'ven.',
-      'sam.',
-      'dim.'
-    ];
-    List<String> months = [
-      'jan.',
-      'févr.',
-      'mars',
-      'avr.',
-      'mai',
-      'juin',
-      'juil.',
-      'août',
-      'sept.',
-      'oct.',
-      'nov.',
-      'déc.'
-    ];
-
-    if (dateInit.day < 10) {
-      day = "0${dateInit.day}";
-    } else {
-      day = "${dateInit.day}";
-    }
-
-    message =
-        "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
-    return message;
   }
 }

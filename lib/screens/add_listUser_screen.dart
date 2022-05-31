@@ -84,7 +84,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         Text(
                           "Titre : ${DatabaseTest.nameSave!}",
                           textAlign: TextAlign.start,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                         ListView(
                           shrinkWrap: true,
@@ -176,12 +177,20 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                 "example${taille++}@gmail.com";
                                           }
                                           //debugPrint(mess);
-                                          if (_groupListUser.contains(mess)) {
+                                          bool userExist =
+                                              _groupListUser.contains(mess);
+                                          bool uIdExist = DatabaseTest.userUid
+                                              .contains(mess);
+                                          String snackBar = userExist
+                                              ? "$mess est déjà dans la liste..."
+                                              : (uIdExist
+                                                  ? "$mess : Vous êtes déjà invité !"
+                                                  : "Ajout réussi...");
+                                          if (userExist || uIdExist) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                content: Text(
-                                                    "$mess est déjà invité..."),
+                                                content: Text(snackBar),
                                                 padding:
                                                     const EdgeInsets.all(15.0),
                                               ),
@@ -193,6 +202,14 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                 .add(_dropdownGroup!);
                                             _groupDropdownRole
                                                 .add(_dropdownRole!);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(snackBar),
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                              ),
+                                            );
                                           }
 
                                           _guestCtl.clear();
@@ -272,7 +289,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                     ))),
                 _isProcessing
                     ? const Center(
-                        child:  Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: CircularProgressIndicator(
                               // valueColor: AlwaysStoppedAnimation<Color>(
@@ -300,13 +317,14 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             });
                             int? yearStart = DatabaseTest.startSave!.year;
                             int? yearEnd = DatabaseTest.endSave!.year;
-                            int? monthStart = DatabaseTest.endSave!.month;
+                            int? monthStart = DatabaseTest.startSave!.month;
                             int? monthEnd = DatabaseTest.endSave!.month;
-                            int? dayStart = DatabaseTest.endSave!.day;
+                            int? dayStart = DatabaseTest.startSave!.day;
                             int? dayEnd = DatabaseTest.endSave!.day;
                             int? hourStart = DatabaseTest.timeStartSave!.hour;
                             int? hourEnd = DatabaseTest.timeEndSave!.hour;
-                            int? minuteStart = DatabaseTest.timeStartSave!.minute;
+                            int? minuteStart =
+                                DatabaseTest.timeStartSave!.minute;
                             int? minuteEnd = DatabaseTest.timeEndSave!.minute;
 
                             await DatabaseTest.addItem(
@@ -315,8 +333,10 @@ class _ListUserScreenState extends State<ListUserScreen> {
                               address: DatabaseTest.addrSave.toString(),
                               /*start: DateTime.parse(DateTime.now().toString()),
                               end: DateTime.parse(DateTime.now().toString()),*/
-                              start: DateTime(yearStart,monthStart,dayStart,hourStart,minuteStart),
-                              end: DateTime(yearEnd,monthEnd,dayEnd,hourEnd,minuteEnd),
+                              start: DateTime(yearStart, monthStart, dayStart,
+                                  hourStart, minuteStart),
+                              end: DateTime(yearEnd, monthEnd, dayEnd, hourEnd,
+                                  minuteEnd),
                               role: "Organisateur",
                             );
                             await DatabaseTest.addInviteList(
@@ -357,118 +377,147 @@ class _ListUserScreenState extends State<ListUserScreen> {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: const Text("Modifier les informations de l'invité"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  maxLines: 1,
-                  keyboardType: TextInputType.text,
-                  controller: _editGuestCtl,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(8),
-                    isDense: true,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //Pour le groupe
-                    Container(
-                      height: 50,
-                      //width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(top: 15),
-                      child: DropdownButtonHideUnderline(
-                        child: GFDropdown(
-                          padding: const EdgeInsets.all(15),
-                          borderRadius: BorderRadius.circular(5),
-                          border: const BorderSide(
-                              //color: CustomColors.textPrimary, width: 1
-                              ),
-                          // dropdownButtonColor: CustomColors.textSecondary,
-                          value: _dropdownGroup,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _dropdownGroup = newValue as String?;
-                            });
-                          },
-                          items: DatabaseTest.listNameGroup
-                              .map((value) => DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
+          return StatefulBuilder(
+              builder: (BuildContext _context, StateSetter _setState) {
+            return AlertDialog(
+              title: const Text("Modifier les informations de l'invité"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    maxLines: 1,
+                    keyboardType: TextInputType.text,
+                    controller: _editGuestCtl,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(8),
+                      isDense: true,
                     ),
-                    //Pour le role
-                    Container(
-                      height: 50,
-                      //width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(top: 15),
-                      child: DropdownButtonHideUnderline(
-                        child: GFDropdown(
-                          padding: const EdgeInsets.all(15),
-                          borderRadius: BorderRadius.circular(5),
-                          border: const BorderSide(
-                              //color: CustomColors.textPrimary, width: 1
-                              ),
-                          // dropdownButtonColor: CustomColors.textSecondary,
-                          value: _dropdownRole,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _dropdownRole = newValue as String?;
-                              print(_dropdownRole);
-                            });
-                          },
-                          items: _roleDropDown
-                              .map((value) => DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  ))
-                              .toList(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //Pour le groupe
+                      Container(
+                        height: 50,
+                        //width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonHideUnderline(
+                          child: GFDropdown(
+                            padding: const EdgeInsets.all(15),
+                            borderRadius: BorderRadius.circular(5),
+                            border: const BorderSide(
+                                //color: CustomColors.textPrimary, width: 1
+                                ),
+                            // dropdownButtonColor: CustomColors.textSecondary,
+                            value: _dropdownGroup,
+                            onChanged: (newValue) {
+                              _setState(() {
+                                _dropdownGroup = newValue as String?;
+                              });
+                            },
+                            items: DatabaseTest.listNameGroup
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
+                                .toList(),
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-                // side: BorderSide(
-                // color: CustomColors.textPrimary,
-                // width: 1),
-                borderRadius: BorderRadius.circular(15)),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Annuler"),
+                      //Pour le role
+                      Container(
+                        height: 50,
+                        //width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(top: 15),
+                        child: DropdownButtonHideUnderline(
+                          child: GFDropdown(
+                            padding: const EdgeInsets.all(15),
+                            borderRadius: BorderRadius.circular(5),
+                            border: const BorderSide(
+                                //color: CustomColors.textPrimary, width: 1
+                                ),
+                            // dropdownButtonColor: CustomColors.textSecondary,
+                            value: _dropdownRole,
+                            onChanged: (newValue) {
+                              _setState(() {
+                                _dropdownRole = newValue as String?;
+                                debugPrint(_dropdownRole);
+                              });
+                            },
+                            items: _roleDropDown
+                                .map((value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
+                                .toList(),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
               ),
-              TextButton(
+              shape: RoundedRectangleBorder(
+                  // side: BorderSide(
+                  // color: CustomColors.textPrimary,
+                  // width: 1),
+                  borderRadius: BorderRadius.circular(15)),
+              actions: [
+                TextButton(
                   onPressed: () {
-                    // Remove the box
-                    setState(() {
-                      _groupListUser[index] = _editGuestCtl!.text;
-                      _groupDropdownGroup[index] = _dropdownGroup!;
-                      _groupDropdownRole[index] = _dropdownRole!;
-                    });
-
                     // Close the dialog
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    "Modifier",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-            ],
-          );
+                  child: const Text("Annuler"),
+                ),
+                TextButton(
+                    onPressed: () {
+                      // Remove the box
+                      setState(() {
+                        String mess = _editGuestCtl!.text;
+                        bool diff = mess.contains(_groupListUser[index]);
+                        bool userExist = _groupListUser.contains(mess);
+                        bool uIdExist = DatabaseTest.userUid.contains(mess);
+                        String snackBar = diff
+                            ? "Modification réussie..."
+                            : userExist
+                                ? "$mess est déjà dans la liste..."
+                                : (uIdExist
+                                    ? "$mess : Vous êtes déjà invité !"
+                                    : "Modification réussie...");
+                        if (!diff && (userExist || uIdExist)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(snackBar),
+                              padding: const EdgeInsets.all(15.0),
+                            ),
+                          );
+                        } else {
+                          _groupListUser[index] = _editGuestCtl!.text;
+                          _groupDropdownGroup[index] = _dropdownGroup!;
+                          _groupDropdownRole[index] = _dropdownRole!;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(snackBar),
+                              padding: const EdgeInsets.all(15.0),
+                            ),
+                          );
+                        }
+                      });
+
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      "Modifier",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+              ],
+            );
+          });
         });
   }
 }

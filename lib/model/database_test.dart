@@ -233,7 +233,7 @@ class DatabaseTest {
     await documentRefList.then((value) => value.docs.forEach((element) {
           element.reference.delete();
         }));
-    //Step 2bis : delete list of group (participation) of this event
+    //Step 2bis : delete list of group (participation) of this event (list of group and list of time)
     final documentRefGroup = _mainCollection
         .doc(userUid)
         .collection(eventRelated)
@@ -254,6 +254,7 @@ class DatabaseTest {
             docId +
             ' have been deleted from the database!!!'))
         .catchError((e) => print(e));
+    isDel = false;
   }
 
   /*---------------------------------------*/
@@ -304,7 +305,8 @@ class DatabaseTest {
       "statutEntree": true,
       "timestamp": DateTime.now(),
       "email": userUid,
-      "group": "HOST"
+      "group": "HOST",
+      "nbEntree" : 0
     };
 
     await documentReferencer
@@ -321,10 +323,10 @@ class DatabaseTest {
         .collection(participantsGr)
         .doc(listOfGroup);
     //utiliser hashmap pour éviter les duplicatas (dans le cas l'utilisateur choisit un groupe pour une personne, sinon la liste de groupe est vide)
-    HashMap<String, int> hashMapGr = HashMap<String, int>();
+    /*HashMap<String, int> hashMapGr = HashMap<String, int>();
     for (int i = 0; i < listGroup.length; i++) {
       hashMapGr.putIfAbsent(listGroup[i], () => i);
-    }
+    }*/
     /*print(hashMapGr.toString());
     print(hashMapGr.keys.toList(growable: false));*/
     Map<String, dynamic> dataGr = <String, dynamic>{
@@ -356,7 +358,8 @@ class DatabaseTest {
         "statutEntree": false,
         "timestamp": DateTime.now(),
         "email": listEmail[i],
-        "group": listGroup[i]
+        "group": listGroup[i],
+        "nbEntree" : 0
       };
 
       await documentReferencer
@@ -369,14 +372,17 @@ class DatabaseTest {
 
       //syncItemsOfInvitation(email: listEmail[i], role: listRole[i], emailUid: userUid, docID: docIdAdd!, group: listGroup[i]);
 
-      //Step 3: in the same time, create an event with each of email in the list
+      //Step 3: At the same time, create an event with each email in the list (but need to verify the time of this person on this group)
+      //return index of this group in the list of group
+      int position = listNameGroup.indexOf(listRole[i]);
+      //with this position, i can have access to the date list and return the date/time corresponding to this person
       syncItems(
           email: listEmail[i],
           title: nameSave!,
           description: descSave!,
           address: addrSave!,
-          start: startSave!,
-          end: endSave!,
+          start: listHoursStart[position],
+          end: listHoursEnd[position],
           role: listRole[i]);
 
       //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode (just for clients not scanners)
@@ -408,7 +414,8 @@ class DatabaseTest {
           "statutEntree": false,
           "timestamp": DateTime.now(),
           "email": listEmail[i],
-          "group": listGroup[i]
+          "group": listGroup[i],
+          "nbEntree" : 0
         };
         await _mainCollection
             .doc(listOfRoleScan[j])
@@ -667,27 +674,54 @@ class DatabaseTest {
   /*---------------------------------------*/
   //avoir besoins de sauvegarder touts les groupes sur BDD pour
   static Future<void> updateGroup(
-      {required String docId, required List<String> lstGroupUpdate}) async {
-    DocumentReference documentReferencer = _mainCollection
+      {required String docId,
+      required List<String> lstGroupUpdate,
+      required List<DateTime> lstDateStart,
+      required List<DateTime> lstDateEnd}) async {
+    //mettre à jour la liste de groupe
+    DocumentReference documentGroup = _mainCollection
         .doc(userUid)
         .collection(eventRelated)
         .doc(docId)
         .collection(participantsGr)
         .doc(listOfGroup);
 
-    Map<String, dynamic> data = <String, dynamic>{
+    Map<String, dynamic> dataGr = <String, dynamic>{
       "nomListeGroupe": lstGroupUpdate
     };
 
-    await documentReferencer
-        .update(data)
-        .whenComplete(() => print("Updated group for event ${docId}"))
-        .catchError((e) => print(e));
+    await documentGroup
+        .update(dataGr)
+        .whenComplete(() => debugPrint("Updated group for event $docId"))
+        .catchError((e) => debugPrint(e));
+
+    //mettre à jour la liste de date commencé/terminé
+    DocumentReference documentDate = _mainCollection
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participantsGr)
+        .doc(listOfHours);
+
+    Map<String, dynamic> dataDate = <String, dynamic>{
+      "listeHeureCommencee": lstDateStart,
+      "listeHeureTerminee": lstDateEnd
+    };
+
+    await documentDate
+        .update(dataDate)
+        .whenComplete(() => debugPrint("Updated time for event $docId"))
+        .catchError((e) => debugPrint(e));
   }
 
   /*---------------------------------------*/
   //pour récupérer tous les groupes dans la BDD
+  // pour voir les groupes sauvegardées dans la BDD
   static List<String> lstGrAdded = [];
+
+  //les 2 autres listes pour consulter les dates débuts et fins
+  static List<DateTime> lstDateStartAdded = [];
+  static List<DateTime> lstDateEndAdded = [];
 
   //méthode pour récupérer les groupes dans la liste d'invitation
   /*static void fetchGroupAdded(String idParticipation) async{
@@ -721,7 +755,9 @@ class DatabaseTest {
 
   static Future<void> fetchGroupAdded(String idParticipation) async {
     //récupérer le nom de cet events pour savoir quel events qu'on touche
-
+    //2
+    List<Timestamp> start = [];
+    List<Timestamp> end = [];
     var dataID = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
@@ -730,13 +766,23 @@ class DatabaseTest {
         .collection(participantsGr)
         .get();
     if (lstGrAdded.isNotEmpty) lstGrAdded.clear();
+    if (lstDateStartAdded.isNotEmpty) lstDateStartAdded.clear();
+    if (lstDateEndAdded.isNotEmpty) lstDateEndAdded.clear();
     if (dataID.docs.isNotEmpty) {
       lstGrAdded = (dataID.docs[0].data()['nomListeGroupe']).cast<String>();
+      //cast en Timestamp parce que sur Firebase, il n'a pas de type DateTime
+      start = (dataID.docs[1].data()['listeHeureCommencee']).cast<Timestamp>();
+      end = (dataID.docs[1].data()['listeHeureTerminee']).cast<Timestamp>();
       /* for (int i = 0; i < dataID.docs.length; i++) {
         //faut convertir en String parce qu'au début c'est le type dynamic pour que je puisse sauvegarder dans la BDD
         lstGrAdded = (dataID.docs[i].data()['nomListeGroupe']).cast<String>();
       }*/
     }
+    //parcourir la liste et convertir en DateTime
+    lstDateStartAdded = start.map((date) => date.toDate()).toList();
+    lstDateEndAdded = end.map((date) => date.toDate()).toList();
+    debugPrint(lstDateStartAdded.toString());
+    debugPrint(lstDateEndAdded.toString());
   }
 
   /*---------------------------------------*/
@@ -967,9 +1013,11 @@ class DatabaseTest {
         .collection(participantsGr)
         .get();
     List<String> group = [];
-    for (int i = 0; i < dataGroup.docs.length; i++) {
+    /*for (int i = 0; i < dataGroup.docs.length; i++) {
       group.add(dataGroup.docs[i].data()['nomListeGroupe']);
-    }
+    }*/
+    group = (dataGroup.docs[0].data()['nomListeGroupe']).cast<String>();
+    debugPrint(group.toString());
     var dataInvite = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
