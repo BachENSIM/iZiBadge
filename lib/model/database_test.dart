@@ -9,7 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example4@gmail.com";
+  static String userUid = "example5@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -306,7 +306,7 @@ class DatabaseTest {
       "timestamp": DateTime.now(),
       "email": userUid,
       "group": "HOST",
-      "nbEntree" : 0
+      "nbEntree": 0
     };
 
     await documentReferencer
@@ -359,7 +359,7 @@ class DatabaseTest {
         "timestamp": DateTime.now(),
         "email": listEmail[i],
         "group": listGroup[i],
-        "nbEntree" : 0
+        "nbEntree": 0
       };
 
       await documentReferencer
@@ -374,7 +374,7 @@ class DatabaseTest {
 
       //Step 3: At the same time, create an event with each email in the list (but need to verify the time of this person on this group)
       //return index of this group in the list of group
-      int position = listNameGroup.indexOf(listRole[i]);
+      int position = listNameGroup.indexOf(listGroup[i]);
       //with this position, i can have access to the date list and return the date/time corresponding to this person
       syncItems(
           email: listEmail[i],
@@ -415,7 +415,7 @@ class DatabaseTest {
           "timestamp": DateTime.now(),
           "email": listEmail[i],
           "group": listGroup[i],
-          "nbEntree" : 0
+          "nbEntree": 0
         };
         await _mainCollection
             .doc(listOfRoleScan[j])
