@@ -9,7 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example1@gmail.com";
+  static String userUid = "example4@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -233,7 +233,7 @@ class DatabaseTest {
     await documentRefList.then((value) => value.docs.forEach((element) {
           element.reference.delete();
         }));
-    //Step 2bis : delete list of group (participation) of this event
+    //Step 2bis : delete list of group (participation) of this event (list of group and list of time)
     final documentRefGroup = _mainCollection
         .doc(userUid)
         .collection(eventRelated)
@@ -305,7 +305,8 @@ class DatabaseTest {
       "statutEntree": true,
       "timestamp": DateTime.now(),
       "email": userUid,
-      "group": "HOST"
+      "group": "HOST",
+      "nbEntree" : 0
     };
 
     await documentReferencer
@@ -322,10 +323,10 @@ class DatabaseTest {
         .collection(participantsGr)
         .doc(listOfGroup);
     //utiliser hashmap pour éviter les duplicatas (dans le cas l'utilisateur choisit un groupe pour une personne, sinon la liste de groupe est vide)
-    HashMap<String, int> hashMapGr = HashMap<String, int>();
+    /*HashMap<String, int> hashMapGr = HashMap<String, int>();
     for (int i = 0; i < listGroup.length; i++) {
       hashMapGr.putIfAbsent(listGroup[i], () => i);
-    }
+    }*/
     /*print(hashMapGr.toString());
     print(hashMapGr.keys.toList(growable: false));*/
     Map<String, dynamic> dataGr = <String, dynamic>{
@@ -357,7 +358,8 @@ class DatabaseTest {
         "statutEntree": false,
         "timestamp": DateTime.now(),
         "email": listEmail[i],
-        "group": listGroup[i]
+        "group": listGroup[i],
+        "nbEntree" : 0
       };
 
       await documentReferencer
@@ -370,14 +372,17 @@ class DatabaseTest {
 
       //syncItemsOfInvitation(email: listEmail[i], role: listRole[i], emailUid: userUid, docID: docIdAdd!, group: listGroup[i]);
 
-      //Step 3: in the same time, create an event with each of email in the list
+      //Step 3: At the same time, create an event with each email in the list (but need to verify the time of this person on this group)
+      //return index of this group in the list of group
+      int position = listNameGroup.indexOf(listRole[i]);
+      //with this position, i can have access to the date list and return the date/time corresponding to this person
       syncItems(
           email: listEmail[i],
           title: nameSave!,
           description: descSave!,
           address: addrSave!,
-          start: startSave!,
-          end: endSave!,
+          start: listHoursStart[position],
+          end: listHoursEnd[position],
           role: listRole[i]);
 
       //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode (just for clients not scanners)
@@ -409,7 +414,8 @@ class DatabaseTest {
           "statutEntree": false,
           "timestamp": DateTime.now(),
           "email": listEmail[i],
-          "group": listGroup[i]
+          "group": listGroup[i],
+          "nbEntree" : 0
         };
         await _mainCollection
             .doc(listOfRoleScan[j])
@@ -1011,6 +1017,7 @@ class DatabaseTest {
       group.add(dataGroup.docs[i].data()['nomListeGroupe']);
     }*/
     group = (dataGroup.docs[0].data()['nomListeGroupe']).cast<String>();
+    debugPrint(group.toString());
     var dataInvite = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)

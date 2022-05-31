@@ -184,7 +184,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                           String snackBar = userExist
                                               ? "$mess est déjà dans la liste..."
                                               : (uIdExist
-                                                  ? "$mess : Vous ne pouvez pas inviter vous même parce que vous êtes organisateur"
+                                                  ? "$mess : Vous êtes déjà invité !"
                                                   : "Ajout réussi...");
                                           if (userExist || uIdExist) {
                                             ScaffoldMessenger.of(context)
@@ -484,7 +484,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             : userExist
                                 ? "$mess est déjà dans la liste..."
                                 : (uIdExist
-                                    ? "$mess : Vous ne pouvez pas inviter vous même parce que vous êtes organisateur"
+                                    ? "$mess : Vous êtes déjà invité !"
                                     : "Modification réussie...");
                         if (!diff && (userExist || uIdExist)) {
                           ScaffoldMessenger.of(context).showSnackBar(
