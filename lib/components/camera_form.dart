@@ -93,9 +93,9 @@ class _CameraFormState extends State<CameraForm> {
                 onPressed: () async {
                   debugPrint("touche");
                   await controller!.resumeCamera();
-                  setState(() {
+                 /* setState(() {
                     nbTotal = DatabaseTest.nbPersonTotal;
-                  });
+                  });*/
                 },
                 child: _buildQrView(context),
                 minWidth: MediaQuery.of(context).size.width,
@@ -239,9 +239,10 @@ class _CameraFormState extends State<CameraForm> {
       result = scanData;
       debugPrint("QRCode ${result!.code}");
 
+
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      verify = await DatabaseTest.fetchDataCheck(
-          widget.documentId, result!.code.toString().split('//').last);
+      verify = await DatabaseTest.fetchDataCheckUpdateDB(
+          widget.documentId, result!.code.toString());
       debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
@@ -258,8 +259,8 @@ class _CameraFormState extends State<CameraForm> {
               children: <Widget>[
                 const Icon(Icons.check_circle_outline,
                     color: Colors.green, size: 40),
-                Text(result!.code.toString().split('//').last),
-                Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
+                Text(result!.code.toString()),
+                //Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
             //duration: Duration(seconds: 365),
@@ -279,7 +280,7 @@ class _CameraFormState extends State<CameraForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                Text("Code non valide...")
+                Text("Code non validé...")
               ],
             ),
             //duration: Duration(seconds: 365),

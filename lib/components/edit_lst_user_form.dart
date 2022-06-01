@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -307,19 +309,16 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               setState(() {
                                 _isProcessing = true;
                               });
-                              /*await DatabaseTest.addItem(
-                              title: DatabaseTest.nameSave.toString(),
-                              description: DatabaseTest.descSave.toString(),
-                              address: DatabaseTest.addrSave.toString(),
-                              start: DateTime.parse(DateTime.now().toString()),
-                              end: DateTime.parse(DateTime.now().toString()),
-                              role: "Organisateur",
-                            );
-                            await DatabaseTest.addInviteList(
-                                listEmail: _groupListUser,
-                                listGroup: _groupDropdownGroup,
-                                listRole: _groupDropdownRole
-                            );*/
+                              HashMap<int, String> checkLstMail = HashMap<int, String>();
+                              for (int i = 0; i < DatabaseTest.lstUserAdded.length; i++) {
+                                checkLstMail.putIfAbsent(i, () => DatabaseTest.lstUserAdded[i]);
+                              }
+                              debugPrint(checkLstMail.toString());
+                            /*  await DatabaseTest.updateListUser(
+                                  docId: widget.documentId,
+                                  lstGroupUpdate: DatabaseTest.lstGroupAdded,
+                                  lstEmailUpdate: DatabaseTest.lstUserAdded,
+                                  lstRoleUpdate: DatabaseTest.lstRoleAdded);*/
 
                               setState(() {
                                 _isProcessing = false;
@@ -354,7 +353,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
           return StatefulBuilder(
               builder: (BuildContext _context, StateSetter _setState) {
             return AlertDialog(
-              title: const Text("Modifier les informations de l'invité"),
+              title: Text("Modifier les informations de l'invité ${DatabaseTest.lstUserAdded[index]}"),
               content: Column(mainAxisSize: MainAxisSize.min, children: [
                 TextFormField(
                   maxLines: 1,

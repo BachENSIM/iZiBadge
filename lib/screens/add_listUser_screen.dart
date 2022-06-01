@@ -344,14 +344,16 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 listGroup: _groupDropdownGroup,
                                 listRole: _groupDropdownRole);
 
-                            setState(() {
-                              _isProcessing = false;
-                            });
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => DashboardScreen(),
                               ),
                             );
+
+                            setState(() {
+                              _isProcessing = false;
+                            });
+
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(top: 16.0, bottom: 16.0),

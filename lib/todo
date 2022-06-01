@@ -22,6 +22,8 @@
 31. Changer l'interface de partie scanner un QR Code (un modal affichant au milieu d'écran et toucher pour reprendre la camera).
 32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer
 33. éviter inviter nous même (une comparaison avec le nom de host)
+34. Rapport: problem de BDD, il faut changer partout pour voir le résultat
+35. Le probleme de synchroniser: les attributes(titre, adresse, desc => done), la communication de la camera (done),
 
 ------------done---------------
 3. 3 types de modifications: events/groupe/user => done

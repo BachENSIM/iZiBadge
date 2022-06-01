@@ -304,15 +304,15 @@ class _EditGroupFormState extends State<EditGroupForm> {
                             lstGroupUpdate: DatabaseTest.lstGrAdded,
                             lstDateStart: DatabaseTest.lstDateStartAdded,
                             lstDateEnd: DatabaseTest.lstDateEndAdded);
-
-                        setState(() {
-                          _isProcessing = true;
-                        });
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => DashboardScreen(),
                           ),
                         );
+                        setState(() {
+                          _isProcessing = true;
+                        });
+
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16, bottom: 16),

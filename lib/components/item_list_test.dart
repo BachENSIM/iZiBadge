@@ -722,8 +722,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                               docID);
                                           await DatabaseTest.fetchGroupAdded(
                                               docID);
-                                          sleep(const Duration(
-                                              milliseconds: 500));
+                                         /* sleep(const Duration(
+                                              milliseconds: 500));*/
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>

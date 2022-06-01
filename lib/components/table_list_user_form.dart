@@ -16,7 +16,7 @@ class _TableUserFormState extends State<TableUserForm> {
   int? sortColumnIndex; //pour mettre en orde (sorting)
   bool isAscending = false;
   int no = 0;
-  final columns = ["Invité", "Entré", "Entrées"];
+  final columns = ["Invités", "Status", "Nombre d'entrées"];
   late List<String> lstEmail =
       DatabaseTest.lstInviteChecked.keys.toList(growable: false);
   late List<bool> lstStatus =
