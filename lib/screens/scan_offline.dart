@@ -11,7 +11,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 class ScanOffline extends StatefulWidget {
   NearbyService nearbyService;
   String documentId;
-  List<Device> connectedDevices = [];
+  Device connectedDevices;
 
   var chat_state;
 
@@ -49,17 +49,19 @@ class _ScanOfflineState extends State<ScanOffline> {
   }
 
   void init() {
+    int i = 0;
     receivedDataSubscription = this
         .widget
         .nearbyService
-        .dataReceivedSubscription(callback: (data) async {
+        .dataReceivedSubscription(callback: (data) {
       //Réception du contenu du QR Code
       var obj =
           ChatMessage(messageContent: data["message"], messageType: "receiver");
-      log(obj.messageContent);
-      await DatabaseTest.fetchDataCheck(
-          widget.documentId, obj.messageContent.toString().split('//').last);
-    });
+      //récupération du code
+      //synchronisation de la base de données locale
+
+    } );
+    i=0;
   }
 
   @override
@@ -128,7 +130,7 @@ class ChatMessage {
 class CameraFormOffline extends StatefulWidget {
   // const CameraForm({Key? key}) : super(key: key);
   late final String documentId;
-  List<Device> connectedDevices = [];
+  Device connectedDevices ;
   NearbyService nearbyService;
   CameraFormOffline(
       {required this.documentId,
@@ -147,6 +149,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   late String myControllerText;
+  int j = 0;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -272,8 +275,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             action: SnackBarAction(
               label: "Validé",
               onPressed: () async {
-                for (int i = 0; i < widget.connectedDevices.length; i++) {
-                  if (this.widget.connectedDevices[i].state ==
+                  if (this.widget.connectedDevices.state ==
                       SessionState.notConnected) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text("disconnected"),
@@ -281,11 +283,10 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
                     ));
                     return;
                   }
-
                   this.widget.nearbyService.sendMessage(
-                      this.widget.connectedDevices[i].deviceId,
+                      this.widget.connectedDevices.deviceId,
                       myControllerText);
-                }
+
 
                 myControllerText = "";
                 await controller.resumeCamera();
@@ -308,21 +309,6 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             action: SnackBarAction(
               label: "Rescannez",
               onPressed: () async {
-                for (int i = 0; i < widget.connectedDevices.length; i++) {
-                  if (this.widget.connectedDevices[i].state ==
-                      SessionState.notConnected) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("disconnected"),
-                      backgroundColor: Colors.red,
-                    ));
-                    return;
-                  }
-
-                  this.widget.nearbyService.sendMessage(
-                      this.widget.connectedDevices[i].deviceId,
-                      myControllerText);
-                }
-                myControllerText = "";
                 await controller.resumeCamera();
               },
             ),

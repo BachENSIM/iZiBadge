@@ -9,7 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example5@gmail.com";
+  static String userUid = "example2@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD

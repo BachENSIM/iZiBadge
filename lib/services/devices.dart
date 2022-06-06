@@ -50,15 +50,48 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          centerTitle: true,
-          title: Row(
-            children: [
-              SizedBox(width: 40),
-              Text(widget.deviceType.toString().substring(11).toUpperCase()),
-            ],
-          ),
+            centerTitle: true,
+            title: Text("QR Scanner"),
+            leadingWidth: 100,
+            leading: ElevatedButton.icon(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.arrow_left_sharp),
+                label: const Text("Back"),
+                style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    // primary: Colors.transparent,
+                    textStyle: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold))),
+           /* actions: [
+              ElevatedButton(
+                // style: ButtonStyle(
+                //     backgroundColor: MaterialStateProperty.all(
+                //   CustomColors.backgroundColorDark,
+                // )),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ScanOffline(
+                            connectedDevices: connectedDevices,
+                            nearbyService: nearbyService,
+                            documentId: widget.documentId)),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const <Widget>[
+                    Text("Liste",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          //color: CustomColors.textSecondary,
+                        )),
+                    Icon(Icons.arrow_right_sharp)
+                  ],
+                ),
+              )
+            ]*/
         ),
         backgroundColor: Colors.white,
         body: ListView.builder(
@@ -71,52 +104,50 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                 margin: EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Row(
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Expanded(
-                            child: GestureDetector(
-                          onTap: () => _onTabItemListener(device),
-                          child: Column(
-                            textDirection: TextDirection.rtl,
-                            children: [
-                              SizedBox(height: 9.0),
-                              Text(
-                                device.deviceName,
-                              ),
-                              Text(
-                                getStateName(device.state),
-                                style: TextStyle(
-                                    color: getStateColor(device.state)),
-                              ),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          ),
-                        )),
-                        // Request connect
-                        GestureDetector(
-                          onTap: () => _onButtonClicked(device),
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8.0),
-                            height: 40,
-                            width: 40,
-                            color: getButtonColor(device.state),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  new Icon(
-                                    getButtonStateIcon(device.state),
-                                    color: Colors.white,
-                                  )
-                                ]),
-                          ),
+                    Row(textDirection: TextDirection.rtl, children: [
+                      Expanded(
+                          child: GestureDetector(
+                        onTap: () => _onTabItemListener(device),
+                        child: Column(
+                          textDirection: TextDirection.rtl,
+                          children: [
+                            SizedBox(height: 9.0),
+                            Text(
+                              device.deviceName,
+                            ),
+                            Text(
+                              getStateName(device.state),
+                              style:
+                                  TextStyle(color: getStateColor(device.state)),
+                            ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         ),
-                        SizedBox.fromSize(
-                          size: Size(40, 40), // button width and height
-                          // child: ClipOval(
+                      )),
+                      // Request connect
+                      GestureDetector(
+                        onTap: () => _onButtonClicked(device),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8.0),
+                          height: 40,
+                          width: 40,
+                          color: getButtonColor(device.state),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                new Icon(
+                                  getButtonStateIcon(device.state),
+                                  color: Colors.white,
+                                )
+                              ]),
+                        ),
+                      ),
+                      SizedBox.fromSize(
+                        size: Size(40, 40), // button width and height
+                        // child: ClipOval(
 
-                          child: Material(
-                            color: Colors.blue, // button color
+                        child: Material(
+                            //color: Colors.blue, // button color
                             child: InkWell(
                               // splash color
                               onTap: () {
@@ -131,7 +162,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ScanOffline(
-                                            connectedDevices: connectedDevices,
+                                            connectedDevices: device,
                                             nearbyService: nearbyService,
                                             documentId: widget.documentId)),
                                   );
@@ -153,11 +184,10 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                                 ],
                               ),
                             ),
-                          ),
-                          // ),
-                        )
-                      ],
-                    ),
+                            ),
+                        // ),
+                      )
+                    ]),
                     SizedBox(
                       height: 8.0,
                     ),
@@ -338,6 +368,5 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
     });
   }
 }
-
 
 //
