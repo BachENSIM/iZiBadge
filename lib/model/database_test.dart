@@ -9,7 +9,7 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example5@gmail.com";
+  static String userUid = "mana.tomfd@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -138,19 +138,19 @@ class DatabaseTest {
     if (_isOrganisateur && !_isInviteur && !_isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Organisateur")
-          .orderBy("dateDebut", descending: true)
+          .orderBy("dateDebut", descending: false)
           .snapshots();
     }
     //Filtrer par Invité
     else if (!_isOrganisateur && _isInviteur && !_isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Invité")
-          .orderBy("dateDebut", descending: true)
+          .orderBy("dateDebut", descending: false)
           .snapshots();
     } else if (!_isOrganisateur && !_isInviteur && _isScanneur) {
       return notesItemCollection
           .where("role", isEqualTo: "Scanneur")
-          .orderBy("dateDebut", descending: true)
+          .orderBy("dateDebut", descending: false)
           .snapshots();
     }
     //Faire la recherche par le nom de titre
@@ -164,7 +164,7 @@ class DatabaseTest {
                   String.fromCharCode(
                       searchSave.codeUnitAt(searchSave.length - 1) + 1))
           //.startAt([searchSave]).endAt([searchSave + '\uf8ff'])
-          .orderBy("titre", descending: true)
+          .orderBy("titre", descending: false)
           .orderBy("dateDebut", descending: false)
           .snapshots();
     }
@@ -175,7 +175,7 @@ class DatabaseTest {
           isGreaterThanOrEqualTo: searchSave,
           isLessThan: searchSave + 'z')
           .orderBy("titre", descending: true)*/
-          .orderBy("dateDebut", descending: true)
+          .orderBy("dateDebut", descending: false)
           .snapshots();
     }
   }
