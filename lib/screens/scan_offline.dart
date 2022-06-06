@@ -56,7 +56,7 @@ class _ScanOfflineState extends State<ScanOffline> {
       //Réception du contenu du QR Code
       var obj =
           ChatMessage(messageContent: data["message"], messageType: "receiver");
-      log(obj.messageContent);
+      log("Received: " + obj.messageContent);
       await DatabaseTest.fetchDataCheck(
           widget.documentId, obj.messageContent.toString().split('//').last);
     });
@@ -66,50 +66,50 @@ class _ScanOfflineState extends State<ScanOffline> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: Text("QR Scanner"),
-          leadingWidth: 100,
-          leading: ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.arrow_left_sharp),
-              label: const Text("Back"),
-              style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  // primary: Colors.transparent,
-                  textStyle: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold))),
-          actions: [
-            ElevatedButton(
-              // style: ButtonStyle(
-              //     backgroundColor: MaterialStateProperty.all(
-              //   CustomColors.backgroundColorDark,
-              // )),
-              onPressed: () async {
-                await DatabaseTest.fetchListInvite(docId: widget.documentId);
-                sleep(const Duration(milliseconds: 500));
-                log(widget.documentId);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CheckListUserScreen(
-                      documentId: widget.documentId,
-                    ),
+        centerTitle: true,
+        title: const Text("QR Scanner"),
+        leadingWidth: 100,
+        leading: ElevatedButton.icon(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_left_sharp),
+            label: const Text("Back"),
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                // primary: Colors.transparent,
+                textStyle: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold))),
+        actions: [
+          ElevatedButton(
+            // style: ButtonStyle(
+            //     backgroundColor: MaterialStateProperty.all(
+            //   CustomColors.backgroundColorDark,
+            // )),
+            onPressed: () async {
+              await DatabaseTest.fetchListInvite(docId: widget.documentId);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => CheckListUserScreen(
+                    documentId: widget.documentId,
                   ),
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const <Widget>[
-                  Text("Liste",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        //color: CustomColors.textSecondary,
-                      )),
-                  Icon(Icons.arrow_right_sharp)
-                ],
-              ),
-            )
-          ]),
+                ),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: const <Widget>[
+                Text(
+                  "Liste",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Icon(Icons.arrow_right_sharp)
+              ],
+            ),
+          )
+        ],
+      ),
       body: CameraFormOffline(
           documentId: widget.documentId,
           connectedDevices: widget.connectedDevices,
@@ -144,6 +144,8 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   QRViewController? controller;
   late bool verify;
   bool flash = false;
+  bool touch = false;
+  int nbTotal = 0;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   late String myControllerText;
@@ -155,61 +157,80 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
     super.reassemble();
     if (Platform.isAndroid) {
       controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
     }
-    controller!.resumeCamera();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // Expanded(flex: 4, child: _buildQrView(context)),
-        Expanded(
-            flex: 4,
-            child: Stack(children: <Widget>[
-              _buildQrView(context),
-              Row(
-                //mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      top: 0.0,
-                      child: Container(
-                          width: 250,
-                          height: 50,
-                          child: Text(
-                            "Nombre de persons entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ))),
-                  SizedBox(
-                    width: 90,
-                  ),
-                  Positioned(
-                      left: 0.0,
-                      right: 0.0,
-                      top: 0.0,
-                      child: Container(
-                          width: 50,
-                          height: 50,
-                          child: IconButton(
-                              icon: flash
-                                  ? Icon(
-                                      Icons.flash_on,
-                                      //color: Colors.white,
-                                    )
-                                  : Icon(Icons.flash_off, color: Colors.white),
-                              onPressed: () async {
-                                await controller!.toggleFlash();
-                                flash = !flash;
-                                setState(() {});
-                              }))),
-                ],
+        Container(
+          color: Colors.black,
+          width: MediaQuery.of(context).size.width,
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
+                "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
               ),
-            ])),
+              IconButton(
+                icon: flash
+                    ? const Icon(
+                        Icons.flash_on,
+                        color: Colors.white,
+                      )
+                    : const Icon(Icons.flash_off, color: Colors.white),
+                onPressed: () async {
+                  debugPrint("light");
+                  await controller!.toggleFlash();
+                  flash = !flash;
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: Stack(
+            children: <Widget>[
+              MaterialButton(
+                padding: EdgeInsets.zero,
+                onPressed: () async {
+                  for (int i = 0; i < widget.connectedDevices.length; i++) {
+                    if (this.widget.connectedDevices[i].state ==
+                        SessionState.notConnected) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("disconnected"),
+                        backgroundColor: Colors.red,
+                      ));
+                      return;
+                    }
+
+                    this.widget.nearbyService.sendMessage(
+                        this.widget.connectedDevices[i].deviceId,
+                        myControllerText);
+                  }
+                  debugPrint("touche");
+                  await controller!.resumeCamera();
+                  setState(() {
+                    nbTotal = DatabaseTest.nbPersonTotal;
+                  });
+                },
+                child: _buildQrView(context),
+                minWidth: MediaQuery.of(context).size.width,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -236,17 +257,13 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
-    });
-
+    this.controller = controller;
     controller.scannedDataStream.listen((scanData) async {
       await controller.pauseCamera();
       result = scanData;
-      debugPrint(result!.code);
+      debugPrint("QRCode ${result!.code}");
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      myControllerText = result!.code.toString();
       verify = await DatabaseTest.fetchDataCheck(
           widget.documentId, result!.code.toString());
       debugPrint("Status: " +
@@ -263,34 +280,17 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
-                Text("Numbre d'entrées: ${DatabaseTest.countPersonEnter}")
+                const Icon(
+                  Icons.check_circle_outline,
+                  color: Colors.green,
+                  size: 40,
+                ),
+                Text(result!.code.toString()),
+                Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
-            duration: Duration(seconds: 365),
+            //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
-              label: "Validé",
-              onPressed: () async {
-                for (int i = 0; i < widget.connectedDevices.length; i++) {
-                  if (this.widget.connectedDevices[i].state ==
-                      SessionState.notConnected) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("disconnected"),
-                      backgroundColor: Colors.red,
-                    ));
-                    return;
-                  }
-
-                  this.widget.nearbyService.sendMessage(
-                      this.widget.connectedDevices[i].deviceId,
-                      myControllerText);
-                }
-
-                myControllerText = "";
-                await controller.resumeCamera();
-              },
-            ),
           ),
         );
       } else {
@@ -300,36 +300,16 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                Text('Invalidé.....Veuillez rescanner')
+                Text("Code non valide...")
               ],
             ),
-            duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
-            action: SnackBarAction(
-              label: "Rescannez",
-              onPressed: () async {
-                for (int i = 0; i < widget.connectedDevices.length; i++) {
-                  if (this.widget.connectedDevices[i].state ==
-                      SessionState.notConnected) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("disconnected"),
-                      backgroundColor: Colors.red,
-                    ));
-                    return;
-                  }
-
-                  this.widget.nearbyService.sendMessage(
-                      this.widget.connectedDevices[i].deviceId,
-                      myControllerText);
-                }
-                myControllerText = "";
-                await controller.resumeCamera();
-              },
-            ),
           ),
         );
       }
-      setState(() {});
+      setState(() {
+        verify = false;
+      });
     });
   }
 
@@ -337,7 +317,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+        const SnackBar(content: Text("Pas de permission")),
       );
       Navigator.of(context).pop();
     }
@@ -346,8 +326,8 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   void _showToast(BuildContext context) {
     final scaffold = Scaffold.of(context);
     scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Go'),
+      const SnackBar(
+        content: Text('Go'),
       ),
     );
   }
