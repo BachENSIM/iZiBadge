@@ -180,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: const Text(
-                "LOGIN",
+                "CONNEXION",
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     //color: CustomColors.textPrimary,
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
               alignment: Alignment.centerRight,
               margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: Text(
-                "Forgot your password?",
+                "Mot de passe oublié ?",
                 style: TextStyle(
                   fontSize: 12,
                   //color: CustomColors.backgroundLight
@@ -310,7 +310,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       .then((value) {
                     print("after login" + _emailCtl.text);
                     print("after login" + _passCtl.text);
-                    DatabaseTest.userUid = _emailCtl.text;
+                    DatabaseTest.userUid = _emailCtl.text.toLowerCase();
                     Navigator.of(context).push(MaterialPageRoute(
                         //builder: (context) =>  ListViewEvent()));
                         builder: (context) => DashboardScreen()));
@@ -341,7 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   padding: const EdgeInsets.all(0),
                   child: const Text(
-                    "LOGIN",
+                    "SE CONNECTER",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -361,7 +361,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (context) => const RegisterScreen()))
                 },
                 child: Text(
-                  "Don't Have an Account? Sign up",
+                  "Créer un nouveau compte?",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -395,7 +395,8 @@ class _LoginScreenState extends State<LoginScreen> {
 String? validatePassword(String? value) {
   // ignore: unnecessary_null_comparison
   if (value == null || value.isEmpty) {
-    return "Password is required";
+    //return "Password is required";
+    return "Mot de passe obligatoire";
   } else if (value.length < 6) {
     return "Password should be at least 6 characters";
   }
@@ -405,7 +406,8 @@ String? validatePassword(String? value) {
 String? validateEmail(String? value) {
   // ignore: unnecessary_null_comparison
   if (value == null || value.isEmpty) {
-    return "Email is required";
+    //return "Email is required";
+    return "Email obligatoire";
   }
   return null;
 }

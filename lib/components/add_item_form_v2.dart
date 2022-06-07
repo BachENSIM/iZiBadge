@@ -119,7 +119,7 @@ class _AddItemFormState extends State<AddItemForm> {
                   focusNode: widget.descFocusNode,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.done,
-                  validator: (value) => Validator.validateField(
+                  validator: (value) => Validator.nonValidateField(
                     value: value,
                   ),
                   label: 'Description',
@@ -178,7 +178,7 @@ class _AddItemFormState extends State<AddItemForm> {
             ),
           ),
           _isProcessing
-              ? Padding(
+              ? const Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: CircularProgressIndicator(
                       // valueColor: AlwaysStoppedAnimation<Color>(

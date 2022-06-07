@@ -36,7 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Register Page"),
+        title: const Text("Page d'inscription"),
       ),
       body: Form(
         key: _formKey,
@@ -49,11 +49,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: TextFormField(
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: "Enter your email"),
+                    labelText: "Saisir votre email"),
                 keyboardType: TextInputType.emailAddress,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Email is required";
+                    return "Email obligatoire";
                   }
                   return null;
                 },
@@ -68,11 +68,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: _passCtl,
                 decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: "Enter your password"),
+                    labelText: "Saisir votre mot de passe"),
                 keyboardType: TextInputType.emailAddress,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return "Password is required";
+                    return "Mot de passe obligatoire";
                   } else if (value.length < 6) {
                     return "Password should be at least 6 characters";
                   }
@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   padding: const EdgeInsets.all(0),
                   child: Text(
-                    "SIGN UP",
+                    "S'INSCRIRE",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       MaterialPageRoute(builder: (context) => LoginScreen()))
                 },
                 child: Text(
-                  "Already Have an Account? Sign in",
+                  "Se connecter à un compte existant",
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,

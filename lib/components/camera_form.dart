@@ -22,6 +22,7 @@ class _CameraFormState extends State<CameraForm> {
   bool flash = false;
   bool touch = false;
   int nbTotal = 0;
+  int nbStatusTrue = 0;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -45,6 +46,10 @@ class _CameraFormState extends State<CameraForm> {
 
   void getSize() async {
     nbTotal = await DatabaseTest.fetchListSize(docId: widget.documentId);
+    await DatabaseTest.fetchListInvite(docId: widget.documentId);
+    DatabaseTest.lstInviteChecked.values.toList().forEach((element) {
+      if(element == true) nbStatusTrue++;
+    });
     setState(() {
       debugPrint("nbTotal = $nbTotal");
     });
@@ -64,7 +69,8 @@ class _CameraFormState extends State<CameraForm> {
               children: <Widget>[
                 Text(
                   //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
-                  "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  "Nombre de personnes entrées: \n $nbStatusTrue / $nbTotal",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,

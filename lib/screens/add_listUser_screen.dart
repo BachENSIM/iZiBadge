@@ -15,7 +15,7 @@ class ListUserScreen extends StatefulWidget {
 
 class _ListUserScreenState extends State<ListUserScreen> {
   // The inital group value
-  static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
+  //static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
 
   final List<String> _groupListUser = [];
   final List<String> _groupDropdownGroup = [];
@@ -68,7 +68,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Form(
-          key: _lstUserFormKey,
+          //key: _lstUserFormKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
