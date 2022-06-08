@@ -9,8 +9,8 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  //static String userUid = "test@gmail.com";
-  static String userUid = "example5@gmail.com";
+  static String userUid = "ensim@univ-lemans.fr";
+  //static String userUid = "example5@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -750,7 +750,7 @@ class DatabaseTest {
               .catchError((e) => print(e));
         }
         debugPrint("email after $emailClient ....");
-        emailClient = "";
+        //emailClient = "";
 
         break;
       } else {
@@ -868,7 +868,7 @@ class DatabaseTest {
           }
         }
         //debugPrint("email after $emailClient ....");
-        emailClient = "";
+        //emailClient = "";
         break;
       } else {
         //debugPrint(" content: $contentQRCode data false $i $idClient");

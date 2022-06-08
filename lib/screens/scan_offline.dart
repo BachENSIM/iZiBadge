@@ -264,6 +264,21 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       //verify = DatabaseTest.status;
 
       if (verify) {
+        if (this.widget.connectedDevices.state ==
+            SessionState.notConnected) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("disconnected"),
+            backgroundColor: Colors.red,
+          ));
+          return;
+        }
+        this.widget.nearbyService.sendMessage(
+            this.widget.connectedDevices.deviceId,
+            myControllerText);
+
+
+        myControllerText = "";
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -278,20 +293,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             action: SnackBarAction(
               label: "Validé",
               onPressed: () async {
-                if (this.widget.connectedDevices.state ==
-                    SessionState.notConnected) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("disconnected"),
-                    backgroundColor: Colors.red,
-                  ));
-                  return;
-                }
-                this.widget.nearbyService.sendMessage(
-                    this.widget.connectedDevices.deviceId,
-                    myControllerText);
 
-
-                myControllerText = "";
                 await controller.resumeCamera();
               },
             ),
