@@ -70,8 +70,8 @@ class MyApp extends StatelessWidget {
             // textTheme: Typography().black,
             ),
         //indiquer sur quelle page il va commencer quand lancer l'app
-        //home: const LoginScreen(),
-        home: DashboardScreen(),
+        home: const LoginScreen(),
+        //home: DashboardScreen(),
       ),
     );
     /*return MultiProvider(
