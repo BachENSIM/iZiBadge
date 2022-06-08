@@ -179,7 +179,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
                               children: <Widget>[
                                 Icon(
                                   Icons.chat,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ), // icon
                               ],
                             ),
