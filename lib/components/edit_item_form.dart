@@ -102,7 +102,7 @@ class _EditItemFormState extends State<EditItemForm> {
                     focusNode: widget.descFocusNode,
                     inputType: TextInputType.text,
                     inputAction: TextInputAction.done,
-                    validator: (value) => Validator.validateField(
+                    validator: (value) => Validator.nonValidateField(
                       value: value,
                     ),
                     label: 'Description',

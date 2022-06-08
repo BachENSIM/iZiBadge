@@ -16,7 +16,7 @@ class _TableUserFormState extends State<TableUserForm> {
   int? sortColumnIndex; //pour mettre en orde (sorting)
   bool isAscending = false;
   int no = 0;
-  final columns = ["Invité", "Entré", "Entrées"];
+  final columns = ["Invités", "Status", "Nombre d'entrées"];
   late List<String> lstEmail =
       DatabaseTest.lstInviteChecked.keys.toList(growable: false);
   late List<bool> lstStatus =
@@ -32,9 +32,9 @@ class _TableUserFormState extends State<TableUserForm> {
     lstEnter = DatabaseTest.lstSizeInvite;*/
     for (int i = 0; i < lstStatus.length; i++) {
       String mess = lstEmail[i] +
-          "-" +
+          "/" +
           lstStatus[i].toString() +
-          "-" +
+          "/" +
           lstEnter[i].toString();
       lstCombine.add(mess);
     }
@@ -56,12 +56,13 @@ class _TableUserFormState extends State<TableUserForm> {
         if (lstCombine.isNotEmpty) lstCombine.clear();
         for (int i = 0; i < lstStatus.length; i++) {
           String mess = lstEmail[i] +
-              "-" +
+              "/" +
               lstStatus[i].toString() +
-              "-" +
+              "/" +
               lstEnter[i].toString();
           lstCombine.add(mess);
         }
+        debugPrint("scroll");
         setState(() {});
       },
       color: Colors.purple,
@@ -169,9 +170,9 @@ class _TableUserFormState extends State<TableUserForm> {
   List<DataRow> getRows(List<String> combines) {
     return combines.map((String combineItem) {
       final cells = [
-        combineItem.split("-").first,
-        combineItem.split("-")[1],
-        combineItem.split("-").last
+        combineItem.split("/").first,
+        combineItem.split("/")[1],
+        combineItem.split("/").last
       ];
       return DataRow(cells: getCells(cells));
     }).toList();
@@ -201,15 +202,15 @@ class _TableUserFormState extends State<TableUserForm> {
   void onSort(int columnIndex, bool ascending) {
     if (columnIndex == 0) {
       lstCombine.sort((user1, user2) => compareString(
-          ascending, user1.split("-").first, user2.split("-").first));
+          ascending, user1.split("/").first, user2.split("/").first));
     } else if (columnIndex == 2) {
       lstCombine.sort((user1, user2) => compareInt(ascending,
-          int.parse(user1.split("-").last), int.parse(user2.split("-").last)));
+          int.parse(user1.split("/").last), int.parse(user2.split("/").last)));
       /* lstCombine.sort((user1, user2) => Comparable.compare(
-          int.parse(user1.split("-").last), int.parse(user2.split("-").last)));*/
+          int.parse(user1.split("/").last), int.parse(user2.split("/").last)));*/
     } else {
       lstCombine.sort((user1, user2) =>
-          compareString(ascending, user1.split("-")[1], user2.split("-")[1]));
+          compareString(ascending, user1.split("/")[1], user2.split("/")[1]));
     }
 
     setState(() {

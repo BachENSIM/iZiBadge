@@ -17,8 +17,8 @@ class ScanOffline extends StatefulWidget {
 
   ScanOffline(
       {required this.connectedDevices,
-      required this.nearbyService,
-      required this.documentId});
+        required this.nearbyService,
+        required this.documentId});
 
   @override
   _ScanOfflineState createState() => _ScanOfflineState();
@@ -53,12 +53,15 @@ class _ScanOfflineState extends State<ScanOffline> {
     receivedDataSubscription = this
         .widget
         .nearbyService
-        .dataReceivedSubscription(callback: (data) {
+        .dataReceivedSubscription(callback: (data) async {
       //Réception du contenu du QR Code
       var obj =
-          ChatMessage(messageContent: data["message"], messageType: "receiver");
+      ChatMessage(messageContent: data["message"], messageType: "receiver");
       //récupération du code
       //synchronisation de la base de données locale
+      log(obj.messageContent.toString());
+      await DatabaseTest.fetchDataCheckUpdateDB(
+          widget.documentId, obj.messageContent.toString());
 
     } );
     i=0;
@@ -116,7 +119,7 @@ class _ScanOfflineState extends State<ScanOffline> {
           documentId: widget.documentId,
           connectedDevices: widget.connectedDevices,
           nearbyService:
-              widget.nearbyService), // Here the scanned result will be shown
+          widget.nearbyService), // Here the scanned result will be shown
     );
   }
 }
@@ -134,8 +137,8 @@ class CameraFormOffline extends StatefulWidget {
   NearbyService nearbyService;
   CameraFormOffline(
       {required this.documentId,
-      required this.connectedDevices,
-      required this.nearbyService});
+        required this.connectedDevices,
+        required this.nearbyService});
 
   @override
   _CameraFormOfflineState createState() => _CameraFormOfflineState();
@@ -201,9 +204,9 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
                           child: IconButton(
                               icon: flash
                                   ? Icon(
-                                      Icons.flash_on,
-                                      //color: Colors.white,
-                                    )
+                                Icons.flash_on,
+                                //color: Colors.white,
+                              )
                                   : Icon(Icons.flash_off, color: Colors.white),
                               onPressed: () async {
                                 await controller!.toggleFlash();
@@ -220,7 +223,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
-            MediaQuery.of(context).size.height < 400)
+        MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
     // To ensure the Scanner view is properly sizes after rotation
@@ -229,7 +232,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          // borderColor: Colors.orangeAccent,
+        // borderColor: Colors.orangeAccent,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -250,7 +253,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
 
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
       myControllerText = result!.code.toString();
-      verify = await DatabaseTest.fetchDataCheck(
+      verify = await DatabaseTest.fetchDataCheckUpdateDB(
           widget.documentId, result!.code.toString());
       debugPrint("Status: " +
           verify.toString() +
@@ -275,17 +278,17 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
             action: SnackBarAction(
               label: "Validé",
               onPressed: () async {
-                  if (this.widget.connectedDevices.state ==
-                      SessionState.notConnected) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("disconnected"),
-                      backgroundColor: Colors.red,
-                    ));
-                    return;
-                  }
-                  this.widget.nearbyService.sendMessage(
-                      this.widget.connectedDevices.deviceId,
-                      myControllerText);
+                if (this.widget.connectedDevices.state ==
+                    SessionState.notConnected) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("disconnected"),
+                    backgroundColor: Colors.red,
+                  ));
+                  return;
+                }
+                this.widget.nearbyService.sendMessage(
+                    this.widget.connectedDevices.deviceId,
+                    myControllerText);
 
 
                 myControllerText = "";

@@ -70,8 +70,8 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
                     //dessiner le QRCode (ajouter des couleurs,...)
                     final painter = QrPainter.withQr(
                       qr: qrCode!,
-                      color: const Color(0xFFFFFFFF),
-                      emptyColor: const Color(0xFF000000),
+                      emptyColor: const Color(0xFFFFFFFF),
+                      color: const Color(0xFF000000),
                       gapless: true,
                       embeddedImageStyle: null,
                       embeddedImage: null,
@@ -91,8 +91,8 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: success!
-                          ? Text('Image saved to Gallery')
-                          : Text('Error saving image'),
+                          ? Text('Sauvegarder dans la gallerie')
+                          : Text('Problème lors de la sauvegarde...'),
                     ));
                     debugPrint(success.toString());
                     Navigator.of(context).pop();

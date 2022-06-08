@@ -22,6 +22,7 @@ class _CameraFormState extends State<CameraForm> {
   bool flash = false;
   bool touch = false;
   int nbTotal = 0;
+  int nbStatusTrue = 0;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -45,6 +46,10 @@ class _CameraFormState extends State<CameraForm> {
 
   void getSize() async {
     nbTotal = await DatabaseTest.fetchListSize(docId: widget.documentId);
+    await DatabaseTest.fetchListInvite(docId: widget.documentId);
+    DatabaseTest.lstInviteChecked.values.toList().forEach((element) {
+      if(element == true) nbStatusTrue++;
+    });
     setState(() {
       debugPrint("nbTotal = $nbTotal");
     });
@@ -64,7 +69,8 @@ class _CameraFormState extends State<CameraForm> {
               children: <Widget>[
                 Text(
                   //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / ${DatabaseTest.nbPersonTotal}",
-                  "Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  //"Nombre de personnes entrées: \n ${DatabaseTest.lstPersonScanned.length} / $nbTotal",
+                  "Nombre de personnes entrées: \n $nbStatusTrue / $nbTotal",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -93,9 +99,9 @@ class _CameraFormState extends State<CameraForm> {
                 onPressed: () async {
                   debugPrint("touche");
                   await controller!.resumeCamera();
-                  setState(() {
+                 /* setState(() {
                     nbTotal = DatabaseTest.nbPersonTotal;
-                  });
+                  });*/
                 },
                 child: _buildQrView(context),
                 minWidth: MediaQuery.of(context).size.width,
@@ -239,9 +245,10 @@ class _CameraFormState extends State<CameraForm> {
       result = scanData;
       debugPrint("QRCode ${result!.code}");
 
+
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
-      verify = await DatabaseTest.fetchDataCheck(
-          widget.documentId, result!.code.toString().split('//').last);
+      verify = await DatabaseTest.fetchDataCheckUpdateDB(
+          widget.documentId, result!.code.toString());
       debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
@@ -258,8 +265,8 @@ class _CameraFormState extends State<CameraForm> {
               children: <Widget>[
                 const Icon(Icons.check_circle_outline,
                     color: Colors.green, size: 40),
-                Text(result!.code.toString().split('//').last),
-                Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
+                Text(result!.code.toString()),
+                //Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
               ],
             ),
             //duration: Duration(seconds: 365),
@@ -279,7 +286,7 @@ class _CameraFormState extends State<CameraForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const <Widget>[
                 Icon(Icons.cancel_outlined, color: Colors.red, size: 40),
-                Text("Code non valide...")
+                Text("Code non validé...")
               ],
             ),
             //duration: Duration(seconds: 365),

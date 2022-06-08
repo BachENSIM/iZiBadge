@@ -9,7 +9,8 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  static String userUid = "example2@gmail.com";
+  //static String userUid = "test@gmail.com";
+  static String userUid = "example5@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -91,6 +92,7 @@ class DatabaseTest {
 
   /*---------------------------------------*/
   //pour modifier un events
+  //faut aussi synchroniser tous les personnes
   static Future<void> updateItem({
     required String title,
     required String description,
@@ -111,8 +113,28 @@ class DatabaseTest {
     await documentReferencer
         .update(data)
         .whenComplete(
-            () => print("Event of this account updated in the database"))
-        .catchError((e) => print(e));
+            () => debugPrint("DB changed $userUid"))
+        .catchError((e) => debugPrint(e));
+    //récupérer la liste d'invitation
+    var dataSync = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    for (var i = 0; i < dataSync.size; i++) {
+      String email = dataSync.docs[i].data()['email'];
+      await _mainCollection
+          .doc(email)
+          .collection(eventRelated)
+          .doc(docId)
+          .update(data)
+          .whenComplete(() => debugPrint(
+          "DB changed $email"))
+          .catchError((e) => debugPrint(e));
+    }
+
   }
 
   /*---------------------------------------*/
@@ -306,7 +328,7 @@ class DatabaseTest {
       "timestamp": DateTime.now(),
       "email": userUid,
       "group": "HOST",
-      "nbEntree": 0
+      "nbEntree": 1
     };
 
     await documentReferencer
@@ -314,7 +336,8 @@ class DatabaseTest {
         .whenComplete(
             () => print("Add Organisateur : id " + documentReferencer.id))
         .catchError((e) => print(e));
-
+    //sauvegarder docID de HOST
+    String idHOST = documentReferencer.id;
     //Step 2bis: Need to also save the list of group for modify after
     DocumentReference documentRefGr = _mainCollection
         .doc(userUid)
@@ -344,6 +367,7 @@ class DatabaseTest {
     //Step 2: Save the list into database
     List<String> listOfID = [];
     List<String> listOfRoleScan = [];
+
     for (int i = 0; i < listEmail.length; i++) {
       //Save en tant qu'organisateur/
       DocumentReference documentReferencer = _mainCollection
@@ -383,7 +407,7 @@ class DatabaseTest {
           address: addrSave!,
           start: listHoursStart[position],
           end: listHoursEnd[position],
-          role: listRole[i]);
+          role: listRole[i], id: docIdAdd!);
 
       //Step 4: in this event of this client, create too an email in the collection "participation" for the content of QRCode (just for clients not scanners)
       if (listRole[i].compareTo("Invité") == 0) {
@@ -425,9 +449,27 @@ class DatabaseTest {
             .doc(listOfID[i])
             .set(data)
             .whenComplete(
-                () => print("${listOfRoleScan[j]} update ${listEmail[i]}"))
-            .catchError((e) => print(e));
+                () => debugPrint("${listOfRoleScan[j]} update ${listEmail[i]}"))
+            .catchError((e) => debugPrint(e));
       }
+      Map<String, dynamic> data = <String, dynamic>{
+        "role": "Organisateur",
+        "statutEntree": true,
+        "timestamp": DateTime.now(),
+        "email": userUid,
+        "group": "HOST",
+        "nbEntree": 1
+      };
+      await  _mainCollection
+          .doc(listOfRoleScan[j])
+          .collection(eventRelated)
+          .doc(docIdAdd)
+          .collection(participants)
+          .doc(idHOST)
+          .set(data)
+          .whenComplete(
+              () => debugPrint("${listOfRoleScan[j]} update $userUid"))
+          .catchError((e) => debugPrint(e));
     }
   }
 
@@ -511,9 +553,10 @@ class DatabaseTest {
     required DateTime start,
     required DateTime end,
     required String role,
+    required String id,
   }) async {
     DocumentReference documentReferencer =
-        _mainCollection.doc(email).collection(eventRelated).doc(docIdAdd);
+        _mainCollection.doc(email).collection(eventRelated).doc(id);
 
     Map<String, dynamic> data = <String, dynamic>{
       "titre": title,
@@ -522,7 +565,7 @@ class DatabaseTest {
       "dateDebut": start,
       "dateEnd": end,
       "role": role,
-      "isEfface": isDel,
+      "isEfface": false,
     };
     await documentReferencer
         .set(data)
@@ -591,9 +634,56 @@ class DatabaseTest {
     listNbRole[1] = nbInv;
     listNbRole[2] = nbScan;
   }
+  /*---------------------------------------*/
+  //une méthode pour voir la liste d'invitation de cet événement
+  //toujours la même liste d'invitation (avec l'email d'organisateur et l'email de scanneur)
+  //2 HashMap pour stocker email - status - nbEntrer (putIfAbsent qui ne respecte pas l'ordre dans la BDD)
+  static HashMap<String, bool> lstInviteChecked = HashMap<String, bool>();
+  static HashMap<String, int> lstSizeInvite = HashMap<String, int>();
+
+  //static List<int> lstSizeInvite = [];
+
+  static Future<void> fetchListInvite({
+    required String docId,
+  }) async {
+    var dataID = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .orderBy("email", descending: true)
+        .get();
+    int sizeList = dataID.docs.length;
+    if (lstInviteChecked.isNotEmpty) lstInviteChecked.clear();
+    if (lstSizeInvite.isNotEmpty) lstSizeInvite.clear();
+    //méthode pour remplir une liste avec les données par défault
+    //lstSizeInvite = List.generate(sizeList, (index) => 0);
+    //lstSizeInvite = List.filled (sizeList, 0,growable: false);
+    for (int i = 0; i < sizeList; i++) {
+      String role = dataID.docs[i].data()['role'];
+      String key = "";
+      role.contains("Organisateur") ?
+        key = dataID.docs[i].data()['email'] + " (HOST)" :
+        role.contains("Scanneur") ?
+        key = dataID.docs[i].data()['email'] + " (Scanneur)" :
+        key = dataID.docs[i].data()['email'];
+
+      bool value = dataID.docs[i].data()['statutEntree'];
+      int nbTimeEnter = dataID.docs[i].data()['nbEntree'];
+      lstInviteChecked.putIfAbsent(key, () => value);
+      lstSizeInvite.putIfAbsent(key, () => nbTimeEnter);
+      /* if (!key.contains(userUid) || !role.contains("Organisateur")) {
+        lstInviteChecked.putIfAbsent(key, () => value);
+        lstSizeInvite.putIfAbsent(key, () => nbTimeEnter);
+        //debugPrint("message : $key $nbTimeEnter");
+      }*/
+    }
+  }
 
   /*---------------------------------------*/
   //check status de QRCode
+  //il faut aussi mettre à jour  dans la BDD de les scanneurs (entre organisateur et scanneur/ scanneur entre scanneur)
   static Future<bool> status = Future<bool>.value(false);
   static late int nbPersonTotal = 0; //nb total de personne dans un events
   static late int countPersonEnter = 0; //compter cb de persons qui rentre
@@ -670,16 +760,206 @@ class DatabaseTest {
     }
     return status;
   }
+  //récupérer les données dans la BDD, les comparer et les mettre un HashMap pour afficher sur écran
+  static Future<bool> fetchDataCheckUpdateDB(
+      String idParticipation, String contentQRCode) async {
+    //lstPersonEnter = HashMap<String,bool>();
+    //lstPersonScanned = HashMap<String,int>();
+    HashMap<String,int> hashMapNbEnter = HashMap<String, int>();
+    List<String> lstEmailClient = [];
+    var dataNbEnter = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(idParticipation)
+        .collection(participants)
+        .get();
+    for (int i = 0; i < dataNbEnter.docs.length; i++) {
+      String key = dataNbEnter.docs[i].id;
+      int value = dataNbEnter.docs[i].data()['nbEntree'];
+      String email = dataNbEnter.docs[i].data()['email'];
+      String role = dataNbEnter.docs[i].data()['role'];
+      hashMapNbEnter.putIfAbsent(key, () => value);
+      if(!email.contains(userUid) && (role.contains("Organisateur") || role.contains("Scanneur"))) lstEmailClient.add(email);
+    }
+    debugPrint(lstEmailClient.toString());
+    var dataID = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(idParticipation)
+        .collection(participants)
+        .get();
+    nbPersonTotal = dataID.docs.length - 1;
+    countPersonEnter = 1;
+    for (int i = 0; i < dataID.docs.length; i++) {
+      String idClient = dataID.docs[i].id;
+      String role = dataID.docs[i].data()['role'];
+      if (contentQRCode.compareTo(idClient) == 0) {
+        //debugPrint(" content: $contentQRCode data true $i $idClient");
+        status = Future<bool>.value(true);
+        emailClient = dataID.docs[i].data()['email'];
+        //countPersonScanned++;
+        if (!lstPersonScanned.containsKey(contentQRCode)) {
+          countPersonEnter = hashMapNbEnter[contentQRCode]!+1;
+          lstPersonScanned.putIfAbsent(contentQRCode,
+                  () => countPersonEnter); //ajouter une valeur dans la table de Hachage
+          //mettre à jour le statut d'entrée d'une personne = true
+          debugPrint("NB " + lstPersonScanned[contentQRCode].toString());
+          await _mainCollection
+              .doc(userUid)
+              .collection(eventRelated)
+              .doc(idParticipation)
+              .collection(participants)
+              .doc(idClient)
+              .update({
+            "statutEntree": true,
+            "timestamp": DateTime.now(),
+            "nbEntree": lstPersonScanned[contentQRCode]
+          })
+              .whenComplete(() =>
+              debugPrint("$userUid Updated: $emailClient status: true"))
+              .catchError((e) => debugPrint(e));
 
+          for (int j = 0; j <lstEmailClient.length;j++) {
+            await _mainCollection
+                .doc(lstEmailClient[j])
+                .collection(eventRelated)
+                .doc(idParticipation)
+                .collection(participants)
+                .doc(idClient)
+                .update({
+                "statutEntree": true,
+                "timestamp": DateTime.now(),
+                "nbEntree": lstPersonScanned[contentQRCode] })
+                .whenComplete(() =>
+                debugPrint("${lstEmailClient[j]} Updated $emailClient status: true"))
+                .catchError((e) => debugPrint(e));
+          }
+
+          //countPersonEnter++;
+        }
+        else {
+          countPersonEnter = hashMapNbEnter[contentQRCode]! + 1;
+          //mettre à jour une valeur dans la liste
+          lstPersonScanned.update(contentQRCode, (value) => countPersonEnter);
+          await _mainCollection
+              .doc(userUid)
+              .collection(eventRelated)
+              .doc(idParticipation)
+              .collection(participants)
+              .doc(idClient)
+              .update({"nbEntree": countPersonEnter})
+              .whenComplete(() => debugPrint(
+              "$userUid Updated: $emailClient nbEntrée: $countPersonEnter"))
+              .catchError((e) => debugPrint(e));
+
+          for (int j = 0; j <lstEmailClient.length;j++) {
+            await _mainCollection
+                .doc(lstEmailClient[j])
+                .collection(eventRelated)
+                .doc(idParticipation)
+                .collection(participants)
+                .doc(idClient)
+                .update({"nbEntree": countPersonEnter})
+                .whenComplete(() => debugPrint(
+                "${lstEmailClient[j]} Updated: $emailClient nbEntrée: $countPersonEnter"))
+                .catchError((e) => debugPrint(e));
+          }
+        }
+        //debugPrint("email after $emailClient ....");
+        emailClient = "";
+        break;
+      } else {
+        //debugPrint(" content: $contentQRCode data false $i $idClient");
+        //status = Future<bool>.value(false);
+      }
+    }
+    return status;
+  }
   /*---------------------------------------*/
   //avoir besoins de sauvegarder touts les groupes sur BDD pour
+  //mettre à jour partout dans la BDD (si changer le nom de groupe, faut comparer avec la liste ancienne,..)
+  static HashMap<String,String> hashMapGrChanged = HashMap<String,String>();
   static Future<void> updateGroup(
       {required String docId,
       required List<String> lstGroupUpdate,
       required List<DateTime> lstDateStart,
       required List<DateTime> lstDateEnd}) async {
+
+    //récupérer les données avant de modifier
+    var dataNameGr = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    HashMap<String,String> hmGrUpdated = HashMap<String,String>();
+    //List<String> lstId = [];
+    for (int i = 0; i < dataNameGr.docs.length;i++) {
+      String group = dataNameGr.docs[i].data()['group'];
+      String id = dataNameGr.docs[i].id;
+      hmGrUpdated.putIfAbsent(id,() => group);
+    }
+    hashMapGrChanged.keys.toList().forEach((element) {
+      hmGrUpdated.updateAll((key, value) => value.replaceAll(element, hashMapGrChanged[element]!));
+    });
+    debugPrint("updated : " + hmGrUpdated.values.toList().toString());
+    //changer le nom de group correspondant avec nom modifié
+    for(int i = 0;i < hmGrUpdated.length;i++ ) {
+      String name = hmGrUpdated.values.toList().elementAt(i);
+      String id = hmGrUpdated.keys.toList().elementAt(i);
+      Map<String, dynamic> updateNameGr = <String, dynamic>{
+        "group": name
+      };
+      DocumentReference updatedGr = _mainCollection
+          .doc(userUid)
+          .collection(eventRelated)
+          .doc(docId)
+          .collection(participants)
+          .doc(id);
+
+      await updatedGr
+          .update(updateNameGr)
+          .whenComplete(() => debugPrint("Updated $name"))
+          .catchError((e) => debugPrint(e));
+    }
+    //faut changer aussi l'heure affiché sur la page d'acceuil
+    var dataEmail = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    //un HashMap pour stocker email avec un group
+    HashMap<String,String> hmEmailUpdated = HashMap<String,String>();
+    for (int i = 0; i < dataEmail.docs.length;i++) {
+      String group = dataEmail.docs[i].data()['group'];
+      String email = dataEmail.docs[i].data()['email'];
+      hmEmailUpdated.putIfAbsent(email,() => group);
+    }
+    for(int i = 0;i < hmEmailUpdated.length;i++ ) {
+      String group = hmEmailUpdated.values.toList().elementAt(i);
+      String email = hmEmailUpdated.keys.toList().elementAt(i);
+      Map<String, dynamic> updateTimeChanged = <String, dynamic>{
+        "dateDebut": lstDateStart[i],
+        "dateEnd": lstDateEnd[i]
+      };
+      DocumentReference updatedTime = _mainCollection
+          .doc(email)
+          .collection(eventRelated)
+          .doc(docId);
+
+      await updatedTime
+          .update(updateTimeChanged)
+          .whenComplete(() => debugPrint("Updated $email"))
+          .catchError((e) => debugPrint(e));
+    }
+
     //mettre à jour la liste de groupe
-    DocumentReference documentGroup = _mainCollection
+      DocumentReference documentGroup = _mainCollection
         .doc(userUid)
         .collection(eventRelated)
         .doc(docId)
@@ -712,6 +992,8 @@ class DatabaseTest {
         .update(dataDate)
         .whenComplete(() => debugPrint("Updated time for event $docId"))
         .catchError((e) => debugPrint(e));
+
+
   }
 
   /*---------------------------------------*/
@@ -768,8 +1050,12 @@ class DatabaseTest {
     if (lstGrAdded.isNotEmpty) lstGrAdded.clear();
     if (lstDateStartAdded.isNotEmpty) lstDateStartAdded.clear();
     if (lstDateEndAdded.isNotEmpty) lstDateEndAdded.clear();
+    if (hashMapGrChanged.isNotEmpty) hashMapGrChanged.clear();
     if (dataID.docs.isNotEmpty) {
       lstGrAdded = (dataID.docs[0].data()['nomListeGroupe']).cast<String>();
+      for (String element in lstGrAdded) {
+        hashMapGrChanged.putIfAbsent(element, () => element);
+      }
       //cast en Timestamp parce que sur Firebase, il n'a pas de type DateTime
       start = (dataID.docs[1].data()['listeHeureCommencee']).cast<Timestamp>();
       end = (dataID.docs[1].data()['listeHeureTerminee']).cast<Timestamp>();
@@ -884,9 +1170,12 @@ class DatabaseTest {
     required List<String> lstRoleUpdate,
   }) async {
     //parcourir pour prendre ID de chaque user dans la collection "participation"
+    List<String> listOfRoleScan = [];
     HashMap<int, String> checkLstMail = HashMap<int, String>();
     for (int i = 0; i < lstEmailUpdate.length; i++) {
       checkLstMail.putIfAbsent(i, () => lstEmailUpdate[i]);
+      if (lstRoleUpdate[i].compareTo("Scanneur") == 0)
+        listOfRoleScan.add(lstEmailUpdate[i]);
     }
 
     var dataID = await FirebaseFirestore.instance
@@ -896,84 +1185,173 @@ class DatabaseTest {
         .doc(docId)
         .collection(participants)
         .get();
-
+    await fetchGroupAdded(docId);
+    //traiter la mis à jour par rapport l'ancienne email
     for (int i = 0; i < dataID.docs.length; i++) {
       String emailCheck = dataID.docs[i].data()['email'];
+      String id = dataID.docs[i].id;
       bool check = checkLstMail.containsValue(emailCheck);
       int index = checkLstMail.keys
           .firstWhere((k) => checkLstMail[k] == emailCheck, orElse: () => -1);
-
+      //int index = checkLstMail.keys.toList();
+      debugPrint("index = $index and status = $check");
       if (!check) {
         //if check = fasle => isEfface = true
+        //supprimer cette personne dans la liste d'invitation (Organisateur )
+        //pour lui, cet events est effacé par l'organisateur
         await _mainCollection
             .doc(emailCheck)
             .collection(eventRelated)
             .doc(docId)
             .update({"isEfface": false})
-            .whenComplete(() => print(
-                "Changer l'etat de l'attribute isEfface = false de ${emailCheck}"))
-            .catchError((e) => print(e));
-      } else if (check && index > 0) {
+            .whenComplete(() => debugPrint(
+                "Changer l'etat de l'attribute isEfface = false de $emailCheck"))
+            .catchError((e) => debugPrint(e));
+        await _mainCollection
+            .doc(userUid)
+            .collection(eventRelated)
+            .doc(docId)
+            .collection(participants)
+            .doc(id)
+            .delete()
+            .whenComplete(() => debugPrint("Deleted $emailCheck"))
+            .catchError((e) => debugPrint(e));
+      } else if (check && index >= 0) {
         //check = true => mettre à jour des valeurs
         Map<String, dynamic> update = <String, dynamic>{
-          "groupe": lstGroupUpdate[index],
-          "role": lstGroupUpdate[index],
+          "group": lstGroupUpdate[index],
+          "role": lstRoleUpdate[index],
         };
+        //Organisateur mettre à jour la liste
+        await _mainCollection
+            .doc(userUid)
+            .collection(eventRelated)
+            .doc(docId)
+            .collection(participants)
+            .doc(id)
+            .update(update)
+            .whenComplete(
+                () => debugPrint("1 Changer des attributes de $emailCheck"))
+            .catchError((e) => debugPrint(e));
+        //Cette personne mettre à jour lui même
+        int pos = lstGrAdded.indexOf(lstGroupUpdate[index]);
+        await _mainCollection
+            .doc(emailCheck)
+            .collection(eventRelated)
+            .doc(docId)
+            .update({
+              "role": lstRoleUpdate[index],
+              "dateStart": lstDateStartAdded[pos],
+              "dateEnd": lstDateEndAdded[pos]
+            })
+            .whenComplete(
+                () => debugPrint("2 Changer des attributes de $emailCheck"))
+            .catchError((e) => debugPrint(e));
         await _mainCollection
             .doc(emailCheck)
             .collection(eventRelated)
             .doc(docId)
             .collection(participants)
-            .doc(dataID.docs[i].id)
+            .doc(id)
             .update(update)
             .whenComplete(
-                () => print("Changer des attributes de ${emailCheck}"))
-            .catchError((e) => print(e));
+                () => debugPrint("3 Changer des attributes de $emailCheck"))
+            .catchError((e) => debugPrint(e));
         lstGroupUpdate.removeAt(index);
         lstEmailUpdate.removeAt(index);
         lstRoleUpdate.removeAt(index);
-      } else {
-        //créer nouveau liste
-        for (int i = 0; i < lstGroupUpdate.length; i++) {
-          DocumentReference documentReferencer = _mainCollection
-              .doc(userUid)
-              .collection(eventRelated)
-              .doc(docIdAdd)
-              .collection(participants)
-              .doc();
+      }
+    }
+    for (int i = 0; i < lstEmailUpdate.length; i++) {
+      //créer nouvelle liste pour le rest de la liste
+      //faire étape par étape (par email)
+      int pos = lstGrAdded.indexOf(lstGroupUpdate[i]);
+      var detail = await FirebaseFirestore.instance
+          .collection(nameDB)
+          .doc(userUid)
+          .collection(eventRelated)
+          .doc(docId)
+          .get();
+      String name = detail.data()!['titre'];
+      String address = detail.data()!['adresse'];
+      String desc = detail.data()!['description'];
+      DateTime dateEnd = lstDateStartAdded[pos];
+      DateTime dateStart = lstDateEndAdded[pos];
+      for (int i = 0; i < lstEmailUpdate.length; i++) {
+        //ajouter cetter personne dans la bdd d'organisateur
+        DocumentReference documentReferencer = _mainCollection
+            .doc(userUid)
+            .collection(eventRelated)
+            .doc(docId)
+            .collection(participants)
+            .doc();
 
-          Map<String, dynamic> data = <String, dynamic>{
-            "role": lstRoleUpdate[i],
-            "statutEntree": false,
-            "timestamp": DateTime.now(),
-            "email": lstEmailUpdate[i],
-            "group": lstGroupUpdate[i]
-          };
+        Map<String, dynamic> data = <String, dynamic>{
+          "role": lstRoleUpdate[i],
+          "statutEntree": false,
+          "nbEntree": 0,
+          "timestamp": DateTime.now(),
+          "email": lstEmailUpdate[i],
+          "group": lstGroupUpdate[i]
+        };
 
-          await documentReferencer
-              .set(data)
-              .whenComplete(() => print("Add id: ${documentReferencer.id}"))
-              .catchError((e) => print(e));
+        await documentReferencer
+            .set(data)
+            .whenComplete(() => debugPrint("Add id: ${documentReferencer.id}"))
+            .catchError((e) => debugPrint(e));
+        //synchroniser cet events dans BDD de cet personne
+        //faut récupérer le titre, la description, l'adresse, l'heure et la date concernant ce groupe
+        syncItems(
+            email: lstEmailUpdate[i],
+            title: name,
+            description: desc,
+            address: address,
+            start: dateStart,
+            end: dateEnd,
+            role: lstRoleUpdate[i],
+            id: docId);
+        //ajouter le dans la participation de cette personne
+        await _mainCollection
+            .doc(lstEmailUpdate[i])
+            .collection(eventRelated)
+            .doc(docId)
+            .collection(participants)
+            .doc(documentReferencer.id)
+            .set(data)
+            .whenComplete(() => debugPrint("successful"))
+            .catchError((e) => debugPrint(e));
+        //encore mettre à jour dans la liste de scanneur
+      }
+    }
 
-          syncItems(
-              email: lstEmailUpdate[i],
-              title: nameSave!,
-              description: descSave!,
-              address: addrSave!,
-              start: startSave!,
-              end: endSave!,
-              role: listRole[i]);
-
-          await _mainCollection
-              .doc(lstEmailUpdate[i])
-              .collection(eventRelated)
-              .doc(docIdAdd)
-              .collection(participants)
-              .doc(documentReferencer.id)
-              .set(data)
-              .whenComplete(() => print("successful"))
-              .catchError((e) => print(e));
-        }
+    //scanneur aussi
+    var forScanner = await FirebaseFirestore.instance
+        .collection(nameDB)
+        .doc(userUid)
+        .collection(eventRelated)
+        .doc(docId)
+        .collection(participants)
+        .get();
+    //traiter la mis à jour par rapport l'ancienne email
+    for (int i = 0; i < listOfRoleScan.length; i++) {
+      for (var element in forScanner.docs) {
+        Map<String, dynamic> data = <String, dynamic>{
+          "role": element.data()['role'],
+          "statutEntree": false,
+          "nbEntree": 0,
+          "timestamp": DateTime.now(),
+          "email": element.data()['email'],
+          "group": element.data()['group']
+        };
+        await _mainCollection
+            .doc(listOfRoleScan[i])
+            .collection(eventRelated)
+            .doc(docId)
+            .collection(participants)
+            .doc(element.id)
+            .set(data)
+            .whenComplete(() => debugPrint("successful"))
+            .catchError((e) => debugPrint(e));
       }
     }
   }
@@ -999,25 +1377,11 @@ class DatabaseTest {
         break;
       }
     }*/
-
     debugPrint(index.toString());
     String message =
         "${dataID.docs[index].data()['titre']} ${dataID.docs[index].data()['adresse']} ${dataID.docs[index].data()['description']} ";
     debugPrint("message : $message ");
-    //pour récupérer les groupes
-    var dataGroup = await FirebaseFirestore.instance
-        .collection(nameDB)
-        .doc(userUid)
-        .collection(eventRelated)
-        .doc(docId)
-        .collection(participantsGr)
-        .get();
-    List<String> group = [];
-    /*for (int i = 0; i < dataGroup.docs.length; i++) {
-      group.add(dataGroup.docs[i].data()['nomListeGroupe']);
-    }*/
-    group = (dataGroup.docs[0].data()['nomListeGroupe']).cast<String>();
-    debugPrint(group.toString());
+    String role = dataID.docs[index].data()['role'];
     var dataInvite = await FirebaseFirestore.instance
         .collection(nameDB)
         .doc(userUid)
@@ -1030,11 +1394,27 @@ class DatabaseTest {
       listIdClient.add(dataInvite.docs[i].id);
     }
     debugPrint("qrCode" + listIdClient.toString());
+    if (role == "Organisateur") {
+      //pour récupérer les groupes
+      var dataGroup = await FirebaseFirestore.instance
+          .collection(nameDB)
+          .doc(userUid)
+          .collection(eventRelated)
+          .doc(docId)
+          .collection(participantsGr)
+          .get();
+      List<String> group = [];
+      group = (dataGroup.docs[0].data()['nomListeGroupe']).cast<String>();
+      debugPrint(group.toString());
 
-    if (title.compareTo(dataID.docs[index].data()['titre']) != 0)
+    }
+
+    if (title.compareTo(dataID.docs[index].data()['titre']) != 0) {
       status = false;
-    else
+    } else {
       status = true;
+    }
+
 
     /*var update = await FirebaseFirestore.instance
         .collection(nameDB)
@@ -1059,43 +1439,7 @@ class DatabaseTest {
     return status;
   }
 
-  /*---------------------------------------*/
-  //une méthode pour voir la liste d'invitation de cet événement
-  //2 HashMap pour stocker email - status - nbEntrer (putIfAbsent qui ne respecte pas l'ordre dans la BDD)
-  static HashMap<String, bool> lstInviteChecked = HashMap<String, bool>();
-  static HashMap<String, int> lstSizeInvite = HashMap<String, int>();
 
-  //static List<int> lstSizeInvite = [];
-
-  static Future<void> fetchListInvite({
-    required String docId,
-  }) async {
-    var dataID = await FirebaseFirestore.instance
-        .collection(nameDB)
-        .doc(userUid)
-        .collection(eventRelated)
-        .doc(docId)
-        .collection(participants)
-        .orderBy("email", descending: true)
-        .get();
-    int sizeList = dataID.docs.length;
-    if (lstInviteChecked.isNotEmpty) lstInviteChecked.clear();
-    if (lstSizeInvite.isNotEmpty) lstSizeInvite.clear();
-    //méthode pour remplir une liste avec les données par défault
-    //lstSizeInvite = List.generate(sizeList, (index) => 0);
-    //lstSizeInvite = List.filled (sizeList, 0,growable: false);
-    for (int i = 0; i < sizeList; i++) {
-      String key = dataID.docs[i].data()['email'];
-      String role = dataID.docs[i].data()['role'];
-      bool value = dataID.docs[i].data()['statutEntree'];
-      int nbTimeEnter = dataID.docs[i].data()['nbEntree'];
-      if (!key.contains(userUid) || !role.contains("Organisateur")) {
-        lstInviteChecked.putIfAbsent(key, () => value);
-        lstSizeInvite.putIfAbsent(key, () => nbTimeEnter);
-        //debugPrint("message : $key $nbTimeEnter");
-      }
-    }
-  }
 
   /*---------------------------------------*/
   //renvoyer la taille de la liste d'invitation
@@ -1109,7 +1453,7 @@ class DatabaseTest {
         .doc(docId)
         .collection(participants)
         .get();
-    int sizeList = dataID.docs.length - 1;
+    int sizeList = dataID.docs.length;
     return sizeList;
     //debugPrint("message : $key $value $nbTimeEnter");
   }

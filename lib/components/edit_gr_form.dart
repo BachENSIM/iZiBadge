@@ -41,6 +41,22 @@ class _EditGroupFormState extends State<EditGroupForm> {
 
   late int taille = 2;
 
+  //pour heures/ dates
+  late DateTime slcDStart = DateTime(widget.dateStart.year,widget.dateStart.month,widget.dateStart.day);
+  late DateTime slcDEnd = DateTime(widget.dateEnd.year,widget.dateEnd.month,widget.dateEnd.day);
+  late TimeOfDay slcTStart = TimeOfDay(hour: widget.dateStart.hour,minute:widget.dateStart.minute );
+  late TimeOfDay slcTEnd = TimeOfDay(hour: widget.dateEnd.hour,minute:widget.dateEnd.minute );
+
+
+  late String dtStart = displayDate(slcDStart);
+  late String dtEnd = displayDate(slcDEnd);
+  late String todStart = displayTime(slcTStart);
+  late String todEnd = displayTime(slcTEnd);
+
+  late final List<String> _lstDTStart = ["$dtStart/$todStart"];
+  late final List<String> _lstDTEnd = ["$dtEnd/$todEnd"];
+
+
   @override
   void initState() {
     super.initState();
@@ -172,11 +188,24 @@ class _EditGroupFormState extends State<EditGroupForm> {
                               ),
                             );
                           } else {
+                            DatabaseTest.hashMapGrChanged.putIfAbsent(mess,() => mess);
                             //_groupNameList.add(mess);
                             DatabaseTest.lstGrAdded.add(mess);
                             _groupNameCtl.clear();
                           }
-                          //print(DatabaseTest.listNameGroup.toString());
+                          _lstDTStart.add("$dtStart/$todStart");
+                          _lstDTEnd.add("$dtEnd/$todEnd");
+                          String start =
+                              "${slcDStart.toLocal().toString().split(" ").first} ${slcTStart.format(context)}:00";
+                          String end =
+                              "${slcDEnd.toLocal().toString().split(" ").first} ${slcTEnd.format(context)}:00";
+                          debugPrint("start" +
+                              slcDStart.toLocal().toString().split(" ").first);
+                          debugPrint("end" +
+                              slcDEnd.toLocal().toString().split(" ").first);
+                          DatabaseTest.lstDateStartAdded
+                              .add(DateTime.parse(start));
+                          DatabaseTest.lstDateEndAdded.add(DateTime.parse(end));
                         });
                       },
                       //style:  ElevatedButton.styleFrom(side: ),
@@ -250,6 +279,12 @@ class _EditGroupFormState extends State<EditGroupForm> {
                                   setState(() {
                                     if (!_one) {
                                       //_groupNameList.removeAt(index);
+                                      if(DatabaseTest.hashMapGrChanged.containsValue(DatabaseTest.lstGrAdded[index])) {
+                                        int position = DatabaseTest.hashMapGrChanged.values.toList().indexOf(DatabaseTest.lstGrAdded[index]);
+                                        String key = DatabaseTest.hashMapGrChanged.keys.toList().elementAt(position);
+                                        DatabaseTest.hashMapGrChanged.update(key, (value) => "deleted");
+                                        debugPrint("2 " + DatabaseTest.hashMapGrChanged.toString());
+                                      }
                                       DatabaseTest.lstGrAdded.removeAt(index);
                                       DatabaseTest.lstDateStartAdded
                                           .removeAt(index);
@@ -304,15 +339,15 @@ class _EditGroupFormState extends State<EditGroupForm> {
                             lstGroupUpdate: DatabaseTest.lstGrAdded,
                             lstDateStart: DatabaseTest.lstDateStartAdded,
                             lstDateEnd: DatabaseTest.lstDateEndAdded);
-
-                        setState(() {
-                          _isProcessing = true;
-                        });
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => DashboardScreen(),
                           ),
                         );
+                        setState(() {
+                          _isProcessing = true;
+                        });
+
                       },
                       child: const Padding(
                         padding: EdgeInsets.only(top: 16, bottom: 16),
@@ -374,6 +409,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   index),
               TextButton(
                 onPressed: () {
+
                   // Close the dialog
                   Navigator.of(context).pop();
                 },
@@ -383,6 +419,14 @@ class _EditGroupFormState extends State<EditGroupForm> {
                 onPressed: () {
                   // Remove the box
                   setState(() {
+                  /*  DatabaseTest.hashMapGrChanged.putIfAbsent(DatabaseTest.lstGrAdded[index], () => _groupEditCtl!.text);
+                    debugPrint("1 " + DatabaseTest.hashMapGrChanged.toString());*/
+                    if(DatabaseTest.hashMapGrChanged.containsValue(DatabaseTest.lstGrAdded[index])) {
+                      int position = DatabaseTest.hashMapGrChanged.values.toList().indexOf(DatabaseTest.lstGrAdded[index]);
+                      String key = DatabaseTest.hashMapGrChanged.keys.toList().elementAt(position);
+                      DatabaseTest.hashMapGrChanged.update(key, (value) =>  _groupEditCtl!.text);
+                    }
+                    debugPrint("2 " + DatabaseTest.hashMapGrChanged.toString());
                     DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
                     // DatabaseTest.listNameGroup[index] =
                     // _groupNameList[index];

@@ -20,9 +20,12 @@
 29. IL faut sauvegarder où l'heure de chaque groupe ? Pt les mettre directement dans le détail de cet events
 30. Le détail d'un events qui affiche l'heure début et fin ?? le scanneur qui récupere le qr code => trouver le nom de persons et le groupe => revenir à la collection afin de définir la position de ce groupe => trouver les heures
 31. Changer l'interface de partie scanner un QR Code (un modal affichant au milieu d'écran et toucher pour reprendre la camera).
-32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer
-33. éviter inviter nous même (une comparaison avec le nom de host)
-
+32. Un autre attribute pour la fois qu'il rentre chaque fois(nécessaire) ?? utiliser toujours un HashMap pour stocker email + nbEntrer (done)
+33. éviter inviter nous même (une comparaison avec le nom de host) (done)
+34. Rapport: problem de BDD, il faut changer partout pour voir le résultat
+35. Le probleme de synchroniser: les attributes(titre, adresse, desc => done), la communication de la camera (done),
+36. le prob dans l'ajout un gr avec l'heure/date
+37. Le scanneur avoir le droit d'accéder la table de l'heure (pour valider le qrcode)
 ------------done---------------
 3. 3 types de modifications: events/groupe/user => done
 4. editer groupe/user/role quand toucher => done

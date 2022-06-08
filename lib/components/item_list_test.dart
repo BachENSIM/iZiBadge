@@ -687,14 +687,14 @@ class _ItemListTestState extends State<ItemListTest> {
                                   StatefulBuilder(
                                     builder: (_context, _setState) {
                                       return IconButton(
-                                        onPressed: () {
-                                          DatabaseTest.fetchGroupAdded(docID);
+                                        onPressed: () async{
+                                         await DatabaseTest.fetchGroupAdded(docID);
                                           print("editedi " +
                                               DatabaseTest.lstGrAdded
                                                   .toString());
                                           //un astuce => mettre .5s de pause pour charger la BDD
-                                          sleep(const Duration(
-                                              milliseconds: 250));
+                                         /* sleep(const Duration(
+                                              milliseconds: 250));*/
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
@@ -722,8 +722,8 @@ class _ItemListTestState extends State<ItemListTest> {
                                               docID);
                                           await DatabaseTest.fetchGroupAdded(
                                               docID);
-                                          sleep(const Duration(
-                                              milliseconds: 500));
+                                         /* sleep(const Duration(
+                                              milliseconds: 500));*/
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
@@ -761,8 +761,8 @@ class _ItemListTestState extends State<ItemListTest> {
                             )),
                       if ((_scanneur || _organisateur) && !isDel)
                         IconButton(
-                            onPressed: () async{
-                              debugPrint(await DatabaseTest.fetchListSize(docId: docID).toString());
+                            onPressed: (){
+                              //await DatabaseTest.fetchListSize(docId: docID);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ScanTypeScreen(
@@ -791,10 +791,10 @@ class _ItemListTestState extends State<ItemListTest> {
                               Icons.qr_code_scanner_outlined,
                               color: CustomColors.textIcons,
                             )),
-                      if (!isDel && !_isInviteur)
+                      if (!isDel  )
                         IconButton(
                             onPressed: () async {
-                              debugPrint('Size = ' +
+                             /* debugPrint('Size = ' +
                                   MediaQuery.of(context).size.toString());
                               debugPrint('Height = ' +
                                   (MediaQuery.of(context).size.height / 1.5)
@@ -808,7 +808,7 @@ class _ItemListTestState extends State<ItemListTest> {
                                       .toString());
                               debugPrint(
                                   "${MediaQuery.of(context).padding.top}");
-                              debugPrint("${kToolbarHeight}");
+                              debugPrint("${kToolbarHeight}");*/
 
                               bool checked =
                                   await DatabaseTest.fetchItemClicked(

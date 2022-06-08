@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:izibagde/components/custom_colors.dart';
@@ -20,7 +22,7 @@ class EditListUserForm extends StatefulWidget {
 
 class _EditListUserFormState extends State<EditListUserForm> {
   // The inital group value
-  static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
+  //static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
 
   final TextEditingController _guestCtl = TextEditingController();
   TextEditingController? _editGuestCtl;
@@ -46,7 +48,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           child: Form(
-              key: _lstUserFormKey,
+              //key: _lstUserFormKey,
               child: SingleChildScrollView(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,19 +309,16 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               setState(() {
                                 _isProcessing = true;
                               });
-                              /*await DatabaseTest.addItem(
-                              title: DatabaseTest.nameSave.toString(),
-                              description: DatabaseTest.descSave.toString(),
-                              address: DatabaseTest.addrSave.toString(),
-                              start: DateTime.parse(DateTime.now().toString()),
-                              end: DateTime.parse(DateTime.now().toString()),
-                              role: "Organisateur",
-                            );
-                            await DatabaseTest.addInviteList(
-                                listEmail: _groupListUser,
-                                listGroup: _groupDropdownGroup,
-                                listRole: _groupDropdownRole
-                            );*/
+                              HashMap<int, String> checkLstMail = HashMap<int, String>();
+                              for (int i = 0; i < DatabaseTest.lstUserAdded.length; i++) {
+                                checkLstMail.putIfAbsent(i, () => DatabaseTest.lstUserAdded[i]);
+                              }
+                              debugPrint(checkLstMail.toString());
+                              await DatabaseTest.updateListUser(
+                                  docId: widget.documentId,
+                                  lstGroupUpdate: DatabaseTest.lstGroupAdded,
+                                  lstEmailUpdate: DatabaseTest.lstUserAdded,
+                                  lstRoleUpdate: DatabaseTest.lstRoleAdded);
 
                               setState(() {
                                 _isProcessing = false;
@@ -354,7 +353,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
           return StatefulBuilder(
               builder: (BuildContext _context, StateSetter _setState) {
             return AlertDialog(
-              title: const Text("Modifier les informations de l'invité"),
+              title: Text("Modifier les informations de l'invité ${DatabaseTest.lstUserAdded[index]}"),
               content: Column(mainAxisSize: MainAxisSize.min, children: [
                 TextFormField(
                   maxLines: 1,
@@ -469,8 +468,9 @@ class _EditListUserFormState extends State<EditListUserForm> {
                         );
                       } else {
                         DatabaseTest.lstUserAdded[index] = _editGuestCtl!.text;
-                        DatabaseTest.lstGroupAdded[index] = _dropdownGroup!;
+                        //DatabaseTest.lstGroupAdded[index] = _dropdownGroup!;
                         DatabaseTest.lstRoleAdded[index] = _dropdownRole!;
+                        debugPrint( DatabaseTest.lstGroupAdded[index]);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(snackBar),
