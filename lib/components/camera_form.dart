@@ -99,9 +99,10 @@ class _CameraFormState extends State<CameraForm> {
                 onPressed: () async {
                   debugPrint("touche");
                   await controller!.resumeCamera();
-                 /* setState(() {
-                    nbTotal = DatabaseTest.nbPersonTotal;
-                  });*/
+
+                  setState(() {
+
+                  });
                 },
                 child: _buildQrView(context),
                 minWidth: MediaQuery.of(context).size.width,
@@ -249,25 +250,41 @@ class _CameraFormState extends State<CameraForm> {
       //DatabaseTest.fetchDataCheck(widget.documentId, result!.code.toString());
       verify = await DatabaseTest.fetchDataCheckUpdateDB(
           widget.documentId, result!.code.toString());
-      debugPrint("Status: " +
+    /*  debugPrint("Status: " +
           verify.toString() +
           "\nemail:" +
           DatabaseTest.emailClient +
           " nb d'entrée: " +
-          DatabaseTest.countPersonScanned.toString());
+          DatabaseTest.countPersonScanned.toString());*/
+      //mettre à jour nb personne qui entre
+      await DatabaseTest.fetchListInvite(docId: widget.documentId);
+      nbStatusTrue = 0;
+      DatabaseTest.lstInviteChecked.values.toList().forEach((element) {
+        if(element == true) nbStatusTrue++;
+      });
+      debugPrint(DatabaseTest.lstSizeInvite.toString());
       //verify = DatabaseTest.status;
-
+      String attention = "";
+      DatabaseTest.lstSizeInvite[DatabaseTest.emailClient]! > 1 ?  attention = "Personne déjà scannée !" :  attention = "";
       if (verify) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Icon(Icons.check_circle_outline,
-                    color: Colors.green, size: 40),
-                Text(result!.code.toString()),
-                //Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
-              ],
+            content:Container(
+              height: 100,
+              child:  Column(
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        const Icon(Icons.check_circle_outline,
+                            color: Colors.green, size: 40),
+                        Text(DatabaseTest.emailClient),
+                        Text(
+                            "Nombre d'entrées: ${DatabaseTest.lstSizeInvite[DatabaseTest.emailClient]}"),
+                      ]),
+                  Text("\n$attention")
+                ],
+              ),
             ),
             //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),

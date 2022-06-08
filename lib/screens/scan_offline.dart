@@ -403,11 +403,6 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       //verify = DatabaseTest.status;
 
       if (verify) {
-
-        log(this.widget.connectedDevices.state.toString());
-        log(this.widget.connectedDevices.deviceId);
-        log(this.widget.connectedDevices.deviceName);
-
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(

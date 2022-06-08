@@ -9,8 +9,8 @@ final CollectionReference _mainCollection = _firestore.collection('evenements');
 class DatabaseTest {
   //définir le nom de personne qui se connecte
   //static String userUid = "test14@gmail.com";
-  //static String userUid = "test@gmail.com";
-  static String userUid = "example5@gmail.com";
+  static String userUid = "ensim@univ-lemans.fr";
+  //static String userUid = "example5@gmail.com";
 
   /*---------------------------------------*/
   //variable globale pour changer la BDD
@@ -750,7 +750,7 @@ class DatabaseTest {
               .catchError((e) => print(e));
         }
         debugPrint("email after $emailClient ....");
-        emailClient = "";
+        //emailClient = "";
 
         break;
       } else {
@@ -806,6 +806,7 @@ class DatabaseTest {
                   () => countPersonEnter); //ajouter une valeur dans la table de Hachage
           //mettre à jour le statut d'entrée d'une personne = true
           debugPrint("NB " + lstPersonScanned[contentQRCode].toString());
+
           await _mainCollection
               .doc(userUid)
               .collection(eventRelated)
@@ -822,7 +823,7 @@ class DatabaseTest {
               .catchError((e) => debugPrint(e));
 
           for (int j = 0; j <lstEmailClient.length;j++) {
-            await _mainCollection
+             _mainCollection
                 .doc(lstEmailClient[j])
                 .collection(eventRelated)
                 .doc(idParticipation)
@@ -843,32 +844,32 @@ class DatabaseTest {
           countPersonEnter = hashMapNbEnter[contentQRCode]! + 1;
           //mettre à jour une valeur dans la liste
           lstPersonScanned.update(contentQRCode, (value) => countPersonEnter);
-          await _mainCollection
+           _mainCollection
               .doc(userUid)
               .collection(eventRelated)
               .doc(idParticipation)
               .collection(participants)
               .doc(idClient)
-              .update({"nbEntree": countPersonEnter})
-              .whenComplete(() => debugPrint(
+              .update({"nbEntree": countPersonEnter});
+              /*.whenComplete(() => debugPrint(
               "$userUid Updated: $emailClient nbEntrée: $countPersonEnter"))
-              .catchError((e) => debugPrint(e));
+              .catchError((e) => debugPrint(e));*/
 
           for (int j = 0; j <lstEmailClient.length;j++) {
-            await _mainCollection
+             _mainCollection
                 .doc(lstEmailClient[j])
                 .collection(eventRelated)
                 .doc(idParticipation)
                 .collection(participants)
                 .doc(idClient)
-                .update({"nbEntree": countPersonEnter})
-                .whenComplete(() => debugPrint(
+                .update({"nbEntree": countPersonEnter});
+                /*.whenComplete(() => debugPrint(
                 "${lstEmailClient[j]} Updated: $emailClient nbEntrée: $countPersonEnter"))
-                .catchError((e) => debugPrint(e));
+                .catchError((e) => debugPrint(e));*/
           }
         }
         //debugPrint("email after $emailClient ....");
-        emailClient = "";
+        //emailClient = "";
         break;
       } else {
         //debugPrint(" content: $contentQRCode data false $i $idClient");
