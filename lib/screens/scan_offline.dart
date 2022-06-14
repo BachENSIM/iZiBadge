@@ -287,17 +287,34 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       myControllerText = "";
       verify = await DatabaseTest.fetchDataCheckUpdateDB(
           widget.documentId, result!.code.toString());
+      debugPrint("Status: " +
+          verify.toString() +
+          "\nemail:" +
+          DatabaseTest.emailClient +
+          " nb d'entrée: " +
+          DatabaseTest.countPersonScanned.toString());
+      //verify = DatabaseTest.status;
+      String attention = "";
+      DatabaseTest.lstSizeInvite[DatabaseTest.emailClient]! > 1 ?  attention = "Personne déjà scannée !" :  attention = "";
       if (verify) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                const Icon(Icons.check_circle_outline,
-                    color: Colors.green, size: 40),
-                Text(result!.code.toString()),
-                //Text("Nombre d'entrées: ${DatabaseTest.countPersonEnter}")
-              ],
+            content: Container(
+              height: 100,
+              child:  Column(
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        const Icon(Icons.check_circle_outline,
+                            color: Colors.green, size: 40),
+                        Text(DatabaseTest.emailClient),
+                        Text(
+                            "Nombre d'entrées: ${DatabaseTest.lstSizeInvite[DatabaseTest.emailClient]}"),
+                      ]),
+                  Text("\n$attention")
+                ],
+              ),
             ),
             //duration: Duration(seconds: 365),
             padding: const EdgeInsets.all(15.0),
