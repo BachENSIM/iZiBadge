@@ -61,8 +61,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
   void initState() {
     super.initState();
     _groupInitCtl = TextEditingController(text: initialText);
-    //_groupNameList = DatabaseTest.lstGrAdded;
-    //print("qdqsd" + DatabaseTest.lstGrAdded.length.toString());
   }
 
   @override
@@ -78,7 +76,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
@@ -208,7 +205,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
                           DatabaseTest.lstDateEndAdded.add(DateTime.parse(end));
                         });
                       },
-                      //style:  ElevatedButton.styleFrom(side: ),
                       style: ElevatedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -232,7 +228,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
                 height: MediaQuery.of(context).size.height / 1.7,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  //itemCount: _groupNameList.length,
                   itemCount: DatabaseTest.lstGrAdded.length,
                   itemBuilder: (BuildContext context, int index) {
                     //if (_groupNameList.length == 1)
@@ -246,15 +241,12 @@ class _EditGroupFormState extends State<EditGroupForm> {
                             : CustomColors.lightPrimaryColor.withOpacity(0.6),
                         avatar: CircleAvatar(
                             radius: 20,
-                            // backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
                                 fontSize: 15,
-                                // color: CustomColors.textSecondary
                               ),
                             )),
-                        //titleText: _groupNameList[index],
                         titleText: DatabaseTest.lstGrAdded[index],
                         subTitle: subTitle(DatabaseTest.lstDateStartAdded,
                             index, DatabaseTest.lstDateEndAdded),
@@ -270,7 +262,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
                                   _modify(context, index);
                                 });
                               },
-                              // color: CustomColors.accentDark,
                             ),
                             if (!_one)
                               IconButton(
@@ -278,7 +269,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
                                 onPressed: () {
                                   setState(() {
                                     if (!_one) {
-                                      //_groupNameList.removeAt(index);
+
                                       if(DatabaseTest.hashMapGrChanged.containsValue(DatabaseTest.lstGrAdded[index])) {
                                         int position = DatabaseTest.hashMapGrChanged.values.toList().indexOf(DatabaseTest.lstGrAdded[index]);
                                         String key = DatabaseTest.hashMapGrChanged.keys.toList().elementAt(position);
@@ -310,20 +301,13 @@ class _EditGroupFormState extends State<EditGroupForm> {
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
                       child: CircularProgressIndicator(
-                          // valueColor: AlwaysStoppedAnimation<Color>(
-                          //   CustomColors.accentLight,
-                          // ),
                           ),
                     ),
                   )
                 : Container(
                     width: double.maxFinite,
-                    // alignment: Alignment.center,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        // backgroundColor: MaterialStateProperty.all(
-                        //   CustomColors.accentDark,
-                        // ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -366,7 +350,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
       ),
     );
   }
-
+  //le modal pour modifier
   void _modify(BuildContext context, int index) {
     showDialog(
         context: context,
@@ -409,7 +393,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
                   index),
               TextButton(
                 onPressed: () {
-
                   // Close the dialog
                   Navigator.of(context).pop();
                 },
@@ -419,20 +402,12 @@ class _EditGroupFormState extends State<EditGroupForm> {
                 onPressed: () {
                   // Remove the box
                   setState(() {
-                  /*  DatabaseTest.hashMapGrChanged.putIfAbsent(DatabaseTest.lstGrAdded[index], () => _groupEditCtl!.text);
-                    debugPrint("1 " + DatabaseTest.hashMapGrChanged.toString());*/
                     if(DatabaseTest.hashMapGrChanged.containsValue(DatabaseTest.lstGrAdded[index])) {
                       int position = DatabaseTest.hashMapGrChanged.values.toList().indexOf(DatabaseTest.lstGrAdded[index]);
                       String key = DatabaseTest.hashMapGrChanged.keys.toList().elementAt(position);
                       DatabaseTest.hashMapGrChanged.update(key, (value) =>  _groupEditCtl!.text);
                     }
-                    debugPrint("2 " + DatabaseTest.hashMapGrChanged.toString());
                     DatabaseTest.lstGrAdded[index] = _groupEditCtl!.text;
-                    // DatabaseTest.listNameGroup[index] =
-                    // _groupNameList[index];
-                    //print("list" +  DatabaseTest.lstGrAdded[index]);
-                    // print("data: " +
-                    //     DatabaseTest.listNameGroup.toString());
                     _groupEditCtl?.clear();
                   });
                   // Close the dialog
@@ -449,7 +424,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
           );
         });
   }
-
+  //Pour ajouter 2 lignes: heure commencé et heure terminé
   Widget subTitle(
       List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
     TimeOfDay timeStart = TimeOfDay(
@@ -497,7 +472,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
       ],
     );
   }
-
+  //un modal qui permet de sélectionner date/heure en même temps
   Widget dateTimeModal(DateTime dateInit, String container, TimeOfDay timeInit,
       bool status, int index) {
     return StatefulBuilder(
@@ -543,7 +518,6 @@ class _EditGroupFormState extends State<EditGroupForm> {
                     });
                   }
                   _setState(() {
-                    //_selectDate(_context, dateInit, status,index);
                   });
                 },
                 child: Container(
@@ -600,7 +574,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
       );
     });
   }
-
+  //Afficher heure sous forme String
   String displayTime(TimeOfDay timeInit) {
     String message = "";
     String mins = "";
@@ -614,7 +588,7 @@ class _EditGroupFormState extends State<EditGroupForm> {
     message = "$hours:$mins";
     return message;
   }
-
+  //Afficher date sous forme String
   String displayDate(DateTime dateInit) {
     String message = "";
     String day = "";

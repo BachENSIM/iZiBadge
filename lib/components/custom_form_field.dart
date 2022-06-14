@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izibagde/components/custom_colors.dart';
 
 class CustomFormField extends StatelessWidget {
+  //Cette page pour customizer le TextInputField
   final bool isObscure;
   final bool isCapitalized;
   final bool isLabelEnabled;

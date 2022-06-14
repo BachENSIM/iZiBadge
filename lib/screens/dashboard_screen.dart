@@ -14,6 +14,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
+
   //pour BottomBar
   int _currentIndex = 0;
 
@@ -32,12 +33,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: CustomColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
-        //backgroundColor: CustomColors.backgroundAppbar,
-        //title: AppBarTitle(),
         title: customWidget,
         actions: [
           IconButton(
@@ -86,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 });
               },
               icon: customIcon)
-        ], //Text("Dashboard for Events") ,
+        ],
       ),
       extendBody: true,
       floatingActionButton: FloatingActionButton(
@@ -105,44 +103,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       body: SafeArea(
-          child: Padding(
+          child:  ItemListTest()
+
+         /* Padding(
         padding: const EdgeInsets.only(
             // left: 16,
             // right: 16,
             // bottom: 20,
             ),
-        child: ItemListTest(),
-      )),
-      // ),
-      //Menu bottom bar
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _currentIndex,
-      //   //type: BottomNavigationBarType.fixed,
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.home),
-      //       label: 'Home',
-      //       backgroundColor: Colors.white38,
-      //     ),
-      //     BottomNavigationBarItem(
-      //         icon: Icon(Icons.settings),
-      //         //title: Text('Settings'),
-      //         label: 'Settings',
-      //         backgroundColor: Colors.green),
-      //   ],
-      //   onTap: (index) {
-      //     setState(() {
-      //       _currentIndex = index;
-      //       /*  if (index == 1) {
-      //         Navigator.of(context).push(
-      //           MaterialPageRoute(
-      //             builder: (context) => GeneratePage(),
-      //           ),
-      //         );
-      //       }*/
-      //     });
-      //   },
-      // ),
+        child: ItemListTest(),)*/
+      ),
     );
   }
 }

@@ -16,14 +16,12 @@ class EditListUserScreen extends StatefulWidget {
 }
 
 class _EditListUserScreenState extends State<EditListUserScreen> {
+  //Cette page pour modifier la liste d'invitation (changer rôle, groupe ou en ajouter autres)
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //elevation: 0,
-        //backgroundColor: CustomColors.backgroundDark,
         title: const Text("Modifier la liste"),
-        //AppBarTitle()
         centerTitle: true,
         leadingWidth: 100,
         leading: ElevatedButton.icon(
@@ -32,8 +30,6 @@ class _EditListUserScreenState extends State<EditListUserScreen> {
             label: const Text("",
                 style: TextStyle(
                   fontSize: 16,
-                  // fontWeight: FontWeight.w700,
-                  //color: CustomColors.secondaryText,
                 )),
             style: ElevatedButton.styleFrom(
                 elevation: 0, primary: Colors.transparent)),

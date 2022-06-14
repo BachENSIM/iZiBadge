@@ -7,7 +7,7 @@ class Background extends StatelessWidget {
     Key? key,
     required this.child,
   }) : super(key: key);
-
+  //Cette page pour déco la page de connexion
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,22 +33,7 @@ class Background extends StatelessWidget {
                 width: size.width
             ),
           ),
-          /*Positioned(
-            top: 50,
-            right: 30,
-            child: Image.asset(
-                "assets/images/main.png",
-                width: size.width * 0.35
-            ),
-          ),*/
-          // Positioned(
-          //   bottom: 0,
-          //   right: 0,
-          //   child: Image.asset(
-          //       "asset/image/bottom1.png",
-          //       width: size.width
-          //   ),
-          // ),
+
           Positioned(
             bottom: 0,
             right: 0,

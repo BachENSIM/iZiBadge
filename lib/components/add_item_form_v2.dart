@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:izibagde/components/custom_colors.dart';
 import 'package:izibagde/components/custom_form_field.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/model/validator.dart';
 import 'package:izibagde/screens/add_group_screen.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class AddItemForm extends StatefulWidget {
   //const AddItemForm({Key? key}) : super(key: key);
@@ -24,12 +22,11 @@ class AddItemForm extends StatefulWidget {
 }
 
 class _AddItemFormState extends State<AddItemForm> {
+  //Cette page est le contenu de page d'ajout des attributs
   final _addItemFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
 
-  //for create date and hours of event
-/*  DateTime selectedDateStart = DateTime.now();
-  TimeOfDay selectedTimeStart = TimeOfDay.now(); */
+  //il faut régler les heures pour aujourd'hui et il y a une heure de décale entre l'heure début et l'heure fin
   DateTime selectedDateStart = DateTime.now();
   TimeOfDay selectedTimeStart =
       TimeOfDay(hour: TimeOfDay.now().hour + 1, minute: TimeOfDay.now().minute);
@@ -37,7 +34,7 @@ class _AddItemFormState extends State<AddItemForm> {
 
   late TimeOfDay selectedTimeEnd = TimeOfDay(
       hour: selectedTimeStart.hour + 1, minute: selectedTimeStart.minute);
-
+  //pour l'affichage
   late String? startDate = displayDate(selectedDateStart);
   late String? startTime =
       displayTime(TimeOfDay(hour: selectedDateStart.hour + 1, minute: 00));
@@ -180,19 +177,12 @@ class _AddItemFormState extends State<AddItemForm> {
           _isProcessing
               ? const Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: CircularProgressIndicator(
-                      // valueColor: AlwaysStoppedAnimation<Color>(
-                      //   CustomColors.accentLight,
-                      // ),
-                      ),
+                  child: CircularProgressIndicator(),
                 )
               : Container(
                   width: double.maxFinite,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      // backgroundColor: MaterialStateProperty.all(
-                      //   CustomColors.accentLight,
-                      // ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -208,6 +198,8 @@ class _AddItemFormState extends State<AddItemForm> {
                         setState(() {
                           _isProcessing = true;
                         });
+                        //faut save tous les variables en local pour qu'on puisse les utiliser apres
+                        //quand on finira la liste d'invitation, on les reprendra
                         DatabaseTest.nameSave = _titleCtl.text;
                         DatabaseTest.addrSave = _addrCtl.text;
                         DatabaseTest.descSave = _descCtl.text;
@@ -229,26 +221,6 @@ class _AddItemFormState extends State<AddItemForm> {
                         if (DatabaseTest.listHoursEnd.isNotEmpty)
                           DatabaseTest.listHoursEnd.clear();
                         DatabaseTest.listHoursEnd.add(DateTime.parse(end));
-
-                        /*debugPrint(
-                            "Change page " + selectedDateStart.toString());
-                        debugPrint(selectedDateEnd.toString());
-                        debugPrint(selectedTimeStart.format(context));
-                        debugPrint(selectedTimeEnd.format(context));*/
-
-                        /*await Database.addItem(
-                          title: _titleCtl.text,
-                          description: _descCtl.text,
-                          address: _addrCtl.text,
-                          //start: DateTime.fromMicrosecondsSinceEpoch(DateTime.parse(startDate! + "T" + startTime!).microsecondsSinceEpoch),
-                          //end: DateTime.fromMicrosecondsSinceEpoch(DateTime.parse(endDate! + "T" + endTime!).microsecondsSinceEpoch),
-                          //limit: DateTime.fromMicrosecondsSinceEpoch(DateTime.parse(limitDate! + "T" + limitTime!).microsecondsSinceEpoch),
-                          //start: DateTime.parse(startDate! + " " + startTime!),
-                          //end: DateTime.parse(endDate! + " " + endTime!),
-
-                          start: DateTime.parse(DateTime.now().toString()),
-                          end: DateTime.parse(DateTime.now().toString()),
-                        );*/
 
                         setState(() {
                           _isProcessing = false;
@@ -276,7 +248,7 @@ class _AddItemFormState extends State<AddItemForm> {
       ),
     );
   }
-
+  //Un Wigdet pour choisir date/heure
   Widget dateTime(DateTime dateInit, TimeOfDay timeInit, bool start) {
     return Row(
       children: [
@@ -285,12 +257,11 @@ class _AddItemFormState extends State<AddItemForm> {
             onPressed: () {
               _selectDate(context, dateInit, start);
               setState(() {});
-              //showDatePicker(context, dateInit,timeInit);
             },
             child: Container(
                 width: 150,
                 alignment: Alignment.centerRight,
-                child: //Text(displayDate(dateInit))
+                child:
                     Text(start ? startDate! : endDate!))),
         TextButton(
             onPressed: () {
@@ -299,12 +270,12 @@ class _AddItemFormState extends State<AddItemForm> {
             },
             child: Container(
                 alignment: Alignment.centerLeft,
-                child: //Text(displayTime(timeInit))
+                child:
                     Text(start ? startTime! : endTime!)))
       ],
     );
   }
-
+  //afficher date sous forme String
   String displayDate(DateTime dateInit) {
     String message = "";
     String day = "";
@@ -340,7 +311,7 @@ class _AddItemFormState extends State<AddItemForm> {
         "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
     return message;
   }
-
+  //afficher heure sous forme String
   String displayTime(TimeOfDay timeInit) {
     String message = "";
     String mins = "";
@@ -354,7 +325,7 @@ class _AddItemFormState extends State<AddItemForm> {
     message = "$hours:$mins";
     return message;
   }
-
+  //une fonction pour sélectionner la date
   _selectDate(BuildContext context, DateTime dateTimeInit, bool start) async {
     final DateTime? selected = await showDatePicker(
       locale: const Locale('fr', ''),
@@ -376,14 +347,6 @@ class _AddItemFormState extends State<AddItemForm> {
             selectedDateEnd = selectedDateStart;
             endDate = displayDate(selectedDateEnd);
           }
-
-          /*if(selectedDateEnd.day < selectedDateStart.day && selectedDateEnd.month == selectedDateStart.month ){
-            selectedDateEnd = dateTimeInit;
-            endDate = displayDate(selectedDateEnd);
-            debugPrint("Start: $selectedDateStart");
-            debugPrint("End: $selectedDateEnd");
-          }*/
-
         } else {
           selectedDateEnd = dateTimeInit;
           if (selectedDateEnd.day < selectedDateStart.day &&
@@ -400,7 +363,7 @@ class _AddItemFormState extends State<AddItemForm> {
       });
     }
   }
-
+  //une fonction pour sélectionner l'heure
   _selectTime(BuildContext context, TimeOfDay todInit, bool start) async {
     final TimeOfDay? timeOfDay = await showTimePicker(
       context: context,
