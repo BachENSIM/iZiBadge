@@ -7,6 +7,7 @@ import 'package:izibagde/screens/scanner_screen.dart';
 import '../services/Scan_Blue_Devices.dart';
 import 'blue_home.dart';
 
+/* cette page est faite pour choisir le mode de scan, soit en ligne ou hors ligne */
 const BoldStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
 

@@ -8,7 +8,7 @@ import 'package:izibagde/model/database_test.dart';
 import 'package:izibagde/screens/check_list_screen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-
+/* cette page est faite pour la communication entre les dispositifs */
 
 class ScanOffline extends StatefulWidget {
   NearbyService nearbyService;
@@ -50,11 +50,13 @@ class _ScanOfflineState extends State<ScanOffline>{
     receivedDataSubscription.cancel();
   }
   void init(){
+    //recevoir le message, elle est toujours en écoute
     receivedDataSubscription =
         this.widget.nearbyService.dataReceivedSubscription(callback: (data) {
           var obj = ChatMessage(messageContent: data["message"], messageType: "receiver");
           log("message reçu");
           log(obj.messageContent);
+          //modification directe sur la base de données locale
           DatabaseTest.fetchDataCheckUpdateDB(
               widget.documentId, obj.messageContent);
         });
@@ -96,6 +98,7 @@ class _ScanOfflineState extends State<ScanOffline>{
                   ),
                 );
               },
+              //Pour afficher la liste des invités et leurs nombres d'entrés
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: const <Widget>[
@@ -110,6 +113,7 @@ class _ScanOfflineState extends State<ScanOffline>{
               ),
             )
           ]),
+      //interface de scan
       body: CameraFormOffline(
           documentId: widget.documentId,
           connectedDevices: widget.connectedDevices,
@@ -401,6 +405,11 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
           " nb d'entrée: " +
           DatabaseTest.countPersonScanned.toString());
       //verify = DatabaseTest.status;
+      await DatabaseTest.fetchListInvite(docId: widget.documentId);
+      nbStatusTrue = 0;
+      DatabaseTest.lstInviteChecked.values.toList().forEach((element) {
+        if(element == true) nbStatusTrue++;
+      });
       String attention = "";
       DatabaseTest.lstSizeInvite[DatabaseTest.emailClient]! > 1 ?  attention = "Personne déjà scannée !" :  attention = "";
       if (verify) {

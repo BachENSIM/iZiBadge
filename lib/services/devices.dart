@@ -10,13 +10,14 @@ import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import '../screens/scan_offline.dart';
 import 'chat.dart';
 
+/* Cette page gère l'affichage des interfaces pour le mâitre ou l'esclave */
 enum DeviceType { advertiser, browser }
 
 class DevicesListScreen extends StatefulWidget {
   DevicesListScreen({required this.deviceType, required this.documentId});
 
   final DeviceType deviceType;
-
+  //documentId est partagé depuis le fichier components/item_list_test.dart pour se rappeler quel événement on veut scanner
   final String documentId;
 
   @override
@@ -97,6 +98,11 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
         body: ListView.builder(
             itemCount: getItemCount(),
             itemBuilder: (context, index) {
+              /*
+              Condition pour différencier entre l'interface maître et escale. En effet, pour le maître on affiche les dispositifs
+              disponibles, contrairement au esclave, on affiche seulement le maître connecté
+               */
+
               final device = widget.deviceType == DeviceType.advertiser
                   ? connectedDevices[index]
                   : devices[index];
@@ -201,6 +207,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
             }));
   }
 
+  //fonction pour savoir si on a toujours la connexion avec un dispositif ou non
   String getStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -212,6 +219,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
     }
   }
 
+  //fonction pour changer l'état de connexion dans l'interface
   String getButtonStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -256,6 +264,7 @@ class _DevicesListScreenState extends State<DevicesListScreen> {
     }
   }
 
+  //on l'a seulement utilisé pour tester la communication
   _onTabItemListener(Device device) {
     if (device.state == SessionState.connected) {
       showDialog(
