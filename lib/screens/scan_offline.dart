@@ -11,8 +11,11 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 /* cette page est faite pour la communication entre les dispositifs */
 
 class ScanOffline extends StatefulWidget {
+  //stratégie P2P_CLUSTER
   NearbyService nearbyService;
+  //id de l'événement
   String documentId;
+  //le dispositif connecté
   Device connectedDevices;
 
   var chat_state;
@@ -271,10 +274,11 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
       await controller.pauseCamera();
       result = scanData;
       debugPrint("QRCode ${result!.code}");
-
+      //récupération du contenu du QR code
       myControllerText = result!.code.toString();
 
       log(myControllerText);
+      //vérifier si on est toujours connecté a dispositif
       if (this.widget.connectedDevices.state ==
           SessionState.notConnected) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -283,6 +287,7 @@ class _CameraFormOfflineState extends State<CameraFormOffline> {
         ));
         return;
       }
+      //pour envoyer le contenu du QR code á l'autre dispositif
       this.widget.nearbyService.sendMessage(
           this.widget.connectedDevices.deviceId,
           myControllerText);
