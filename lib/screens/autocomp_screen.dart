@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:izibagde/model/database.dart';
 
 class AutoScreen extends StatefulWidget {
   const AutoScreen({Key? key}) : super(key: key);
@@ -10,6 +9,10 @@ class AutoScreen extends StatefulWidget {
 }
 
 class _AutoScreenState extends State<AutoScreen> {
+
+  //Cette page pour automatique remplir le champ quand on saisit un email (autocomplete form)
+  //Mais je n'ai pas le temps pour finir cette partie donc cette page n'est jamais utilisé
+
   CollectionReference _collectionReference = FirebaseFirestore.instance
       .collection('evenements')
       .doc('test@gmail.com')

@@ -69,10 +69,19 @@ Code fonctionne aussi avec les extensions).
 Les principaux fichiers source se trouvent dans [`/lib`](/lib). Vous y trouverez le [`main.dart`](/lib/main.dart), 
 ainsi que les autres fichiers sources rangés dans 4 dossiers.
 
-La gestion de l'authentification de la page de connexion se trouve dans [`/services`](/lib/services).
+La gestion de l'authentification de la page de connexion et de la communication en mode hors ligne se trouvent dans [`/services`](/lib/services).
 
 La gestion des appels à la base de données se trove dans [`/model`](/lib/model).
 
 Les différents écrans se trouvent dans [`/screens`](/lib/screens).
 
 Les différents composants constituant les écrans se trouvent dans [`/components`](/lib/components).
+
+## Mode hors ligne  
+
+Plugins utilisés :  
+
+[flutter_nearby_connections 1.1.1](https://pub.dev/packages/flutter_nearby_connections) pour la connectivité entre les smarthpones  
+la communication entre eux en mode hors ligne. (la stratégie utilisée est Strategy.P2P_CLUSTER avec le Bluetooth).  
+
+[device_info_plus 3.2.4](https://pub.dev/packages/device_info_plus) pour récupérer les informations d'un dispositif.

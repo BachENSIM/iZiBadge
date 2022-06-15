@@ -20,14 +20,12 @@ class EditGroupScreen extends StatefulWidget {
 }
 
 class _EditGroupScreenState extends State<EditGroupScreen> {
+  //Cette page pour le but de modifier la liste de groupe (ajouter ou changer le nom d'un groupe)
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        //elevation: 0,
-        // backgroundColor: CustomColors.backgroundDark,
         title: const Text("Modifier les groupes"),
-        //AppBarTitle()
         centerTitle: true,
         leadingWidth: 100,
         leading: ElevatedButton.icon(

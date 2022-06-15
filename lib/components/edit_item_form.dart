@@ -30,6 +30,7 @@ class EditItemForm extends StatefulWidget {
 }
 
 class _EditItemFormState extends State<EditItemForm> {
+  //Cette page est le contenu de la page de modification
   final _editItemFormKey = GlobalKey<FormState>();
   bool _isProcessing = false;
 
@@ -61,13 +62,10 @@ class _EditItemFormState extends State<EditItemForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // const SizedBox(height: 12.0), //invisible box
                   const Text(
                     'Titre',
                     style: TextStyle(
-                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -88,9 +86,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   const Text(
                     'Description',
                     style: TextStyle(
-                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -102,7 +98,7 @@ class _EditItemFormState extends State<EditItemForm> {
                     focusNode: widget.descFocusNode,
                     inputType: TextInputType.text,
                     inputAction: TextInputAction.done,
-                    validator: (value) => Validator.validateField(
+                    validator: (value) => Validator.nonValidateField(
                       value: value,
                     ),
                     label: 'Description',
@@ -112,9 +108,7 @@ class _EditItemFormState extends State<EditItemForm> {
                   const Text(
                     'Adresse',
                     style: TextStyle(
-                      //color: CustomColors.textPrimary,
                       fontSize: 22.0,
-                      // letterSpacing: 1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -138,19 +132,12 @@ class _EditItemFormState extends State<EditItemForm> {
             _isProcessing
                 ? const Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: CircularProgressIndicator(
-                        // valueColor: AlwaysStoppedAnimation<Color>(
-                        //   CustomColors.accentLight,
-                        // ),
-                        ),
+                    child: CircularProgressIndicator(),
                   )
                 : Container(
                     width: double.maxFinite,
                     child: ElevatedButton(
                       style: ButtonStyle(
-                        // backgroundColor: MaterialStateProperty.all(
-                        //   CustomColors.accentLight,
-                        // ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -164,21 +151,16 @@ class _EditItemFormState extends State<EditItemForm> {
 
                         if (_editItemFormKey.currentState!.validate()) {
                           setState(() {
-                            //print("1" + _isProcessing.toString());
-                            print("ID: " + widget.documentId.toString());
-
                             _isProcessing = true;
                           });
-
+                          //Commande pour mettre à jour cet événement
                           await DatabaseTest.updateItem(
                             docId: widget.documentId,
                             title: _titleCtl.text,
                             description: _descCtl.text,
                             address: _addrCtl.text,
                           );
-
                           setState(() {
-                            //print("2" + _isProcessing.toString());
                             _isProcessing = false;
                           });
 

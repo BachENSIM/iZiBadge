@@ -34,9 +34,6 @@ class BlueHome extends StatelessWidget {
 
   final String documentId;
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

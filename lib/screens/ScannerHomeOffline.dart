@@ -7,6 +7,10 @@ import '../services/devices.dart';
 
 const BoldStyle = TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
+/* cette page est faite pour différencier entre les smartphones maîtres et eclaves.
+Le maître peut afficher les dispositifs à proximité et se connecter à eux.
+L'esclave détecte seulement le smartphone “maître” connecté à lui.
+ */
 
 
 class ScannerHoneOffline extends StatefulWidget {

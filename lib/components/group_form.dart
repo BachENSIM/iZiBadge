@@ -12,6 +12,7 @@ class GroupForm extends StatefulWidget {
 }
 
 class _GroupFormState extends State<GroupForm> {
+  //Cette page est le contenu de la page d'ajout les gourpes
   final _groupNameCtl =
       TextEditingController(); // un autre controller pour saisir => creer des groupe differents
   TextEditingController?
@@ -67,7 +68,6 @@ class _GroupFormState extends State<GroupForm> {
       padding: const EdgeInsets.all(5),
       child: SingleChildScrollView(
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
@@ -87,6 +87,7 @@ class _GroupFormState extends State<GroupForm> {
                       color: Colors.green),
                 ),
               ),
+              //afficher l'heure/ la date commencé
               Container(
                   width: 150,
                   alignment: Alignment.centerLeft,
@@ -108,6 +109,7 @@ class _GroupFormState extends State<GroupForm> {
                       color: Colors.red),
                 ),
               ),
+              //afficher l'heure/ la date terminée
               Container(
                   width: 150,
                   alignment: Alignment.centerLeft,
@@ -158,6 +160,7 @@ class _GroupFormState extends State<GroupForm> {
                   child: ElevatedButton(
                       onPressed: () {
                         setState(() {
+                          //if le champ est vide => sugérer un groupe par default => groupe 1
                           String mess = _groupNameCtl.text;
                           if (_groupNameCtl.text.isEmpty) {
                             mess = "Groupe " + (taille++).toString();
@@ -185,7 +188,6 @@ class _GroupFormState extends State<GroupForm> {
                               slcDStart.toLocal().toString().split(" ").first);
                           debugPrint("end" +
                               slcDEnd.toLocal().toString().split(" ").first);
-                          //debugPrint(slcTStart.format(context));
                           DatabaseTest.listHoursStart
                               .add(DateTime.parse(start));
                           DatabaseTest.listHoursEnd.add(DateTime.parse(end));
@@ -194,7 +196,6 @@ class _GroupFormState extends State<GroupForm> {
                           debugPrint(DatabaseTest.listHoursEnd.toString());
                         });
                       },
-                      //style:  ElevatedButton.styleFrom(side: ),
                       style: ElevatedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
@@ -204,7 +205,6 @@ class _GroupFormState extends State<GroupForm> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            //color: CustomColors.textSecondary,
                           ))),
                 )
               ],
@@ -212,8 +212,6 @@ class _GroupFormState extends State<GroupForm> {
             const SizedBox(
               height: 5,
             ),
-            /*dateTime(slcDStart, "Début", slcTStart, true),
-            dateTime(slcDEnd, "Fin", slcTEnd, false),*/
             ListView(shrinkWrap: true, children: <Widget>[
               const SizedBox(height: 20),
               Container(
@@ -227,17 +225,13 @@ class _GroupFormState extends State<GroupForm> {
                       GFListTile(
                         avatar: CircleAvatar(
                             radius: 20,
-                            //backgroundColor: CustomColors.accentDark,
                             child: Text(
                               (index + 1).toString(),
                               style: const TextStyle(
                                 fontSize: 15,
-                                //color: CustomColors.textSecondary
                               ),
                             )),
                         titleText: _groupNameList[index],
-                        //subTitleText: subTitle(_lstDTStart, index, _lstDTEnd),
-                        //subTitle: subTitle(_lstDTStart, index, _lstDTEnd),
                         subTitle: subTitle(DatabaseTest.listHoursStart, index,
                             DatabaseTest.listHoursEnd),
                         color: index.isEven
@@ -258,7 +252,6 @@ class _GroupFormState extends State<GroupForm> {
                                   _modify(context, index);
                                 });
                               },
-                              //color: CustomColors.accentDark,
                             ),
                             if (!_zero)
                               IconButton(
@@ -294,7 +287,7 @@ class _GroupFormState extends State<GroupForm> {
       ),
     );
   }
-
+  //modal pour modication d'un groupe
   void _modify(
     BuildContext context,
     int index,
@@ -438,7 +431,7 @@ class _GroupFormState extends State<GroupForm> {
         "${dayOfWeek[dateInit.weekday - 1]} $day ${months[dateInit.month - 1]} ${dateInit.year}";
     return message;
   }
-
+  //un modal qui a le droite de sélectionner l'heure et la date
   Widget dateTimeModal(DateTime dateInit, String container, TimeOfDay timeInit,
       bool status, int index) {
     return StatefulBuilder(
@@ -470,7 +463,6 @@ class _GroupFormState extends State<GroupForm> {
                       status
                           ? dtStart = displayDate(dateInit)
                           : dtEnd = displayDate(dateInit);
-
                       status
                           ? DatabaseTest.listHoursStart[index] = DateTime(
                               dateInit.year,
@@ -484,16 +476,9 @@ class _GroupFormState extends State<GroupForm> {
                               dateInit.day,
                               DatabaseTest.listHoursEnd[index].hour,
                               DatabaseTest.listHoursEnd[index].minute);
-
-                      debugPrint(displayDate(dateInit));
-                      debugPrint(dtStart);
-                      debugPrint("az" + dateInit.toLocal().toString());
-                      debugPrint(
-                          status ? slcDStart.toString() : slcDEnd.toString());
                     });
                   }
                   _setState(() {
-                    //_selectDate(_context, dateInit, status,index);
                   });
                 },
                 child: Container(
@@ -509,7 +494,6 @@ class _GroupFormState extends State<GroupForm> {
                       initialEntryMode: TimePickerEntryMode.dial,
                       builder: (_context, child) {
                         if (MediaQuery.of(_context).alwaysUse24HourFormat) {
-                          //return child!;
                           return Localizations.override(
                             context: _context,
                             locale: const Locale('fr', 'FR'),
@@ -543,7 +527,6 @@ class _GroupFormState extends State<GroupForm> {
                     });
                   }
                   _setState(() {
-                    //_selectTime(_context, timeInit, status,index);
                   });
                 },
                 child: Container(
@@ -554,31 +537,6 @@ class _GroupFormState extends State<GroupForm> {
       );
     });
   }
-
-  /* Widget dateTime(
-      DateTime dateInit, String container, TimeOfDay timeInit, bool status) {
-    return Row(
-      children: [
-        Container(width: 50, child: Text(container)),
-        TextButton(
-            onPressed: () {
-              _selectDate(context, dateInit, status);
-            },
-            child: Container(
-                width: 125,
-                alignment: Alignment.centerRight,
-                child: Text(displayDate(dateInit)))),
-        const SizedBox(width: 10.0),
-        TextButton(
-            onPressed: () {
-              _selectTime(context, timeInit, status);
-            },
-            child: Container(
-                alignment: Alignment.centerLeft,
-                child: Text(displayTime(timeInit))))
-      ],
-    );
-  }*/
 
   Widget subTitle(
       List<DateTime> lstStart, int position, List<DateTime> lstEnd) {
@@ -594,7 +552,6 @@ class _GroupFormState extends State<GroupForm> {
     String end = lstEnd[position].toLocal().toString().split(" ").first +
         " - " +
         timeEnd.format(context);
-    //+ lstEnd[position].toLocal().toString().split(" ").last;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -628,89 +585,4 @@ class _GroupFormState extends State<GroupForm> {
     );
   }
 
-  _selectDate(BuildContext context, DateTime dateTimeInit, bool status,
-      int index) async {
-    final DateTime? selected = await showDatePicker(
-      locale: const Locale('fr', ''),
-      context: context,
-      initialDate: dateTimeInit,
-      firstDate: DatabaseTest.startSave!,
-      lastDate: DatabaseTest.endSave!,
-    );
-    if (selected != null && selected != dateTimeInit) {
-      //setState(() {
-      dateTimeInit = selected;
-      status ? slcDStart = selected : slcDEnd = selected;
-      status
-          ? dtStart = displayDate(dateTimeInit)
-          : dtEnd = displayDate(dateTimeInit);
-
-      status
-          ? DatabaseTest.listHoursStart[index] = DateTime(
-              dateTimeInit.year,
-              dateTimeInit.month,
-              dateTimeInit.day,
-              DatabaseTest.listHoursStart[index].hour,
-              DatabaseTest.listHoursStart[index].minute)
-          : DatabaseTest.listHoursEnd[index] = DateTime(
-              dateTimeInit.year,
-              dateTimeInit.month,
-              dateTimeInit.day,
-              DatabaseTest.listHoursEnd[index].hour,
-              DatabaseTest.listHoursEnd[index].minute);
-
-      debugPrint(displayDate(dateTimeInit));
-      debugPrint(dtStart);
-      debugPrint("az" + dateTimeInit.toLocal().toString());
-      debugPrint(status ? slcDStart.toString() : slcDEnd.toString());
-      //});
-    }
-  }
-
-  _selectTime(
-      BuildContext context, TimeOfDay todInit, bool status, int index) async {
-    final TimeOfDay? timeOfDay = await showTimePicker(
-        context: context,
-        initialTime: todInit,
-        initialEntryMode: TimePickerEntryMode.dial,
-        builder: (context, child) {
-          if (MediaQuery.of(context).alwaysUse24HourFormat) {
-            //return child!;
-            return Localizations.override(
-              context: context,
-              locale: const Locale('fr', 'FR'),
-              child: child,
-            );
-          } else {
-            return Localizations.override(
-              context: context,
-              locale: const Locale('fr', 'FR'),
-              child: child,
-            );
-          }
-        });
-    if (timeOfDay != null && timeOfDay != todInit) {
-      setState(() {
-        todInit = timeOfDay;
-        status ? slcTStart = timeOfDay : slcTEnd = timeOfDay;
-        status
-            ? todStart = displayTime(todInit)
-            : todEnd = displayTime(todInit);
-
-        status
-            ? DatabaseTest.listHoursStart[index] = DateTime(
-                DatabaseTest.listHoursStart[index].year,
-                DatabaseTest.listHoursStart[index].month,
-                DatabaseTest.listHoursStart[index].day,
-                todInit.hour,
-                todInit.minute)
-            : DatabaseTest.listHoursEnd[index] = DateTime(
-                DatabaseTest.listHoursEnd[index].year,
-                DatabaseTest.listHoursEnd[index].month,
-                DatabaseTest.listHoursEnd[index].day,
-                todInit.hour,
-                todInit.minute);
-      });
-    }
-  }
 }
