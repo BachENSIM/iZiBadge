@@ -13,6 +13,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  //Cette page pour l'inscription
+
   //Step 2 _ create controller for email and pass
   final _emailCtl = TextEditingController();
   final _passCtl = TextEditingController();

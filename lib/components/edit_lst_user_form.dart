@@ -21,6 +21,7 @@ class EditListUserForm extends StatefulWidget {
 }
 
 class _EditListUserFormState extends State<EditListUserForm> {
+  //Cette page est le contenu de la page de modification la liste d'invitation
   // The inital group value
   //static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
 
@@ -48,14 +49,12 @@ class _EditListUserFormState extends State<EditListUserForm> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           child: Form(
-              //key: _lstUserFormKey,
               child: SingleChildScrollView(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //ajouter d'une liste d'invitation (1 QRCode pour toute la durée)
                   Padding(
-                      //padding: const EdgeInsets.all(5),
                       padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                       child: SingleChildScrollView(
                           child: Column(
@@ -86,22 +85,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                //crossAxisAlignment: CrossAxisAlignment.,
                                 children: <Widget>[
-                                  //Pour le groupe
+                                  //Pour dropdown le groupe
                                   Container(
                                     height: 50,
-                                    //width: MediaQuery.of(context).size.width,
-                                    //margin: EdgeInsets.all(5),
                                     child: DropdownButtonHideUnderline(
                                       child: GFDropdown(
-                                        //padding: const EdgeInsets.all(10),
                                         borderRadius: BorderRadius.circular(5),
-                                        /* border: const BorderSide(
-                                        color: CustomColors.textPrimary,
-                                        width: 1),
-                                    dropdownButtonColor:
-                                        CustomColors.textSecondary,*/
                                         value: _dropdownGroup,
                                         onChanged: (newValue) {
                                           setState(() {
@@ -118,20 +108,14 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                       ),
                                     ),
                                   ),
-                                  //Pour le role
+                                  //Pour dropdown le role
                                   Container(
                                     height: 50,
-                                    //width: MediaQuery.of(context).size.width,
                                     margin: const EdgeInsets.all(5),
                                     child: DropdownButtonHideUnderline(
                                       child: GFDropdown(
                                         padding: const EdgeInsets.all(15),
                                         borderRadius: BorderRadius.circular(5),
-                                        /* border: const BorderSide(
-                                        color: CustomColors.textPrimary,
-                                        width: 1),
-                                    dropdownButtonColor:
-                                        CustomColors.textSecondary,*/
                                         value: _dropdownRole,
                                         onChanged: (newValue) {
                                           setState(() {
@@ -215,15 +199,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                 Container(
                                   height:
                                       MediaQuery.of(context).size.height / 1.5,
-                                  /*decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent)
-                              ),*/
                                   child: ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: DatabaseTest.lstUserAdded.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return GFListTile(
+                                          //appuyer dessous pour consulter cette personne
                                           onTap: () {
                                             setState(() {
                                               _editGuestCtl =
@@ -267,7 +249,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                                                     .removeAt(index);
                                               });
                                             },
-                                            /*color: CustomColors.textPrimary,*/
                                           ));
                                     },
                                   ),
@@ -284,21 +265,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                       ? const Center(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
-                            child: CircularProgressIndicator(
-                                /*valueColor: AlwaysStoppedAnimation<Color>(
-                            CustomColors.accentLight,
-                          ),*/
-                                ),
+                            child: CircularProgressIndicator(),
                           ),
                         )
                       : Container(
                           width: double.maxFinite,
-                          //alignment: Alignment.center,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              /* backgroundColor: MaterialStateProperty.all(
-                            CustomColors.accentDark,
-                          ),*/
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -309,11 +282,13 @@ class _EditListUserFormState extends State<EditListUserForm> {
                               setState(() {
                                 _isProcessing = true;
                               });
+                              //un HashMap
                               HashMap<int, String> checkLstMail = HashMap<int, String>();
                               for (int i = 0; i < DatabaseTest.lstUserAdded.length; i++) {
                                 checkLstMail.putIfAbsent(i, () => DatabaseTest.lstUserAdded[i]);
                               }
                               debugPrint(checkLstMail.toString());
+                              //Cette commande permet de mettre à jour la liste d'invitation (changer le role, le groupe, supprimer ou ajouter une autre personne,..)
                               await DatabaseTest.updateListUser(
                                   docId: widget.documentId,
                                   lstGroupUpdate: DatabaseTest.lstGroupAdded,
@@ -345,7 +320,7 @@ class _EditListUserFormState extends State<EditListUserForm> {
               ))),
         ));
   }
-
+  //modal pour modification
   void _modify(BuildContext context, int index) {
     showDialog(
         context: context,
@@ -372,7 +347,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                     //Pour le groupe
                     Container(
                       height: 50,
-                      //width: MediaQuery.of(context).size.width,
                       margin: const EdgeInsets.only(top: 15),
                       child: DropdownButtonHideUnderline(
                         child: GFDropdown(
@@ -410,7 +384,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                           borderRadius: BorderRadius.circular(5),
                           border: BorderSide(
                               color: CustomColors.primaryText, width: 1),
-                          // dropdownButtonColor: CustomColors.secondaryText,
                           value: _dropdownRole,
                           onChanged: (newValue) {
                             _setState(() {
@@ -433,7 +406,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                 ),
               ]),
               shape: RoundedRectangleBorder(
-                  // side: BorderSide(color: CustomColors.textPrimary, width: 1),
                   borderRadius: BorderRadius.circular(15)),
               actions: [
                 TextButton(
@@ -468,7 +440,6 @@ class _EditListUserFormState extends State<EditListUserForm> {
                         );
                       } else {
                         DatabaseTest.lstUserAdded[index] = _editGuestCtl!.text;
-                        //DatabaseTest.lstGroupAdded[index] = _dropdownGroup!;
                         DatabaseTest.lstRoleAdded[index] = _dropdownRole!;
                         debugPrint( DatabaseTest.lstGroupAdded[index]);
                         ScaffoldMessenger.of(context).showSnackBar(

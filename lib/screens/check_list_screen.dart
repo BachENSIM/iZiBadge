@@ -3,7 +3,6 @@ import 'package:izibagde/components/table_list_user_form.dart';
 import 'package:izibagde/model/database_test.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../components/check_list_form.dart';
 
 class CheckListUserScreen extends StatefulWidget {
   //const CheckListUserScreen({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class CheckListUserScreen extends StatefulWidget {
 
 class _CheckListUserScreenState extends State<CheckListUserScreen> {
   QRViewController? controller;
-
+  //Cette page pour le but de voir tous les invités avec leurs status et leurs nombre d'entrées
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,25 +47,6 @@ class _CheckListUserScreenState extends State<CheckListUserScreen> {
                       fontSize: 16, fontWeight: FontWeight.bold))),
         ),
         body:TableUserForm(documentId: widget.documentId)
-        //Flutter RefreshIndicator => Pull to refresh (swipe to refresh)
-       /* RefreshIndicator(
-            onRefresh: () async {
-              await Future.delayed(Duration(seconds: 1));
-              await DatabaseTest.fetchListInvite(docId: widget.documentId);
-
-              setState(() {});
-            },
-            color: Colors.purple,
-            child: TableUserForm(documentId: widget.documentId))*/
-
-        /*SingleChildScrollView(
-        child:  TableUserForm(documentId: widget.documentId,)
-      )*/
-
-        /* CheckListForm(
-          documentId:
-              widget.documentId),*/ // Here the scanned result will be shown
-
         );
   }
 }

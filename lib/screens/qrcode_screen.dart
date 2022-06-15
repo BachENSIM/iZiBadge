@@ -10,6 +10,7 @@ class QRCodeScreen extends StatefulWidget {
 }
 
 class _QRCodeScreenState extends State<QRCodeScreen> {
+  //Cette page pour voir le QR Code de cet events par rapport à cette personne
   @override
   Widget build(BuildContext context) {
     return Scaffold(

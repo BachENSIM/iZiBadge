@@ -60,56 +60,11 @@ class MyApp extends StatelessWidget {
               background: CustomColors.darkPrimaryColor, //Probably not used
               onBackground: CustomColors.lightPrimaryColor, //Time picker
             )
-            // primarySwatch: Colors.indigo,
-
-            // primaryColor: CustomColors.darkPrimaryColor,
-            // primaryColorDark: CustomColors.darkPrimaryColor,
-            // primaryColorLight: CustomColors.lightPrimaryColor,
-
-            // primaryTextTheme: Typography().black,
-            // textTheme: Typography().black,
             ),
-        //indiquer sur quelle page il va commencer quand lancer l'app
+        //indiquer sur quelle page qu'elle va commencer quand lancer l'app
         home: const LoginScreen(),
         //home: DashboardScreen(),
       ),
     );
-    /*return MultiProvider(
-      providers: [Provider<Authentication>(create: (_) => Authentication())],
-      child: MaterialApp(
-        title: "Page connection",
-        theme: ThemeData(
-            textTheme: const TextTheme(//Just for examples
-                // headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-                // headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-                // bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-                ),
-            colorScheme: ColorScheme(
-              primary: CustomColors.darkPrimaryColor, //Indigo
-              secondary: CustomColors.accentColor, //Orange
-              onPrimary: CustomColors.textIcons, //White
-              onSecondary: CustomColors.textIcons, //White
-              onError: CustomColors.textIcons, //White
-              error: Colors.red,
-              surface: CustomColors.textIcons, //Time selector
-              onSurface: CustomColors.primaryText, //Time selector
-              brightness: Brightness.light,
-              background: CustomColors.darkPrimaryColor, //Probably not used
-              onBackground: CustomColors.textIcons, //Probably not used
-            )
-            // primarySwatch: Colors.indigo,
-
-            // primaryColor: CustomColors.darkPrimaryColor,
-            // primaryColorDark: CustomColors.darkPrimaryColor,
-            // primaryColorLight: CustomColors.lightPrimaryColor,
-
-            // primaryTextTheme: Typography().black,
-            // textTheme: Typography().black,
-            ),
-        //indiquer sur quelle page il va commencer quand lancer l'app
-        //home: const LoginScreen(),
-        home: DashboardScreen(),
-      ),
-    );*/
   }
 }

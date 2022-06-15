@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izibagde/components/add_item_form_v2.dart';
-import 'package:izibagde/components/custom_colors.dart';
-import 'package:izibagde/screens/add_group_screen.dart';
+
 
 class AddScreen extends StatelessWidget {
   //const AddScreen({Key? key}) : super(key: key);
@@ -41,33 +40,6 @@ class AddScreen extends StatelessWidget {
                 elevation: 0,
                 // primary: Colors.transparent
               )),
-/*          actions: [
-            ElevatedButton(
-              // style: ButtonStyle(
-              //     backgroundColor: MaterialStateProperty.all(
-              //   CustomColors.backgroundColorDark,
-              // )),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => GroupScreen(),
-                  ),
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const <Widget>[
-                  Text("Suivant",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        //color: CustomColors.textSecondary,
-                      )),
-                  Icon(Icons.arrow_right_sharp)
-                ],
-              ),
-            )
-          ],*/
         ),
         //scrollView
         body: Center(

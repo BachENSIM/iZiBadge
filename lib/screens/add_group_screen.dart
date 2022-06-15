@@ -22,6 +22,7 @@ class _GroupScreenState extends State<GroupScreen> {
         leading: ElevatedButton.icon(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.arrow_left_sharp),
+            //ce bouton "back" pour revenir à la page précédente
             label: const Text("Back",
                 style: TextStyle(
                   fontSize: 16,
@@ -33,11 +34,8 @@ class _GroupScreenState extends State<GroupScreen> {
               // primary: Colors.transparent
             )),
         actions: [
+        //ce boutton "back" pour passer à l'etape suivante (la liste d'invitation)
           ElevatedButton(
-            // style: ButtonStyle(
-            //     backgroundColor: MaterialStateProperty.all(
-            //   CustomColors.backgroundColorDark,
-            // )),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(

@@ -16,7 +16,7 @@ class ListUserScreen extends StatefulWidget {
 class _ListUserScreenState extends State<ListUserScreen> {
   // The inital group value
   //static final GlobalKey<FormState> _lstUserFormKey = GlobalKey();
-
+  //un combo de List<> pour stocker d'une infor: une personne avec un rôle et appartient à une groupe
   final List<String> _groupListUser = [];
   final List<String> _groupDropdownGroup = [];
   final List<String> _groupDropdownRole = [];
@@ -24,7 +24,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
   TextEditingController? _editGuestCtl;
 
   //dropDown pour le group
-
   String? _dropdownGroup = DatabaseTest.listNameGroup[0];
 
   //dropDown pour le role
@@ -74,7 +73,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //ajouter d'une liste d'invitation (1 QRCode pour toute la durée)
-
                 Padding(
                     padding: const EdgeInsets.all(5),
                     child: SingleChildScrollView(
@@ -116,11 +114,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                     child: GFDropdown(
                                       padding: const EdgeInsets.all(15),
                                       borderRadius: BorderRadius.circular(5),
-                                      /*border: const BorderSide(
-                                          //color: CustomColors.textPrimary,
-                                          width: 1),*/
-                                      // dropdownButtonColor:
-                                      //     CustomColors.textSecondary,
                                       value: _dropdownGroup,
                                       onChanged: (newValue) {
                                         setState(() {
@@ -139,17 +132,11 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 //Pour le role
                                 Container(
                                   height: 50,
-                                  //width: MediaQuery.of(context).size.width,
                                   margin: const EdgeInsets.all(5),
                                   child: DropdownButtonHideUnderline(
                                     child: GFDropdown(
                                       padding: const EdgeInsets.all(15),
                                       borderRadius: BorderRadius.circular(5),
-                                      /* border: const BorderSide(
-                                          //color: CustomColors.textPrimary,
-                                          width: 1),*/
-                                      // dropdownButtonColor:
-                                      //     CustomColors.textSecondary,
                                       value: _dropdownRole,
                                       onChanged: (newValue) {
                                         setState(() {
@@ -171,12 +158,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                   child: ElevatedButton(
                                       onPressed: () {
                                         setState(() {
+                                          //vérifier si le champ est vide => créer automatique un email
                                           String mess = _guestCtl.text;
                                           if (_guestCtl.text.isEmpty) {
                                             mess =
                                                 "example${taille++}@gmail.com";
                                           }
-                                          //debugPrint(mess);
                                           bool userExist =
                                               _groupListUser.contains(mess);
                                           bool uIdExist = DatabaseTest.userUid
@@ -197,7 +184,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                             );
                                           } else {
                                             _groupListUser.add(mess);
-                                            //_groupListUser.add(_guestCtl.text);
                                             _groupDropdownGroup
                                                 .add(_dropdownGroup!);
                                             _groupDropdownRole
@@ -211,7 +197,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               ),
                                             );
                                           }
-
                                           _guestCtl.clear();
                                         });
                                       },
@@ -223,7 +208,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                 )
                               ],
                             ),
-
                             const SizedBox(
                               height: 10,
                             ),
@@ -250,7 +234,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                               _modify(context, index);
                                             });
                                           },
-                                          //color: CustomColors.accentDark,
                                           titleText: _groupListUser[index],
                                           subTitleText: "Groupe: " +
                                               _groupDropdownGroup[index] +
@@ -265,10 +248,8 @@ class _ListUserScreenState extends State<ListUserScreen> {
                                                     .removeAt(index);
                                                 _groupDropdownRole
                                                     .removeAt(index);
-
                                                 DatabaseTest.listInvite =
                                                     _groupListUser;
-                                                print(index);
                                               });
                                             },
                                             color: index.isEven
@@ -287,14 +268,12 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         )
                       ],
                     ))),
+                //pour voir le truc tournant
                 _isProcessing
                     ? const Center(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: CircularProgressIndicator(
-                              // valueColor: AlwaysStoppedAnimation<Color>(
-                              //   CustomColors.accentLight,
-                              // ),
                               ),
                         ),
                       )
@@ -302,9 +281,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                         width: double.maxFinite,
                         child: ElevatedButton(
                           style: ButtonStyle(
-                            // backgroundColor: MaterialStateProperty.all(
-                            //   CustomColors.accentDark,
-                            // ),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -326,19 +302,18 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             int? minuteStart =
                                 DatabaseTest.timeStartSave!.minute;
                             int? minuteEnd = DatabaseTest.timeEndSave!.minute;
-
+                            //Save les DB sur Firebase
                             await DatabaseTest.addItem(
                               title: DatabaseTest.nameSave.toString(),
                               description: DatabaseTest.descSave.toString(),
                               address: DatabaseTest.addrSave.toString(),
-                              /*start: DateTime.parse(DateTime.now().toString()),
-                              end: DateTime.parse(DateTime.now().toString()),*/
                               start: DateTime(yearStart, monthStart, dayStart,
                                   hourStart, minuteStart),
                               end: DateTime(yearEnd, monthEnd, dayEnd, hourEnd,
                                   minuteEnd),
                               role: "Organisateur",
                             );
+                            //synchroniser cet événement sur leurs compte
                             await DatabaseTest.addInviteList(
                                 listEmail: _groupListUser,
                                 listGroup: _groupDropdownGroup,
@@ -374,7 +349,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
       ),
     );
   }
-
+  //le modal pour modifier
   void _modify(BuildContext context, int index) {
     showDialog(
         context: context,
@@ -409,9 +384,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             padding: const EdgeInsets.all(15),
                             borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                //color: CustomColors.textPrimary, width: 1
                                 ),
-                            // dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownGroup,
                             onChanged: (newValue) {
                               _setState(() {
@@ -437,9 +410,7 @@ class _ListUserScreenState extends State<ListUserScreen> {
                             padding: const EdgeInsets.all(15),
                             borderRadius: BorderRadius.circular(5),
                             border: const BorderSide(
-                                //color: CustomColors.textPrimary, width: 1
                                 ),
-                            // dropdownButtonColor: CustomColors.textSecondary,
                             value: _dropdownRole,
                             onChanged: (newValue) {
                               _setState(() {
@@ -461,9 +432,6 @@ class _ListUserScreenState extends State<ListUserScreen> {
                 ],
               ),
               shape: RoundedRectangleBorder(
-                  // side: BorderSide(
-                  // color: CustomColors.textPrimary,
-                  // width: 1),
                   borderRadius: BorderRadius.circular(15)),
               actions: [
                 TextButton(

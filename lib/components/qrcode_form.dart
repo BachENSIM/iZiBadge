@@ -32,25 +32,16 @@ class _generatorQRCodeformState extends State<generatorQRCodeform> {
           if (snapshot.hasError) {
             return const Text("Something went wrong...");
           } else if (snapshot.hasData || snapshot.data != null) {
-            // return ListView.separated(
-            //     separatorBuilder: (context, index) =>
-            //         const SizedBox(height: 16),
-            //     itemCount: snapshot.data!.docs.length,
-            //     itemBuilder: (context, index) {
             var noteList =
                 snapshot.data!.docs[0].data()! as Map<String, dynamic>;
             String docID = snapshot.data!.docs[0].id;
             String email = noteList['email'];
-            print("email: " + email + " ID: " + docID);
             return Column(
               children: <Widget>[
                 QrImage(data: docID),
                 const SizedBox(height: 15),
                 ElevatedButton(
                   style: ButtonStyle(
-                    // backgroundColor: MaterialStateProperty.all(
-                    //   CustomColors.accentLight,
-                    // ),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
